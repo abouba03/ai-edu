@@ -19,3 +19,9 @@ dist/
 build/
 .cache/
 .next/
+
+# Environnement virtuel Python
+env/
+*.dll
+*.lib
+*.pkl
