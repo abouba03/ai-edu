@@ -4,8 +4,18 @@ from pydantic import BaseModel
 import openai
 from app.config import settings
 from app.corrector import correct_code
+from app.routers import interactive_debug
+from app.routers import motivational_feedback
+from app.routers import quiz_generator
 
-app = FastAPI()
+import subprocess
+
+app = FastAPI()  # 👉 Doit être AVANT include_router
+
+app.include_router(interactive_debug.router)
+app.include_router(quiz_generator.router)
+app.include_router(motivational_feedback.router)
+
 
 # Charger la clé API explicitement
 openai.api_key = settings.OPENAI_API_KEY
@@ -18,6 +28,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+class CodeRequest(BaseModel):
+    code: str
 
 # Modèle pour la génération de code
 class CodePrompt(BaseModel):
@@ -59,5 +72,20 @@ async def correct(data: CodeCorrection):
     try:
         corrected_code = correct_code(data.code)
         return {"corrected_code": corrected_code}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/execute/")
+async def execute_code(request: CodeRequest):
+    try:
+        result = subprocess.run(
+            ['docker', 'run', '-i', '--rm', 'code-runner'],
+            input=request.code,  
+            capture_output=True,
+            text=True
+        )
+        output = result.stdout if result.stdout else result.stderr
+        return {"output": output}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

@@ -1,0 +1,14 @@
+1- Ajouter la sauvegarde de l’historique de debug ?
+2- Ajouter un mode "pas à pas" ligne par ligne ?
+3- connecter cette génération directement après une réponse du débogueur ?
+4- sauvegarder les scores de quiz dans la base avec Prisma ?
+5- ajouter une page "Historique des quiz" ?
+6- Créer l’interface Next.js pour afficher et répondre au quiz ?
+7- Ajouter un score et suivi de progression ?
+8- Générer un quiz à partir d’une erreur précise détectée plus tôt (via interactive-debug) ?
+9- Ajouter le choix de voix (masculine/féminine/robotique)
+10- Pour les message motivationelle on pourra afficher automatiquement ce composant quand :
+    ✅ Un quiz est terminé.
+    ✅ Une erreur a été corrigée.
+    ✅ L’étudiant atteint un nouveau niveau.
+    ✅ Cree un tableau avec système de badges à venir
