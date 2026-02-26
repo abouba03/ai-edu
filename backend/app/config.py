@@ -5,5 +5,8 @@ load_dotenv()
 
 class Settings:
     OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+    EXECUTION_MODE = os.getenv("EXECUTION_MODE", "local")
+    EXECUTION_TIMEOUT_SECONDS = int(os.getenv("EXECUTION_TIMEOUT_SECONDS", "5"))
+    EXECUTION_MAX_CODE_CHARS = int(os.getenv("EXECUTION_MAX_CODE_CHARS", "20000"))
 
 settings = Settings()

@@ -1,10 +1,10 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
-import openai
+from openai import OpenAI
 from app.config import settings
 
 router = APIRouter()
-openai.api_key = settings.OPENAI_API_KEY
+client = OpenAI(api_key=settings.OPENAI_API_KEY)
 
 class FeedbackRequest(BaseModel):
     username: str
@@ -28,10 +28,10 @@ Exemples :
 Le message doit être toujours positif, encourageant et adapté au contexte.
 """
 
-    response = openai.ChatCompletion.create(
+    response = client.chat.completions.create(
         model="gpt-4-turbo",
         messages=[{"role": "user", "content": prompt}],
         temperature=0.8
     )
 
-    return {"message": response['choices'][0]['message']['content']}
+    return {"message": response.choices[0].message.content or ""}

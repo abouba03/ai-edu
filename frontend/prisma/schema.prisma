@@ -1,0 +1,154 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id           String        @id @default(uuid())
+  clerkId      String        @unique
+  email        String        @unique
+  displayName  String?
+  avatarUrl    String?
+  level        String        @default("débutant")
+  points       Int           @default(0)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  progress     Progress[]
+  submissions  Submission[]
+  quizAttempts QuizAttempt[]
+  events       LearningEvent[]
+  courseQuizAttempts      CourseQuizAttempt[]
+  courseChallengeAttempts CourseChallengeAttempt[]
+  courseReflections       CourseReflection[]
+}
+
+model Course {
+  id          String     @id @default(uuid())
+  title       String
+  description String?
+  level       String
+  duration    String?
+  modules     Int        @default(0)
+  topics      Json?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  progress    Progress[]
+}
+
+model Progress {
+  id      String @id @default(uuid())
+  userId  String
+  courseId           String
+  completedModules   Int      @default(0)
+  progressPercentage Int      @default(0)
+  lastAccessed       DateTime @default(now())
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course             Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, courseId])
+}
+
+model Challenge {
+  id          String       @id @default(uuid())
+  title       String
+  description String?
+  difficulty  String
+  points      Int          @default(0)
+  testCases   Json?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  submissions Submission[]
+}
+
+model Submission {
+  id           String    @id @default(uuid())
+  userId       String
+  challengeId  String
+  code         String
+  status       String
+  feedback     String?
+  pointsEarned Int       @default(0)
+  createdAt    DateTime  @default(now())
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  challenge    Challenge @relation(fields: [challengeId], references: [id], onDelete: Cascade)
+}
+
+model QuizAttempt {
+  id             String   @id @default(uuid())
+  userId         String
+  quizId         String
+  score          Int      @default(0)
+  totalQuestions Int
+  completed      Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model LearningEvent {
+  id        String   @id @default(uuid())
+  userId    String?
+  clerkId   String?
+  action    String
+  feature   String
+  status    String
+  metadata  Json?
+  createdAt DateTime @default(now())
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([clerkId, createdAt])
+  @@index([feature, createdAt])
+}
+
+model CourseQuizAttempt {
+  id             String   @id @default(uuid())
+  userId         String?
+  clerkId        String?
+  courseSlug     String
+  courseTitle    String?
+  score          Int
+  totalQuestions Int
+  passed         Boolean  @default(false)
+  answers        Json?
+  questions      Json?
+  createdAt      DateTime @default(now())
+  user           User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([clerkId, courseSlug, createdAt])
+}
+
+model CourseChallengeAttempt {
+  id             String   @id @default(uuid())
+  userId         String?
+  clerkId        String?
+  courseSlug     String
+  courseTitle    String?
+  challengeText  String?
+  submittedCode  String
+  evaluation     Json?
+  status         String   @default("submitted")
+  createdAt      DateTime @default(now())
+  user           User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([clerkId, courseSlug, createdAt])
+}
+
+model CourseReflection {
+  id          String   @id @default(uuid())
+  userId      String?
+  clerkId     String?
+  courseSlug  String
+  courseTitle String?
+  understood  String?
+  unclear     String?
+  createdAt   DateTime @default(now())
+  user        User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([clerkId, courseSlug, createdAt])
+}

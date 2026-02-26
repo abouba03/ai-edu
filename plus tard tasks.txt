@@ -12,3 +12,8 @@
     ✅ Une erreur a été corrigée.
     ✅ L’étudiant atteint un nouveau niveau.
     ✅ Cree un tableau avec système de badges à venir
+
+11- Pour les defis collaboratif:
+    -- on ajoute un compte à rebours ⏱ pour limiter le temps de réponse ?
+    -- on stocke les résultats des duels en base de données ?
+    -- on crée un classement (leaderboard) des meilleurs étudiants ?
