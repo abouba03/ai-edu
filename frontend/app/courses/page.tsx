@@ -131,57 +131,57 @@ export default async function CoursesPage() {
     .sort((a, b) => a.formationName.localeCompare(b.formationName));
 
   return (
-    <div className="space-y-6">
-      <section className="rounded-2xl border bg-card p-6 lg:p-7">
-        <p className="text-xs text-primary font-semibold uppercase tracking-wide">Parcours d’apprentissage</p>
-        <h1 className="text-2xl lg:text-3xl font-bold mt-1">Formations disponibles</h1>
-        <p className="text-sm text-muted-foreground mt-2 max-w-2xl">
-          Sélectionne une formation pour afficher ses cours, puis ouvre un cours pour démarrer le quiz et le mini challenge.
+    <div className="space-y-4">
+      <section className="rounded-xl border bg-card p-4 lg:p-5 space-y-2.5">
+        <p className="text-[11px] text-primary font-semibold uppercase tracking-wide">Parcours d’apprentissage</p>
+        <h1 className="text-xl lg:text-2xl font-bold leading-tight">Formations disponibles</h1>
+        <p className="text-xs text-muted-foreground max-w-3xl">
+          Choisis une formation, puis progresse cours par cours avec checkpoint IA et mini challenge.
         </p>
       </section>
 
-      <section className="grid grid-cols-1 xl:grid-cols-2 gap-4">
+      <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2.5">
         {formations.map((formation) => (
-          <article key={formation.formationSlug} className="rounded-xl border bg-card p-5 space-y-4">
+          <article key={formation.formationSlug} className="rounded-lg border bg-card p-3 space-y-2.5 hover:bg-accent/40 transition-colors">
             <div className="flex items-start justify-between gap-3">
-              <div>
-                <p className="text-xs text-muted-foreground">Formation</p>
-                <h2 className="text-lg font-semibold leading-tight mt-1">{formation.formationName}</h2>
-                <p className="text-xs text-muted-foreground mt-1">Niveaux: {formation.levels}</p>
+              <div className="min-w-0">
+                <p className="text-[11px] text-muted-foreground">Formation</p>
+                <h2 className="text-sm font-semibold leading-tight mt-1 line-clamp-2">{formation.formationName}</h2>
+                <p className="text-[11px] text-muted-foreground mt-1 line-clamp-1">Niveaux: {formation.levels}</p>
               </div>
 
-              <div className="size-10 rounded-lg bg-primary/10 text-primary grid place-items-center">
-                <Layers3 className="h-5 w-5" />
+              <div className="size-8 rounded-md bg-primary/10 text-primary grid place-items-center shrink-0">
+                <Layers3 className="h-4 w-4" />
               </div>
             </div>
 
-            <div className="grid grid-cols-3 gap-2 text-xs">
-              <div className="rounded-lg border bg-background p-2.5">
+            <div className="grid grid-cols-3 gap-1.5 text-[11px]">
+              <div className="rounded-md border bg-background p-2">
                 <p className="text-muted-foreground">Cours</p>
-                <p className="font-semibold text-sm">{formation.totalCourses}</p>
+                <p className="font-semibold text-xs">{formation.totalCourses}</p>
               </div>
-              <div className="rounded-lg border bg-primary/10 border-primary/30 p-2.5">
+              <div className="rounded-md border bg-primary/10 border-primary/30 p-2">
                 <p className="text-muted-foreground">Validés</p>
-                <p className="font-semibold text-sm text-primary inline-flex items-center gap-1">
-                  {formation.validatedCourses > 0 && <CheckCircle2 className="h-3.5 w-3.5" />}
+                <p className="font-semibold text-xs text-primary inline-flex items-center gap-1">
+                  {formation.validatedCourses > 0 && <CheckCircle2 className="h-3 w-3" />}
                   {formation.validatedCourses}
                 </p>
               </div>
-              <div className="rounded-lg border bg-background p-2.5">
+              <div className="rounded-md border bg-background p-2">
                 <p className="text-muted-foreground">Progression</p>
-                <p className="font-semibold text-sm">{formation.completionPercent}%</p>
+                <p className="font-semibold text-xs">{formation.completionPercent}%</p>
               </div>
             </div>
 
-            <div className="h-2 rounded-full bg-muted overflow-hidden">
+            <div className="h-1.5 rounded-full bg-muted overflow-hidden">
               <div className="h-full bg-primary transition-all" style={{ width: `${formation.completionPercent}%` }} />
             </div>
 
             <Link
               href={`/courses/formations/${formation.formationSlug}`}
-              className="inline-flex items-center justify-center gap-2 rounded-lg bg-primary text-primary-foreground px-4 py-2 text-sm font-medium hover:bg-primary/90 transition-colors"
+              className="inline-flex w-full items-center justify-center gap-1.5 rounded-md bg-primary text-primary-foreground px-3 py-1.5 text-xs font-medium hover:bg-primary/90 transition-colors"
             >
-              <BookOpenText className="h-4 w-4" /> Voir les cours de cette formation
+              <BookOpenText className="h-3.5 w-3.5" /> Voir la formation
             </Link>
           </article>
         ))}

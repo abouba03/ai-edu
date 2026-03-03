@@ -4,7 +4,7 @@ from openai import OpenAI
 from app.config import settings
 
 router = APIRouter()
-client = OpenAI(api_key=settings.OPENAI_API_KEY)
+client = OpenAI(api_key=settings.OPENAI_API_KEY or "missing-openai-key")
 
 class FeedbackRequest(BaseModel):
     username: str

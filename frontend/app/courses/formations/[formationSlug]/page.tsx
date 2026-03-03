@@ -139,86 +139,76 @@ export default async function FormationCoursesPage({ params }: Props) {
   const completionPercent = Math.round((validatedCount / sortedCourses.length) * 100);
 
   return (
-    <div className="space-y-6">
-      <section className="rounded-2xl border bg-card p-6 lg:p-7">
-        <div className="flex items-start justify-between gap-4 flex-wrap">
-          <div>
-            <p className="text-xs text-primary font-semibold uppercase tracking-wide">Formation</p>
-            <h1 className="text-2xl lg:text-3xl font-bold mt-1">{formationName}</h1>
-            <p className="text-sm text-muted-foreground mt-2">Choisis un cours pour commencer, puis valide-le avec le quiz et le mini challenge.</p>
+    <div className="space-y-4">
+      <section className="rounded-xl border bg-card p-4 lg:p-5 space-y-3">
+        <div className="flex items-start justify-between gap-3 flex-wrap">
+          <div className="space-y-1.5">
+            <p className="text-[11px] text-primary font-semibold uppercase tracking-wide">Formation</p>
+            <h1 className="text-xl lg:text-2xl font-bold leading-tight">{formationName}</h1>
+            <p className="text-xs text-muted-foreground max-w-3xl">Parcours structuré: valide chaque cours avec quiz + mini challenge pour verrouiller les acquis.</p>
           </div>
 
-          <div className="grid grid-cols-3 gap-2 min-w-[250px] text-xs">
-            <div className="rounded-lg border bg-background p-2.5">
-              <p className="text-muted-foreground">Cours</p>
-              <p className="font-semibold text-sm">{sortedCourses.length}</p>
-            </div>
-            <div className="rounded-lg border bg-primary/10 border-primary/30 p-2.5">
-              <p className="text-muted-foreground">Validés</p>
-              <p className="font-semibold text-sm text-primary">{validatedCount}</p>
-            </div>
-            <div className="rounded-lg border bg-background p-2.5">
-              <p className="text-muted-foreground">Progression</p>
-              <p className="font-semibold text-sm">{completionPercent}%</p>
-            </div>
+          <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
+            <span className="rounded-md border bg-background px-2 py-1">{sortedCourses.length} cours</span>
+            <span className="rounded-md border bg-primary/10 border-primary/30 px-2 py-1 text-primary">{validatedCount} validés</span>
+            <span className="rounded-md border bg-background px-2 py-1">{completionPercent}%</span>
           </div>
         </div>
 
-        <div className="mt-4 h-2 rounded-full bg-muted overflow-hidden">
+        <div className="h-1.5 rounded-full bg-muted overflow-hidden">
           <div className="h-full bg-primary transition-all" style={{ width: `${completionPercent}%` }} />
         </div>
 
-        <div className="mt-4">
-          <Link href="/courses" className="inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-sm hover:bg-accent">
-            <Layers3 className="h-4 w-4" /> Retour aux formations
-          </Link>
-        </div>
+        <Link href="/courses" className="inline-flex items-center gap-2 rounded-md border px-2.5 py-1.5 text-xs hover:bg-accent">
+          <Layers3 className="h-3.5 w-3.5" /> Retour aux formations
+        </Link>
       </section>
 
-      <section className="grid grid-cols-1 xl:grid-cols-2 gap-3">
-        {sortedCourses.map((course) => {
-          const status = courseStatusMap.get(course.slug) ?? DEFAULT_STATUS;
-          const missingSteps = getMissingSteps(status);
+      <section className="rounded-xl border bg-card overflow-hidden">
+        <div className="px-3 py-2 border-b bg-background/60 text-[11px] text-muted-foreground uppercase tracking-wide font-semibold">
+          Cours de la formation
+        </div>
 
-          return (
-            <article key={course.slug} className={`rounded-xl border p-4 space-y-3 ${status.validated ? 'border-primary/30 bg-primary/10' : 'bg-card'}`}>
-              <div className="flex items-start justify-between gap-3">
-                <div className="space-y-1 min-w-0">
-                  <p className="text-xs text-muted-foreground">Cours #{course.courseIndex}</p>
-                  <h2 className="font-semibold leading-tight line-clamp-2">{course.title}</h2>
+        <div className="p-3 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2.5">
+          {sortedCourses.map((course) => {
+            const status = courseStatusMap.get(course.slug) ?? DEFAULT_STATUS;
+            const missingSteps = getMissingSteps(status);
+
+            return (
+              <article key={course.slug} className="rounded-lg border bg-background p-3 space-y-2.5 hover:bg-accent/40 transition-colors">
+                <div className="flex items-start justify-between gap-2">
+                  <p className="text-[11px] text-muted-foreground">#{course.courseIndex}</p>
+                  <span className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-semibold ${status.validated ? 'border-primary/40 bg-primary/15 text-primary' : 'text-muted-foreground'}`}>
+                    {status.validated && <CheckCircle2 className="h-3 w-3" />}
+                    {status.validated ? 'Validé' : 'En cours'}
+                  </span>
+                </div>
+
+                <div className="space-y-1">
+                  <h2 className="font-semibold text-sm leading-tight line-clamp-2">{course.title}</h2>
                   <p className="text-xs text-muted-foreground line-clamp-2">{course.description}</p>
                 </div>
-                <span className={`shrink-0 inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] font-semibold ${status.validated ? 'border-primary/40 bg-primary/15 text-primary' : 'text-muted-foreground'}`}>
-                  {status.validated && <CheckCircle2 className="h-3.5 w-3.5" />}
-                  {status.validated ? 'Validé' : 'En cours'}
-                </span>
-              </div>
 
-              <div className="flex items-center gap-3 text-xs text-muted-foreground flex-wrap">
-                <span className="inline-flex items-center gap-1"><GraduationCap className="h-3 w-3" /> {course.level}</span>
-                <span className="inline-flex items-center gap-1"><Clock3 className="h-3 w-3" /> {course.duration}</span>
-                <span>{course.modulesCount} modules</span>
-              </div>
-
-              {status.validated ? (
-                <div className="rounded-lg border border-primary/30 bg-primary/10 px-3 py-2 text-xs font-medium text-primary inline-flex items-center gap-2">
-                  <CheckCircle2 className="h-4 w-4" /> Cours validé
+                <div className="flex items-center gap-2 text-[11px] text-muted-foreground flex-wrap">
+                  <span className="inline-flex items-center gap-1"><GraduationCap className="h-3 w-3" /> {course.level}</span>
+                  <span className="inline-flex items-center gap-1"><Clock3 className="h-3 w-3" /> {course.duration}</span>
+                  <span>{course.modulesCount} modules</span>
                 </div>
-              ) : (
-                <div className="rounded-lg border px-3 py-2 text-xs text-muted-foreground inline-flex items-center gap-2">
-                  <CircleAlert className="h-4 w-4" /> Reste: {missingSteps.join(' • ')}
-                </div>
-              )}
 
-              <Link
-                href={`/courses/${course.slug}`}
-                className="inline-flex items-center justify-center rounded-lg bg-primary text-primary-foreground px-4 py-2 text-sm font-medium hover:bg-primary/90 transition-colors"
-              >
-                Ouvrir le cours
-              </Link>
-            </article>
-          );
-        })}
+                {!status.validated && (
+                  <p className="text-[11px] text-muted-foreground inline-flex items-center gap-1"><CircleAlert className="h-3 w-3" /> {missingSteps.join(' • ')}</p>
+                )}
+
+                <Link
+                  href={`/courses/${course.slug}`}
+                  className="inline-flex w-full items-center justify-center rounded-md bg-primary text-primary-foreground px-3 py-1.5 text-xs font-medium hover:bg-primary/90"
+                >
+                  Ouvrir le cours
+                </Link>
+              </article>
+            );
+          })}
+        </div>
       </section>
     </div>
   );

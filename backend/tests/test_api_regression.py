@@ -33,7 +33,7 @@ def test_correct_rejects_empty_code():
 
 
 def test_correct_success(monkeypatch):
-    monkeypatch.setattr("app.main.correct_code", lambda code, pedagogy_context=None: "code corrigé")
+    monkeypatch.setattr("app.main.correct_code", lambda code, pedagogy_context=None, **kwargs: "code corrigé")
 
     response = client.post("/correct/", json={"code": "print('x')"})
 

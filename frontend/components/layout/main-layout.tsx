@@ -14,6 +14,7 @@ import {
   X,
   User,
   LayoutDashboard,
+  BarChart3,
   BookOpen,
   Settings2,
   Sparkles,
@@ -74,6 +75,12 @@ export default function MainLayout({ children }: MainLayoutProps) {
       icon: <LayoutDashboard className="h-5 w-5" />,
       href: '/dashboard',
       active: pathname === '/dashboard',
+    },
+    {
+      label: 'Pilotage IA',
+      icon: <BarChart3 className="h-5 w-5" />,
+      href: '/dashboard/insights',
+      active: pathname.startsWith('/dashboard/insights'),
     },
     {
       label: 'Cours',

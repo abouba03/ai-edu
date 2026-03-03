@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { BookMarked, CirclePlay, Code2, Clock3, Lightbulb, Sparkles } from 'lucide-react';
+import { BookMarked, CirclePlay, Code2, Clock3, Lightbulb } from 'lucide-react';
 import { getCourseBySlug } from '@/lib/course-catalog';
 import { getAdminCourseBySlug, getFormationProgressBySlug, toYouTubeResources } from '@/lib/admin-course-catalog';
 import PersonalizedCoursePanel from '@/components/courses/personalized-course-panel';
@@ -24,34 +24,36 @@ export default async function CourseDetailPage({ params }: Props) {
     const progression = await getFormationProgressBySlug(slug);
 
     return (
-      <div className="space-y-8">
-        <section className="relative overflow-hidden rounded-3xl border bg-card p-6 lg:p-8 space-y-5">
-          <div className="absolute -top-24 right-0 size-72 rounded-full bg-primary/10 blur-3xl" />
-          <div className="absolute -bottom-20 -left-10 size-72 rounded-full bg-primary/10 blur-3xl" />
-
-          <div className="relative space-y-4">
-            <p className="text-sm text-primary font-semibold inline-flex items-center gap-2">
-              <Sparkles className="h-4 w-4" /> Cours vidéo premium (Admin)
+      <div className="space-y-5">
+        <section className="rounded-xl border bg-card p-4 lg:p-5 space-y-3">
+          <div className="flex items-center justify-between gap-2 flex-wrap">
+            <p className="inline-flex items-center gap-2 rounded-md border bg-background px-2.5 py-1 text-[11px] font-semibold text-primary uppercase tracking-wide">
+              <Code2 className="h-3.5 w-3.5" /> Cours premium
             </p>
-            <h1 className="text-2xl lg:text-4xl font-bold leading-tight">{adminCourse.title}</h1>
-            <p className="text-muted-foreground text-base">{adminCourse.description}</p>
-
-            <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
-              <span className="inline-flex items-center gap-1 rounded-md border bg-background/70 px-3 py-1.5">Formation: {adminCourse.formationName}</span>
-              <span className="inline-flex items-center gap-1 rounded-md border bg-background/70 px-3 py-1.5">Cours #{adminCourse.courseIndex}</span>
-              <span className="inline-flex items-center gap-1 rounded-md border bg-background/70 px-3 py-1.5">Niveau: {adminCourse.level}</span>
-              <span className="inline-flex items-center gap-1 rounded-md border bg-background/70 px-3 py-1.5"><Clock3 className="h-3 w-3" /> {adminCourse.duration}</span>
-              <span className="inline-flex items-center gap-1 rounded-md border bg-background/70 px-3 py-1.5"><BookMarked className="h-3 w-3" /> {adminCourse.modules} modules</span>
+            <div className="flex flex-wrap gap-1.5 text-[11px] text-muted-foreground">
+              <span className="inline-flex items-center rounded-md border bg-background px-2 py-1">{adminCourse.formationName}</span>
+              <span className="inline-flex items-center rounded-md border bg-background px-2 py-1">#{adminCourse.courseIndex}</span>
+              <span className="inline-flex items-center rounded-md border bg-background px-2 py-1">{adminCourse.level}</span>
             </div>
+          </div>
 
-            <div className="flex flex-wrap gap-3 pt-1">
-              <Link href="/admin/formation" className="inline-flex items-center justify-center rounded-lg bg-primary text-primary-foreground px-4 py-2 text-sm font-medium hover:bg-primary/90 transition-colors">
-                Gérer ce cours dans l’admin
-              </Link>
-              <Link href="/courses" className="inline-flex items-center justify-center rounded-lg border px-4 py-2 text-sm font-medium hover:bg-accent transition-colors">
-                Retour aux cours
-              </Link>
-            </div>
+          <div className="space-y-1">
+            <h1 className="text-xl lg:text-2xl font-bold leading-tight tracking-tight">{adminCourse.title}</h1>
+            <p className="text-xs lg:text-sm text-muted-foreground max-w-4xl">{adminCourse.description}</p>
+          </div>
+
+          <div className="flex flex-wrap gap-1.5 text-[11px]">
+            <span className="inline-flex items-center gap-1 rounded-md border bg-background px-2 py-1"><Clock3 className="h-3 w-3" /> {adminCourse.duration}</span>
+            <span className="inline-flex items-center gap-1 rounded-md border bg-background px-2 py-1"><BookMarked className="h-3 w-3" /> {adminCourse.modules} module{adminCourse.modules > 1 ? 's' : ''}</span>
+          </div>
+
+          <div className="flex flex-wrap gap-2 pt-0.5">
+            <Link href="/courses" className="inline-flex items-center justify-center rounded-md border px-3 py-1.5 text-xs font-medium hover:bg-accent transition-colors">
+              Retour aux cours
+            </Link>
+            <Link href="/admin/formation" className="inline-flex items-center justify-center rounded-md bg-primary text-primary-foreground px-3 py-1.5 text-xs font-medium hover:bg-primary/90 transition-colors">
+              Admin
+            </Link>
           </div>
         </section>
 

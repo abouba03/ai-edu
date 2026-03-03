@@ -7,7 +7,7 @@ from app.prompting import build_pedagogy_block
 from typing import Any
 
 router = APIRouter()
-client = OpenAI(api_key=settings.OPENAI_API_KEY)
+client = OpenAI(api_key=settings.OPENAI_API_KEY or "missing-openai-key")
 
 class QuizRequest(BaseModel):
     theme: str

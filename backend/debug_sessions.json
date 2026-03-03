@@ -1,0 +1,886 @@
+{
+  "fe7f5c3f-e83d-4466-a86d-965f35e17ccb": {
+    "session_id": "fe7f5c3f-e83d-4466-a86d-965f35e17ccb",
+    "created_at": "2026-03-01T12:54:28.978219+00:00",
+    "updated_at": "2026-03-01T12:54:28.978244+00:00",
+    "code": "function classer_nombre(n){\r\n    if n<0{\r\n        result = \"negatif\"\r\n    }\r\n    return result;\r\n}",
+    "level": "débutant",
+    "history": []
+  },
+  "60498c53-ec1a-449c-bd7b-06e7a6c5af94": {
+    "session_id": "60498c53-ec1a-449c-bd7b-06e7a6c5af94",
+    "created_at": "2026-03-01T12:54:32.275646+00:00",
+    "updated_at": "2026-03-01T12:54:32.275665+00:00",
+    "code": "function classer_nombre(n){\r\n    if n<0{\r\n        result = \"negatif\"\r\n    }\r\n    return result;\r\n}",
+    "level": "débutant",
+    "history": []
+  },
+  "7a99ad35-a812-4368-b02a-6822946047e4": {
+    "session_id": "7a99ad35-a812-4368-b02a-6822946047e4",
+    "created_at": "2026-03-01T12:55:53.386001+00:00",
+    "updated_at": "2026-03-01T12:55:54.649752+00:00",
+    "code": "def classer_nombre(n):\\n    return \"\"",
+    "level": "débutant",
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Question : Quelle structure de contrôle faut-il ajouter en premier (condition, boucle ou les deux) pour résoudre ce problème ?\nIndice : Commence par identifier la décision principale (if/elif/else), puis parcours les données si nécessaire.",
+        "timestamp": "2026-03-01T12:55:54.649732+00:00"
+      }
+    ]
+  },
+  "e9bc17c5-233f-4b01-ab2b-0245c92adcec": {
+    "session_id": "e9bc17c5-233f-4b01-ab2b-0245c92adcec",
+    "created_at": "2026-03-01T13:01:09.058000+00:00",
+    "updated_at": "2026-03-01T13:01:09.566739+00:00",
+    "code": "def classer_nombre(n): return n",
+    "level": "débutant",
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Question : Quelle structure de contrôle faut-il ajouter en premier (condition, boucle ou les deux) pour résoudre ce problème ?\nIndice : Commence par identifier la décision principale (if/elif/else), puis parcours les données si nécessaire.",
+        "timestamp": "2026-03-01T13:01:09.566717+00:00"
+      }
+    ]
+  },
+  "2a9f61f1-d7a2-4f6a-90d1-6de58a005555": {
+    "session_id": "2a9f61f1-d7a2-4f6a-90d1-6de58a005555",
+    "created_at": "2026-03-01T13:03:14.934989+00:00",
+    "updated_at": "2026-03-01T13:03:15.421677+00:00",
+    "code": "def classer_nombre(n): return n",
+    "level": "débutant",
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Question : Quelle structure de contrôle faut-il ajouter en premier (condition, boucle ou les deux) pour résoudre ce problème ?\nIndice : Commence par identifier la décision principale (if/elif/else), puis parcours les données si nécessaire.",
+        "timestamp": "2026-03-01T13:03:15.421654+00:00"
+      }
+    ]
+  },
+  "576a7f2a-481b-4576-a4ec-9f185ead5075": {
+    "session_id": "576a7f2a-481b-4576-a4ec-9f185ead5075",
+    "created_at": "2026-03-01T13:03:53.483114+00:00",
+    "updated_at": "2026-03-01T13:06:32.031920+00:00",
+    "code": "function classer_nombre(n){\r\n    if n<0{\r\n        result = \"negatif\"\r\n    }\r\n    return result;\r\n}",
+    "level": "débutant",
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Question : Comment vas-tu parcourir les données pour appliquer ta condition à chaque élément ?\nIndice : Une boucle simple suffit, puis retourne le résultat dès que le cas est trouvé.",
+        "timestamp": "2026-03-01T13:03:54.004587+00:00"
+      },
+      {
+        "step": 1,
+        "student_answer": "avec if?",
+        "assistant_response": "Feedback : Bonne progression. Ton explication montre une intention correcte, continue avec une correction ciblée.\nNouvelle question ou indice : Étape 2 — applique la modification principale puis teste 2 cas (normal + limite) ; garde une solution simple et lisible.",
+        "timestamp": "2026-03-01T13:05:18.891123+00:00"
+      },
+      {
+        "step": 2,
+        "student_answer": "j'ai pas compris",
+        "assistant_response": "Feedback : Bonne progression. Ton explication montre une intention correcte, continue avec une correction ciblée.\nNouvelle question ou indice : Étape 3 — applique la modification principale puis teste 2 cas (normal + limite) ; garde une solution simple et lisible.",
+        "timestamp": "2026-03-01T13:06:12.908365+00:00"
+      },
+      {
+        "step": 3,
+        "student_answer": "j'ai pas compris",
+        "assistant_response": "Feedback : Bonne progression. Ton explication montre une intention correcte, continue avec une correction ciblée.\nNouvelle question ou indice : Étape 4 — applique la modification principale puis teste 2 cas (normal + limite) ; garde une solution simple et lisible.",
+        "timestamp": "2026-03-01T13:06:32.031896+00:00"
+      }
+    ]
+  },
+  "8c9e4f13-a4d0-46ab-aded-195dde8fa521": {
+    "session_id": "8c9e4f13-a4d0-46ab-aded-195dde8fa521",
+    "created_at": "2026-03-01T13:06:43.338003+00:00",
+    "updated_at": "2026-03-01T13:06:43.764431+00:00",
+    "code": "function classer_nombre(n){\r\n    if n<0{\r\n        result = \"negatif\"\r\n    }\r\n    return result;\r\n}",
+    "level": "débutant",
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Question : Comment vas-tu parcourir les données pour appliquer ta condition à chaque élément ?\nIndice : Une boucle simple suffit, puis retourne le résultat dès que le cas est trouvé.",
+        "timestamp": "2026-03-01T13:06:43.764409+00:00"
+      }
+    ]
+  },
+  "3fe76675-d03f-427d-acf9-f1f506f1ce5e": {
+    "session_id": "3fe76675-d03f-427d-acf9-f1f506f1ce5e",
+    "created_at": "2026-03-01T13:10:23.876167+00:00",
+    "updated_at": "2026-03-01T13:10:27.320975+00:00",
+    "code": "def first_even(nums): return -1",
+    "level": "débutant",
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Question : Quelle structure de contrôle faut-il ajouter en premier (condition, boucle ou les deux) pour résoudre ce problème ?\nIndice : Commence par identifier la décision principale (if/elif/else), puis parcours les données si nécessaire.",
+        "timestamp": "2026-03-01T13:10:25.077807+00:00"
+      },
+      {
+        "step": 1,
+        "student_answer": "Je vais faire une boucle for et tester x % 2 == 0, puis retourner -1 sinon.",
+        "assistant_response": "Feedback : Ta réponse est cohérente: tu combines boucle, condition et valeur de retour.\nNouvelle question ou indice : Implémente cette version maintenant et vérifie 3 cas: premier élément valide, élément valide au milieu, aucun élément valide.",
+        "timestamp": "2026-03-01T13:10:27.320954+00:00"
+      }
+    ]
+  },
+  "749ba529-8c8f-4628-aa51-cc0f4e648a9a": {
+    "session_id": "749ba529-8c8f-4628-aa51-cc0f4e648a9a",
+    "created_at": "2026-03-01T13:11:50.591306+00:00",
+    "updated_at": "2026-03-01T13:13:35.525375+00:00",
+    "code": "function classer_nombre(n){\r\n    if n<0{\r\n        result = \"negatif\"\r\n    }\r\n    return result;\r\n}",
+    "level": "débutant",
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Question : Comment vas-tu parcourir les données pour appliquer ta condition à chaque élément ?\nIndice : Une boucle simple suffit, puis retourne le résultat dès que le cas est trouvé.",
+        "timestamp": "2026-03-01T13:11:51.091041+00:00"
+      },
+      {
+        "step": 1,
+        "student_answer": "j'ai pas compris",
+        "assistant_response": "Feedback : Bonne progression. Ton explication montre une intention correcte, continue avec une correction ciblée.\nNouvelle question ou indice : Étape 2 — applique la modification principale puis teste 2 cas (normal + limite) ; garde une solution simple et lisible.",
+        "timestamp": "2026-03-01T13:12:08.882065+00:00"
+      },
+      {
+        "step": 2,
+        "student_answer": "tg",
+        "assistant_response": "Feedback : Ta réponse est trop courte pour valider l’étape.\nNouvelle question ou indice : Reformule ton raisonnement en 1-2 phrases (ce que tu modifies et pourquoi).",
+        "timestamp": "2026-03-01T13:12:30.970019+00:00"
+      },
+      {
+        "step": 3,
+        "student_answer": "j'ai pas compis ton feedback ou consil",
+        "assistant_response": "Feedback : Bonne progression. Ton explication montre une intention correcte, continue avec une correction ciblée.\nNouvelle question ou indice : Étape 4 — applique la modification principale puis teste 2 cas (normal + limite) ; garde une solution simple et lisible.",
+        "timestamp": "2026-03-01T13:12:57.208015+00:00"
+      },
+      {
+        "step": 4,
+        "student_answer": "ecrvr4v4r",
+        "assistant_response": "Feedback : Bonne progression. Ton explication montre une intention correcte, continue avec une correction ciblée.\nNouvelle question ou indice : Étape 5 — applique la modification principale puis teste 2 cas (normal + limite) ; garde une solution simple et lisible.",
+        "timestamp": "2026-03-01T13:13:31.668942+00:00"
+      },
+      {
+        "step": 5,
+        "student_answer": "f44ff3dfe3dfr",
+        "assistant_response": "Feedback : Bonne progression. Ton explication montre une intention correcte, continue avec une correction ciblée.\nNouvelle question ou indice : Étape 6 — applique la modification principale puis teste 2 cas (normal + limite) ; garde une solution simple et lisible.",
+        "timestamp": "2026-03-01T13:13:35.525351+00:00"
+      }
+    ]
+  },
+  "a588418e-ab35-4e8c-84a6-ec017fc5200d": {
+    "session_id": "a588418e-ab35-4e8c-84a6-ec017fc5200d",
+    "created_at": "2026-03-01T13:13:42.271475+00:00",
+    "updated_at": "2026-03-01T13:14:04.546545+00:00",
+    "code": "function classer_nombre(n){\r\n    if n<0{\r\n        result = \"negatif\"\r\n    }\r\n    return result;\r\n}",
+    "level": "débutant",
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Question : Comment vas-tu parcourir les données pour appliquer ta condition à chaque élément ?\nIndice : Une boucle simple suffit, puis retourne le résultat dès que le cas est trouvé.",
+        "timestamp": "2026-03-01T13:13:42.715178+00:00"
+      },
+      {
+        "step": 1,
+        "student_answer": "4rtvtvc4v",
+        "assistant_response": "Feedback : Bonne progression. Ton explication montre une intention correcte, continue avec une correction ciblée.\nNouvelle question ou indice : Étape 2 — applique la modification principale puis teste 2 cas (normal + limite) ; garde une solution simple et lisible.",
+        "timestamp": "2026-03-01T13:14:04.546519+00:00"
+      }
+    ]
+  },
+  "87c62fce-4ee5-4e0b-8b24-8712c950e14f": {
+    "session_id": "87c62fce-4ee5-4e0b-8b24-8712c950e14f",
+    "created_at": "2026-03-01T13:17:13.263458+00:00",
+    "updated_at": "2026-03-01T13:17:19.345581+00:00",
+    "code": "def classer_nombre(n):\n    return -1",
+    "level": "débutant",
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Diagnostic : Ton code retourne une constante sans analyser les données (ex: `return -1`).\nQuestion : Quelle étape de traitement dois-tu ajouter avant le `return` final ?\nIndice : Il faut d’abord parcourir les données et vérifier une condition sur chaque élément.",
+        "timestamp": "2026-03-01T13:17:14.698379+00:00"
+      },
+      {
+        "step": 1,
+        "student_answer": "Je vais ajouter une boucle for pour parcourir la liste et tester une condition.",
+        "assistant_response": "Feedback : Bonne réponse, tu as bien identifié la correction prioritaire.\nNouvelle question ou indice : Quelle condition précise vas-tu tester dans la boucle ?\nIndice : Écris d’abord la condition principale, puis le cas par défaut.",
+        "timestamp": "2026-03-01T13:17:16.987053+00:00"
+      },
+      {
+        "step": 2,
+        "student_answer": "Pourquoi je dois utiliser modulo ici ?",
+        "assistant_response": "Feedback : Très bonne question. Oui, ce critère est pertinent pour distinguer les cas attendus.\nNouvelle question ou indice : Où places-tu ce test dans ta boucle pour déclencher le bon `return` au bon moment ?",
+        "timestamp": "2026-03-01T13:17:19.345561+00:00"
+      }
+    ]
+  },
+  "8d67d241-371f-412e-b63b-aab0a6199335": {
+    "session_id": "8d67d241-371f-412e-b63b-aab0a6199335",
+    "created_at": "2026-03-01T13:18:18.861733+00:00",
+    "updated_at": "2026-03-01T13:19:36.606347+00:00",
+    "code": "function classer_nombre(n){\r\n    if n<0{\r\n        result = \"negatif\"\r\n    }\r\n    return result;\r\n}",
+    "level": "débutant",
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Diagnostic : Je ne vois pas de fonction déclarée (`def ...`).\nQuestion : Quelle signature de fonction vas-tu utiliser (nom + paramètre) pour rendre ta solution testable ?\nIndice : Commence par une fonction courte qui prend l’entrée principale en paramètre.",
+        "timestamp": "2026-03-01T13:18:19.339861+00:00"
+      },
+      {
+        "step": 1,
+        "student_answer": "j'ai pas compris",
+        "assistant_response": "Feedback : Ta réponse est intéressante, mais elle ne cible pas encore le point principal détecté dans ton code: Je ne vois pas de boucle pour parcourir les éléments.\nNouvelle question ou indice : Comment vas-tu parcourir les données pour tester chaque élément ?",
+        "timestamp": "2026-03-01T13:19:13.514059+00:00"
+      },
+      {
+        "step": 2,
+        "student_answer": "f fcfcferc",
+        "assistant_response": "Feedback : Ta réponse est intéressante, mais elle ne cible pas encore le point principal détecté dans ton code: Je ne vois pas de boucle pour parcourir les éléments.\nNouvelle question ou indice : Comment vas-tu parcourir les données pour tester chaque élément ?",
+        "timestamp": "2026-03-01T13:19:36.606326+00:00"
+      }
+    ]
+  },
+  "f47bdca0-c004-4772-ad68-7c2ed8d520fb": {
+    "session_id": "f47bdca0-c004-4772-ad68-7c2ed8d520fb",
+    "created_at": "2026-03-01T13:22:37.252670+00:00",
+    "updated_at": "2026-03-01T13:22:43.317199+00:00",
+    "code": "return -1",
+    "level": "débutant",
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Diagnostic : Je ne vois pas de fonction déclarée (`def ...`).\nQuestion : Quelle signature de fonction vas-tu utiliser (nom + paramètre) pour rendre ta solution testable ?\nIndice : Commence par une fonction courte qui prend l’entrée principale en paramètre.",
+        "timestamp": "2026-03-01T13:22:38.784265+00:00"
+      },
+      {
+        "step": 1,
+        "student_answer": "je n'ai pas compris",
+        "assistant_response": "Feedback : Merci de l’avoir dit. On reste sur le même point: Je ne vois pas de fonction déclarée (`def ...`).\nIndice simplifié : Écris juste l’en-tête de fonction (nom + paramètre), sans logique complète pour l’instant.\nNouvelle question ou indice : Quelle signature de fonction vas-tu utiliser (nom + paramètre) pour rendre ta solution testable ?",
+        "timestamp": "2026-03-01T13:22:41.046626+00:00"
+      },
+      {
+        "step": 2,
+        "student_answer": "ok je vais ajouter une fonction def avec un paramètre",
+        "assistant_response": "Feedback : Bonne réponse, tu as bien identifié la correction prioritaire.\nNouvelle question ou indice : Quelle étape de traitement dois-tu ajouter avant le `return` final ?\nIndice : Il faut d’abord parcourir les données et vérifier une condition sur chaque élément.",
+        "timestamp": "2026-03-01T13:22:43.317184+00:00"
+      }
+    ]
+  },
+  "512492cc-b4ba-482d-b414-516ad3a477e7": {
+    "session_id": "512492cc-b4ba-482d-b414-516ad3a477e7",
+    "created_at": "2026-03-01T13:23:30.092876+00:00",
+    "updated_at": "2026-03-01T13:23:44.469645+00:00",
+    "code": "function classer_nombre(n){\r\n    if n<0{\r\n        result = \"negatif\"\r\n    }\r\n    return result;\r\n}",
+    "level": "débutant",
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Diagnostic : Je ne vois pas de fonction déclarée (`def ...`).\nQuestion : Quelle signature de fonction vas-tu utiliser (nom + paramètre) pour rendre ta solution testable ?\nIndice : Commence par une fonction courte qui prend l’entrée principale en paramètre.",
+        "timestamp": "2026-03-01T13:23:30.543032+00:00"
+      },
+      {
+        "step": 1,
+        "student_answer": "j'ai pas compris",
+        "assistant_response": "Feedback : Merci de l’avoir dit. On reste sur le même point: Je ne vois pas de fonction déclarée (`def ...`).\nIndice simplifié : Écris juste l’en-tête de fonction (nom + paramètre), sans logique complète pour l’instant.\nNouvelle question ou indice : Quelle signature de fonction vas-tu utiliser (nom + paramètre) pour rendre ta solution testable ?",
+        "timestamp": "2026-03-01T13:23:44.469621+00:00"
+      }
+    ]
+  },
+  "f93eb18b-c3fd-4602-919e-46d2ff15eb36": {
+    "session_id": "f93eb18b-c3fd-4602-919e-46d2ff15eb36",
+    "created_at": "2026-03-01T13:24:39.094995+00:00",
+    "updated_at": "2026-03-01T13:24:39.614675+00:00",
+    "code": "classer_nombre(n){\r\n    if n<0{\r\n        result = \"negatif\"\r\n    }\r\n    return result;\r\n}",
+    "level": "débutant",
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Diagnostic : Je ne vois pas de fonction déclarée (`def ...`).\nQuestion : Quelle signature de fonction vas-tu utiliser (nom + paramètre) pour rendre ta solution testable ?\nIndice : Commence par une fonction courte qui prend l’entrée principale en paramètre.",
+        "timestamp": "2026-03-01T13:24:39.614648+00:00"
+      }
+    ]
+  },
+  "d9f67a42-8e28-40a5-9e14-9b7d81ed1c7e": {
+    "session_id": "d9f67a42-8e28-40a5-9e14-9b7d81ed1c7e",
+    "created_at": "2026-03-01T13:24:56.041323+00:00",
+    "updated_at": "2026-03-01T13:24:56.501109+00:00",
+    "code": "def classer_nombre(n){\r\n    if n<0{\r\n        result = \"negatif\"\r\n    }\r\n    return result;\r\n}",
+    "level": "débutant",
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Diagnostic : Je ne vois pas de boucle pour parcourir les éléments.\nQuestion : Comment vas-tu parcourir les données pour tester chaque élément ?\nIndice : Une boucle `for` suffit dans la plupart des cas débutants.",
+        "timestamp": "2026-03-01T13:24:56.501079+00:00"
+      }
+    ]
+  },
+  "a5f08e22-28c4-47ae-864a-38b5084429d6": {
+    "session_id": "a5f08e22-28c4-47ae-864a-38b5084429d6",
+    "created_at": "2026-03-01T13:28:30.094273+00:00",
+    "updated_at": "2026-03-01T13:28:31.470548+00:00",
+    "code": "return -1",
+    "level": "débutant",
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Diagnostic : Je ne vois pas de fonction déclarée (`def ...`).\nQuestion : Quelle signature de fonction vas-tu utiliser (nom + paramètre) pour rendre ta solution testable ?\nIndice : Commence par une fonction courte qui prend l’entrée principale en paramètre.",
+        "timestamp": "2026-03-01T13:28:31.470528+00:00"
+      }
+    ]
+  },
+  "aa675d90-2f01-4762-9636-ac69857e2c33": {
+    "session_id": "aa675d90-2f01-4762-9636-ac69857e2c33",
+    "created_at": "2026-03-01T13:28:42.535449+00:00",
+    "updated_at": "2026-03-01T13:28:43.031293+00:00",
+    "code": "def f(nums):\n    if nums:\n        return nums[0]\n    return -1",
+    "level": "débutant",
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Diagnostic : Je ne vois pas de boucle pour parcourir les éléments.\nQuestion : Comment vas-tu parcourir les données pour tester chaque élément ?\nIndice : Pense à une structure de répétition qui passe sur chaque élément un par un.",
+        "timestamp": "2026-03-01T13:28:43.031279+00:00"
+      }
+    ]
+  },
+  "eb806c43-cfe2-4c6d-9cca-e3904da04df9": {
+    "session_id": "eb806c43-cfe2-4c6d-9cca-e3904da04df9",
+    "created_at": "2026-03-01T13:29:28.201796+00:00",
+    "updated_at": "2026-03-01T13:29:55.902077+00:00",
+    "code": "def classer_nombre(n){\r\n    if n<0{\r\n        result = \"negatif\"\r\n    }\r\n    return result;\r\n}",
+    "level": "débutant",
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Diagnostic : Je ne vois pas de boucle pour parcourir les éléments.\nQuestion : Comment vas-tu parcourir les données pour tester chaque élément ?\nIndice : Pense à une structure de répétition qui passe sur chaque élément un par un.",
+        "timestamp": "2026-03-01T13:29:28.689506+00:00"
+      },
+      {
+        "step": 1,
+        "student_answer": "j'ai pas compris",
+        "assistant_response": "Feedback : Merci de l’avoir dit. On reste sur le même point: Je ne vois pas de boucle pour parcourir les éléments.\nIndice simplifié : Pense à une boucle qui lit les éléments l’un après l’autre (`for élément in ...`).\nNouvelle question ou indice : Comment vas-tu parcourir les données pour tester chaque élément ?",
+        "timestamp": "2026-03-01T13:29:55.902051+00:00"
+      }
+    ]
+  },
+  "2092bc39-3f9a-45c1-a0d3-c7e489054dce": {
+    "session_id": "2092bc39-3f9a-45c1-a0d3-c7e489054dce",
+    "created_at": "2026-03-01T13:30:41.414996+00:00",
+    "updated_at": "2026-03-01T13:31:38.154204+00:00",
+    "code": "def classer_nombre(n){\r\n    if n<0{\r\n        result = \"negatif\"\r\n    }\r\n    return result;\r\n}",
+    "level": "débutant",
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Diagnostic : Je ne vois pas de boucle pour parcourir les éléments.\nQuestion : Comment vas-tu parcourir les données pour tester chaque élément ?\nIndice : Pense à une structure de répétition qui passe sur chaque élément un par un.",
+        "timestamp": "2026-03-01T13:30:41.952909+00:00"
+      },
+      {
+        "step": 1,
+        "student_answer": "for?",
+        "assistant_response": "Feedback : Ta réponse est trop courte pour valider l’étape.\nNouvelle question ou indice : Décris en une phrase ce que tu vas modifier dans le code et pourquoi.",
+        "timestamp": "2026-03-01T13:30:47.405316+00:00"
+      },
+      {
+        "step": 2,
+        "student_answer": "tu parles de for?",
+        "assistant_response": "Feedback : Bonne question. D’après ton code, le point prioritaire reste: Je ne vois pas de boucle pour parcourir les éléments.\nNouvelle question ou indice : Comment vas-tu parcourir les données pour tester chaque élément ?",
+        "timestamp": "2026-03-01T13:31:03.257506+00:00"
+      },
+      {
+        "step": 3,
+        "student_answer": "c'est la boucle for",
+        "assistant_response": "Feedback : Bonne direction, ton raisonnement est cohérent avec le problème identifié dans ton code.\nNouvelle question ou indice : Implémente cette correction puis teste 2 cas (normal + limite) ; garde une version simple et lisible.",
+        "timestamp": "2026-03-01T13:31:38.154178+00:00"
+      }
+    ]
+  },
+  "9e46e429-a18a-4e2c-aae8-6b363a88368d": {
+    "session_id": "9e46e429-a18a-4e2c-aae8-6b363a88368d",
+    "created_at": "2026-03-01T13:31:22.277664+00:00",
+    "updated_at": "2026-03-01T13:31:25.789563+00:00",
+    "code": "def f(nums):\n    if nums:\n        return nums[0]\n    return -1",
+    "level": "débutant",
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Diagnostic : Je ne vois pas de boucle pour parcourir les éléments.\nQuestion : Comment vas-tu parcourir les données pour tester chaque élément ?\nIndice : Pense à une structure de répétition qui passe sur chaque élément un par un.",
+        "timestamp": "2026-03-01T13:31:23.514404+00:00"
+      },
+      {
+        "step": 1,
+        "student_answer": "je n'ai pas compris",
+        "assistant_response": "Feedback : Merci de l’avoir dit. On simplifie et on reste sur le point principal: Je ne vois pas de boucle pour parcourir les éléments.\nIndice simplifié : Ajoute une étape de parcours: traite les éléments un par un avant de décider quoi retourner.\nNouvelle question : Comment vas-tu parcourir les données pour tester chaque élément ?",
+        "timestamp": "2026-03-01T13:31:25.789547+00:00"
+      }
+    ]
+  },
+  "818adcb3-0db1-4dae-91f0-a81a93840902": {
+    "session_id": "818adcb3-0db1-4dae-91f0-a81a93840902",
+    "created_at": "2026-03-01T13:32:03.645917+00:00",
+    "updated_at": "2026-03-01T13:32:41.011998+00:00",
+    "code": "def classer_nombre(n){\r\n    if n<0{\r\n        result = \"negatif\"\r\n    }\r\n    return result;\r\n}",
+    "level": "débutant",
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Diagnostic : Je ne vois pas de boucle pour parcourir les éléments.\nQuestion : Comment vas-tu parcourir les données pour tester chaque élément ?\nIndice : Pense à une structure de répétition qui passe sur chaque élément un par un.",
+        "timestamp": "2026-03-01T13:32:05.253469+00:00"
+      },
+      {
+        "step": 1,
+        "student_answer": "la boucle for peut aider",
+        "assistant_response": "Feedback : Bonne direction, ton raisonnement est cohérent avec le problème identifié dans ton code.\nNouvelle question ou indice : Implémente cette correction puis teste 2 cas (normal + limite) ; garde une version simple et lisible.",
+        "timestamp": "2026-03-01T13:32:20.213557+00:00"
+      },
+      {
+        "step": 2,
+        "student_answer": "j'ai pas compris",
+        "assistant_response": "Feedback : Merci de l’avoir dit. On simplifie et on reste sur le point principal: Je ne vois pas de boucle pour parcourir les éléments.\nIndice simplifié : Ajoute une étape de parcours: traite les éléments un par un avant de décider quoi retourner.\nNouvelle question : Comment vas-tu parcourir les données pour tester chaque élément ?",
+        "timestamp": "2026-03-01T13:32:41.011982+00:00"
+      }
+    ]
+  },
+  "589e9250-2667-46a2-a7c8-76b46faa4b25": {
+    "session_id": "589e9250-2667-46a2-a7c8-76b46faa4b25",
+    "created_at": "2026-03-01T13:40:39.649164+00:00",
+    "updated_at": "2026-03-01T13:40:40.198220+00:00",
+    "code": "def function (n{\r\n    \r\n})",
+    "level": "débutant",
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Diagnostic : Je ne vois pas de boucle pour parcourir les éléments.\nQuestion : Comment vas-tu parcourir les données pour tester chaque élément ?\nIndice : Pense à une structure de répétition qui passe sur chaque élément un par un.",
+        "timestamp": "2026-03-01T13:40:40.198194+00:00"
+      }
+    ]
+  },
+  "119db0d4-e413-4b0c-b518-6ab64b6a6f57": {
+    "session_id": "119db0d4-e413-4b0c-b518-6ab64b6a6f57",
+    "created_at": "2026-03-01T13:41:46.260552+00:00",
+    "updated_at": "2026-03-01T13:41:46.792021+00:00",
+    "code": "def classer_nombre(n){\r\n    n = \"string\"\r\n    \r\n    return n\r\n}",
+    "level": "débutant",
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Diagnostic : Je ne vois pas de boucle pour parcourir les éléments.\nQuestion : Comment vas-tu parcourir les données pour tester chaque élément ?\nIndice : Pense à une structure de répétition qui passe sur chaque élément un par un.",
+        "timestamp": "2026-03-01T13:41:46.792004+00:00"
+      }
+    ]
+  },
+  "0cb2cf77-5a35-40c5-8ea8-ac8e120fe4e5": {
+    "session_id": "0cb2cf77-5a35-40c5-8ea8-ac8e120fe4e5",
+    "created_at": "2026-03-01T13:49:04.120562+00:00",
+    "updated_at": "2026-03-01T13:50:37.382918+00:00",
+    "code": "def classer_nombre(n){\r\n    n = \"string\"\r\n    \r\n    return n\r\n}",
+    "level": "débutant",
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Diagnostic : La syntaxe ressemble à du JavaScript (`{}`), pas à du Python.\nQuestion : Comment écris-tu le bloc d’une fonction en Python (indentation, sans accolades) ?\nIndice : En Python: `def ...:` puis des lignes indentées, sans `{` ni `}`.",
+        "timestamp": "2026-03-01T13:49:05.521740+00:00"
+      },
+      {
+        "step": 1,
+        "student_answer": "j'ai pas comprs",
+        "assistant_response": "Feedback : Ta réponse est intéressante, mais elle ne cible pas encore le point principal détecté dans ton code: La syntaxe ressemble à du JavaScript (`{}`), pas à du Python.\nNouvelle question ou indice : Comment écris-tu le bloc d’une fonction en Python (indentation, sans accolades) ?",
+        "timestamp": "2026-03-01T13:49:56.205836+00:00"
+      },
+      {
+        "step": 2,
+        "student_answer": "quel est a solution?",
+        "assistant_response": "Feedback : Bonne question. D’après ton code, le point prioritaire reste: La syntaxe ressemble à du JavaScript (`{}`), pas à du Python.\nNouvelle question ou indice : Comment écris-tu le bloc d’une fonction en Python (indentation, sans accolades) ?",
+        "timestamp": "2026-03-01T13:50:37.382891+00:00"
+      }
+    ]
+  },
+  "d0db4077-e82d-4fee-80e5-b835437fa84a": {
+    "session_id": "d0db4077-e82d-4fee-80e5-b835437fa84a",
+    "created_at": "2026-03-01T13:51:01.680024+00:00",
+    "updated_at": "2026-03-01T13:51:02.104474+00:00",
+    "code": "def classer_nombre(n){\r\n    n = \"string\"\r\n    \r\n    return n\r\n}",
+    "level": "débutant",
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Diagnostic : La syntaxe ressemble à du JavaScript (`{}`), pas à du Python.\nQuestion : Comment écris-tu le bloc d’une fonction en Python (indentation, sans accolades) ?\nIndice : En Python: `def ...:` puis des lignes indentées, sans `{` ni `}`.",
+        "timestamp": "2026-03-01T13:51:02.104447+00:00"
+      }
+    ]
+  },
+  "e7d96b99-3611-40ab-861c-7f47c8c405af": {
+    "session_id": "e7d96b99-3611-40ab-861c-7f47c8c405af",
+    "created_at": "2026-03-01T13:53:18.821747+00:00",
+    "updated_at": "2026-03-01T13:53:20.268490+00:00",
+    "code": "def classer_nombre(n){\r\n    n = \"string\"\r\n    \r\n    return n\r\n}",
+    "level": "débutant",
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Erreur principale : La syntaxe ressemble à du JavaScript (`{}`), pas à du Python.\nCe qu’il reste à faire :\n- Conserver la valeur d’entrée et la tester, au lieu de l’écraser.\n- Poser des conditions explicites pour distinguer les cas.\nProchaine action : Comment écris-tu le bloc d’une fonction en Python (indentation, sans accolades) ?\nIndice (sans réponse directe) : En Python: `def ...:` puis des lignes indentées, sans `{` ni `}`.",
+        "timestamp": "2026-03-01T13:53:20.268462+00:00"
+      }
+    ]
+  },
+  "0d7b0f8f-e014-4faa-bcc2-522cf3e7875d": {
+    "session_id": "0d7b0f8f-e014-4faa-bcc2-522cf3e7875d",
+    "created_at": "2026-03-01T13:58:00.333767+00:00",
+    "updated_at": "2026-03-01T13:58:00.926268+00:00",
+    "code": "def classer nommee(){\r\n    return n\r\n}",
+    "level": "débutant",
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Erreur principale : La syntaxe ressemble à du JavaScript (`{}`), pas à du Python.\nCe qu’il reste à faire :\n- Poser des conditions explicites pour distinguer les cas.\nProchaine action : Quelle différence de structure observes-tu entre ton code actuel et une fonction Python valide ?\nIndice (sans réponse directe) : Regarde uniquement la structure du bloc (délimitation et alignement des lignes).",
+        "timestamp": "2026-03-01T13:58:00.926238+00:00"
+      }
+    ]
+  },
+  "0aef3312-7c16-4a23-8253-bbb4ecf6f0b8": {
+    "session_id": "0aef3312-7c16-4a23-8253-bbb4ecf6f0b8",
+    "created_at": "2026-03-01T14:00:48.772525+00:00",
+    "updated_at": "2026-03-01T14:01:25.126593+00:00",
+    "code": "def classer nommee(){\r\n    return n\r\n}",
+    "level": "débutant",
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Erreur principale : La syntaxe ressemble à du JavaScript (`{}`), pas à du Python.\nCe qu’il reste à faire :\n- Poser des conditions explicites pour distinguer les cas.\nAction recommandée : Précise différence de structure observes-tu entre ton code actuel et une fonction Python valide.\nIndice (sans réponse directe) : Regarde uniquement la structure du bloc (délimitation et alignement des lignes).",
+        "timestamp": "2026-03-01T14:00:49.349912+00:00"
+      },
+      {
+        "step": 1,
+        "student_answer": "quel est le plus gros probleme?",
+        "assistant_response": "Feedback : Bonne question. D’après ton code, le point prioritaire reste: La syntaxe ressemble à du JavaScript (`{}`), pas à du Python.\nCe qu’il reste à faire :\n- Poser des conditions explicites pour distinguer les cas.\nAction recommandée : Précise différence de structure observes-tu entre ton code actuel et une fonction Python valide.",
+        "timestamp": "2026-03-01T14:01:25.126564+00:00"
+      }
+    ]
+  },
+  "ffc60573-fa4d-426a-be4a-364918172917": {
+    "session_id": "ffc60573-fa4d-426a-be4a-364918172917",
+    "created_at": "2026-03-01T14:02:04.322249+00:00",
+    "updated_at": "2026-03-01T14:02:04.845051+00:00",
+    "code": "def classer nommee(){\r\n    return n\r\n}",
+    "level": "débutant",
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Erreur principale : La syntaxe ressemble à du JavaScript (`{}`), pas à du Python.\nCe qu’il reste à faire :\n- Poser des conditions explicites pour distinguer les cas.\nAction recommandée : Précise différence de structure observes-tu entre ton code actuel et une fonction Python valide.\nIndice (sans réponse directe) : Regarde uniquement la structure du bloc (délimitation et alignement des lignes).",
+        "timestamp": "2026-03-01T14:02:04.845026+00:00"
+      }
+    ]
+  },
+  "e248511b-570f-47e8-87bd-cb1e5ba34fc1": {
+    "session_id": "e248511b-570f-47e8-87bd-cb1e5ba34fc1",
+    "created_at": "2026-03-01T14:03:01.058898+00:00",
+    "updated_at": "2026-03-01T14:03:01.563337+00:00",
+    "code": "def classer_nombre(n):\r\n    if n > 0:\r\n        return \"positif\"\r\n    elif n < 0:\r\n        return \"négatif\"\r\n    else:\r\n        return \"zéro\"",
+    "level": "débutant",
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Erreur principale : La structure générale semble présente.\nCe qu’il reste à faire :\n- Tester rapidement la solution avec 2-3 entrées représentatives.\nAction recommandée : Liste cas limites dois-tu encore tester pour éviter les bugs.\nIndice (sans réponse directe) : Teste une entrée vide et un cas où aucun élément ne correspond.",
+        "timestamp": "2026-03-01T14:03:01.563310+00:00"
+      }
+    ]
+  },
+  "5b0a0503-7c86-4c39-ab6e-5d92b9483fb6": {
+    "session_id": "5b0a0503-7c86-4c39-ab6e-5d92b9483fb6",
+    "created_at": "2026-03-01T14:06:37.100018+00:00",
+    "updated_at": "2026-03-01T14:06:37.649916+00:00",
+    "code": "def classer_nombre(n):\n    if n > 0:\n        return \"positif\"\n    elif n < 0:\n        return \"négatif\"\n    else:\n        return \"zéro\"",
+    "level": "débutant",
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Erreur principale : La structure générale semble présente.\nCe qu’il reste à faire :\n- Tester rapidement la solution avec 2-3 entrées représentatives.\nAction recommandée : Exécute trois tests ciblés pour vérifier chaque branche de décision.\nIndice (sans réponse directe) : Utilise un exemple négatif, un exemple nul et un exemple positif pour valider le comportement.",
+        "timestamp": "2026-03-01T14:06:37.649890+00:00"
+      }
+    ]
+  },
+  "9683152c-ac1d-48b6-8f44-263c5400daf8": {
+    "session_id": "9683152c-ac1d-48b6-8f44-263c5400daf8",
+    "created_at": "2026-03-01T14:09:56.545803+00:00",
+    "updated_at": "2026-03-01T14:09:57.072606+00:00",
+    "code": "def classer_nombre(n):\r\n    if n > 0:\r\n        return \"positif\"\r\n    elif n < 0:\r\n        return \"négatif\"\r\n    else:\r\n        return \"zéro\"",
+    "level": "débutant",
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Erreur principale : La structure générale semble présente.\nCe qu’il reste à faire :\n- Tester rapidement la solution avec 2-3 entrées représentatives.\nAction recommandée : Exécute trois tests ciblés pour vérifier chaque branche de décision.\nIndice (sans réponse directe) : Utilise un exemple négatif, un exemple nul et un exemple positif pour valider le comportement.",
+        "timestamp": "2026-03-01T14:09:57.072578+00:00"
+      }
+    ]
+  },
+  "b08a93e9-7dd3-403e-982d-d3d414085a8e": {
+    "session_id": "b08a93e9-7dd3-403e-982d-d3d414085a8e",
+    "created_at": "2026-03-02T13:36:57.698424+00:00",
+    "updated_at": "2026-03-02T13:37:03.462243+00:00",
+    "code": "# Запрашиваем имя пользователя\r\nname = (\"Введите ваше имя: \")\r\n\r\n# Выводим приветственное сообщение\r\nprint(f\"Привет, {name}!\")",
+    "level": "débutant",
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Action recommandée : Vérifie la ligne où tu demandes le nom de l'utilisateur. Assure-toi que tu utilises la bonne fonction pour obtenir une entrée de l'utilisateur.\n\nIndice : Actuellement, tu assignes une chaîne de caractères à la variable `name`. Y a-t-il une fonction spécifique en Python qui permet de capturer ce que l'utilisateur tape au clavier ?",
+        "timestamp": "2026-03-02T13:37:03.462224+00:00"
+      }
+    ]
+  },
+  "bf2998fa-f4c3-4f83-8f93-d86138f4cd45": {
+    "session_id": "bf2998fa-f4c3-4f83-8f93-d86138f4cd45",
+    "created_at": "2026-03-02T14:00:44.394280+00:00",
+    "updated_at": "2026-03-02T14:00:55.259392+00:00",
+    "code": "# Запрашиваем ввод пользователя\r\ntext = input(\"Введите текст: \")\r\n\r\n# Преобразуем строку в верхний регистр\r\nupper_text = text.upper()\r\n\r\n# Выводим результат\r\nprint(upper_text)",
+    "level": "débutant",
+    "challenge_description": "Énoncé: Теперь, когда вы установили Python и настроили среду разработки, создайте простой скрипт Python, который будет принимать ввод пользователя, выполнять преобразование строки во все заглавные буквы и выводить результат обратно пользователю. Это поможет вам понять, как работать с базовыми функциями ввода и вывода в Python.\nContraintes:\n- Используйте функцию input() для получения данных от пользователя.\n- Примените метод .upper() для преобразования строки в верхний регистр.\n- Используйте функцию print() для вывода результата.\nHints:\n- Чтобы прочитать строку от пользователя, можно использовать код: user_input = input('Введите текст: ').\n- Чтобы преобразовать эту строку в заглавные буквы, примените метод к переменной: transformed_input = user_input.upper().\nExemple: {'input': 'Привет, как дела?', 'output': 'ПРИВЕТ, КАК ДЕЛА?'}",
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Erreur principale : Aucune erreur de syntaxe ou de logique n'est présente dans le code fourni.\n\nCe qu’il reste à faire :\n- Tester le code pour s'assurer qu'il fonctionne comme prévu.\n- Vérifier que le code répond aux exigences de l'énoncé du challenge.\n\nAction recommandée : Exécutez le script pour voir comment il traite différents types d'entrées, y compris des caractères spéciaux et des chiffres.\n\nIndice de réflexion : Pensez à tester des cas où l'entrée pourrait inclure des caractères non alphabétiques ou des espaces pour voir comment ils sont transformés en majuscules.",
+        "timestamp": "2026-03-02T14:00:55.259370+00:00"
+      }
+    ]
+  },
+  "6f870e53-9203-464e-b199-32dd54c9b776": {
+    "session_id": "6f870e53-9203-464e-b199-32dd54c9b776",
+    "created_at": "2026-03-02T14:06:07.193250+00:00",
+    "updated_at": "2026-03-02T14:06:13.143506+00:00",
+    "code": "Interactive Debugger",
+    "level": "débutant",
+    "challenge_description": "Énoncé: Après avoir installé avec succès votre environnement de développement Python, écrivez un script simple qui demande à l'utilisateur de saisir son prénom, puis imprime un message de bienvenue personnalisé incluant ce prénom. Ce défi vous aidera à comprendre comment interagir avec l'utilisateur via la console.\nContraintes:\n- Le script doit utiliser la fonction input() pour recueillir le prénom de l'utilisateur.\n- Le message de bienvenue doit inclure le prénom de l'utilisateur et suivre précisément ce format : 'Bienvenue, [Prénom]!'\n- Assurez-vous que le prénom commençant par une majuscule dans le message, peu importe comment l'utilisateur l'a saisi.\nHints:\n- Utilisez la méthode str.capitalize() pour vous assurer que le prénom est correctement formaté avec une majuscule initiale.\n- Pensez à tester votre programme en entrant des prénoms en minuscules, en majuscules ou un mélange des deux pour voir si votre script les ajuste correctement.\nExemple: {'entree': 'enter votre prénom : alexei', 'sortie': 'Bienvenue, Alexei!'}",
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Statut : Pas d'erreur bloquante\nConseil : Assurez-vous que votre code utilise la méthode `capitalize()` pour formater le prénom.\nProchaine action : Vérifiez si votre script ajuste correctement le prénom en entrant des prénoms en différentes casquettes (par exemple 'alex', 'ALEX', 'aLeX') et observez si la sortie est toujours 'Bienvenue, Alex!'.",
+        "timestamp": "2026-03-02T14:06:13.143480+00:00"
+      }
+    ]
+  },
+  "8d0ad0e7-f70d-453c-a2f8-dc578db10cb6": {
+    "session_id": "8d0ad0e7-f70d-453c-a2f8-dc578db10cb6",
+    "created_at": "2026-03-02T14:10:22.916157+00:00",
+    "updated_at": "2026-03-02T14:12:29.886706+00:00",
+    "code": "Interactive Debugger",
+    "level": "débutant",
+    "challenge_description": "Énoncé: Après avoir installé avec succès votre environnement de développement Python, écrivez un script simple qui demande à l'utilisateur de saisir son prénom, puis imprime un message de bienvenue personnalisé incluant ce prénom. Ce défi vous aidera à comprendre comment interagir avec l'utilisateur via la console.\nContraintes:\n- Le script doit utiliser la fonction input() pour recueillir le prénom de l'utilisateur.\n- Le message de bienvenue doit inclure le prénom de l'utilisateur et suivre précisément ce format : 'Bienvenue, [Prénom]!'\n- Assurez-vous que le prénom commençant par une majuscule dans le message, peu importe comment l'utilisateur l'a saisi.\nHints:\n- Utilisez la méthode str.capitalize() pour vous assurer que le prénom est correctement formaté avec une majuscule initiale.\n- Pensez à tester votre programme en entrant des prénoms en minuscules, en majuscules ou un mélange des deux pour voir si votre script les ajuste correctement.\nExemple: {'entree': 'enter votre prénom : alexei', 'sortie': 'Bienvenue, Alexei!'}",
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Statut : Pas d'erreur bloquante\nConseil : Vérifiez que le prénom saisi par l'utilisateur est transformé pour commencer par une majuscule, quel que soit le format initial de la saisie.\nProchaine action : Testez votre script en entrant des prénoms en minuscules, en majuscules, ou un mélange des deux, pour observer si le message de bienvenue est correctement formaté.",
+        "timestamp": "2026-03-02T14:10:28.805774+00:00"
+      },
+      {
+        "step": 1,
+        "student_answer": "j'ai pas compris",
+        "assistant_response": "Statut : Pas d'erreur bloquante\nConseil : Il semble que vous ayez besoin de clarifications sur la manière de recueillir et de manipuler les entrées de l'utilisateur pour respecter les consignes données. \nProchaine action : Pour mieux comprendre, essayez de revoir comment une fonction peut prendre une entrée utilisateur et comment vous pouvez modifier cette entrée pour répondre aux exigences du format spécifié dans le challenge.",
+        "timestamp": "2026-03-02T14:11:56.789911+00:00"
+      },
+      {
+        "step": 2,
+        "student_answer": "capitalize peut aider?",
+        "assistant_response": "Statut : Pas d'erreur bloquante\nConseil : Vous avez identifié une méthode importante pour ajuster la saisie de l'utilisateur afin qu'elle corresponde au format demandé.\nProchaine action : Essayez d'appliquer cette méthode sur l'entrée de l'utilisateur et vérifiez si le prénom est correctement formaté dans le message de bienvenue.",
+        "timestamp": "2026-03-02T14:12:29.886683+00:00"
+      }
+    ]
+  },
+  "a1f537bd-b597-48e4-8c97-b8263928037b": {
+    "session_id": "a1f537bd-b597-48e4-8c97-b8263928037b",
+    "created_at": "2026-03-02T14:13:52.586470+00:00",
+    "updated_at": "2026-03-02T14:13:56.457672+00:00",
+    "code": "# Запрашиваем ввод пользователя\r\ntext = \"enter votre prénom\"\r\n\r\n# Преобразуем строку в верхний регистр\r\nupper_text = text.upper()\r\n\r\n# Выводим результат\r\nprint(upper_text)",
+    "level": "débutant",
+    "challenge_description": "Énoncé: Après avoir installé avec succès votre environnement de développement Python, écrivez un script simple qui demande à l'utilisateur de saisir son prénom, puis imprime un message de bienvenue personnalisé incluant ce prénom. Ce défi vous aidera à comprendre comment interagir avec l'utilisateur via la console.\nContraintes:\n- Le script doit utiliser la fonction input() pour recueillir le prénom de l'utilisateur.\n- Le message de bienvenue doit inclure le prénom de l'utilisateur et suivre précisément ce format : 'Bienvenue, [Prénom]!'\n- Assurez-vous que le prénom commençant par une majuscule dans le message, peu importe comment l'utilisateur l'a saisi.\nHints:\n- Utilisez la méthode str.capitalize() pour vous assurer que le prénom est correctement formaté avec une majuscule initiale.\n- Pensez à tester votre programme en entrant des prénoms en minuscules, en majuscules ou un mélange des deux pour voir si votre script les ajuste correctement.\nExemple: {'entree': 'enter votre prénom : alexei', 'sortie': 'Bienvenue, Alexei!'}",
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Statut : Erreur détectée\nErreur détectée : Le code actuel ne demande pas l'entrée de l'utilisateur pour son prénom.\nConseil : Vérifiez comment récupérer une entrée utilisateur et comment l'utiliser dans votre script.\nProchaine action : Modifier le script pour inclure une demande d'entrée utilisateur.",
+        "timestamp": "2026-03-02T14:13:56.457652+00:00"
+      }
+    ]
+  },
+  "4f2c3561-3b88-4a54-ab3f-a927fa790acc": {
+    "session_id": "4f2c3561-3b88-4a54-ab3f-a927fa790acc",
+    "created_at": "2026-03-02T14:15:58.073586+00:00",
+    "updated_at": "2026-03-02T14:16:02.848455+00:00",
+    "code": "# Запрашиваем ввод пользователя\r\ntext = input(\"Введите текст: \")\r\n\r\n# Преобразуем строку в верхний регистр\r\nupper_text = text.upper()\r\n\r\n# Выводим результат\r\nprint(upper_text)",
+    "level": "débutant",
+    "challenge_description": "Énoncé: Après avoir installé avec succès votre environnement de développement Python, écrivez un script simple qui demande à l'utilisateur de saisir son prénom, puis imprime un message de bienvenue personnalisé incluant ce prénom. Ce défi vous aidera à comprendre comment interagir avec l'utilisateur via la console.\nContraintes:\n- Le script doit utiliser la fonction input() pour recueillir le prénom de l'utilisateur.\n- Le message de bienvenue doit inclure le prénom de l'utilisateur et suivre précisément ce format : 'Bienvenue, [Prénom]!'\n- Assurez-vous que le prénom commençant par une majuscule dans le message, peu importe comment l'utilisateur l'a saisi.\nHints:\n- Utilisez la méthode str.capitalize() pour vous assurer que le prénom est correctement formaté avec une majuscule initiale.\n- Pensez à tester votre programme en entrant des prénoms en minuscules, en majuscules ou un mélange des deux pour voir si votre script les ajuste correctement.\nExemple: {'entree': 'enter votre prénom : alexei', 'sortie': 'Bienvenue, Alexei!'}",
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Statut : Erreur détectée\nErreur détectée : Le script actuel transforme le texte en majuscules complètes au lieu de formater le prénom avec une majuscule initiale.\nConseil : Recherchez une méthode pour ajuster seulement la première lettre du prénom en majuscule.\nProchaine action : Modifiez la manière dont le texte est transformé pour répondre à la consigne du challenge.",
+        "timestamp": "2026-03-02T14:16:02.848435+00:00"
+      }
+    ]
+  },
+  "94eb1c46-17e2-4986-8f2b-75eb10608d37": {
+    "session_id": "94eb1c46-17e2-4986-8f2b-75eb10608d37",
+    "created_at": "2026-03-02T14:17:49.392982+00:00",
+    "updated_at": "2026-03-02T14:17:52.654832+00:00",
+    "code": "# Demander le prénom de l'utilisateur\r\nprenom = input(\"Entrez votre prénom : \")\r\n\r\n# Afficher le message de bienvenue avec la première lettre en majuscule\r\nprint(f\"Bienvenue, {prenom.capitalize()}!\")",
+    "level": "débutant",
+    "challenge_description": "Énoncé: Après avoir installé avec succès votre environnement de développement Python, écrivez un script simple qui demande à l'utilisateur de saisir son prénom, puis imprime un message de bienvenue personnalisé incluant ce prénom. Ce défi vous aidera à comprendre comment interagir avec l'utilisateur via la console.\nContraintes:\n- Le script doit utiliser la fonction input() pour recueillir le prénom de l'utilisateur.\n- Le message de bienvenue doit inclure le prénom de l'utilisateur et suivre précisément ce format : 'Bienvenue, [Prénom]!'\n- Assurez-vous que le prénom commençant par une majuscule dans le message, peu importe comment l'utilisateur l'a saisi.\nHints:\n- Utilisez la méthode str.capitalize() pour vous assurer que le prénom est correctement formaté avec une majuscule initiale.\n- Pensez à tester votre programme en entrant des prénoms en minuscules, en majuscules ou un mélange des deux pour voir si votre script les ajuste correctement.\nExemple: {'entree': 'enter votre prénom : alexei', 'sortie': 'Bienvenue, Alexei!'}",
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Statut : Pas d'erreur bloquante\nConseil : Testez votre script en entrant votre prénom de différentes manières (tout en minuscules, tout en majuscules, mélange de casse) pour vérifier si le formatage du prénom est toujours correct.\nProchaine action : Exécutez votre script avec différents inputs pour observer les résultats.",
+        "timestamp": "2026-03-02T14:17:52.654798+00:00"
+      }
+    ]
+  },
+  "6d70ab20-fbe8-4d07-b288-e80fa85a750d": {
+    "session_id": "6d70ab20-fbe8-4d07-b288-e80fa85a750d",
+    "created_at": "2026-03-02T15:10:29.786547+00:00",
+    "updated_at": "2026-03-02T15:11:00.311023+00:00",
+    "code": "def analyse_tuple(t):\r\n    return (t[0], t[-1], len(t))",
+    "level": "débutant",
+    "challenge_description": "Énoncé: Créez une fonction 'analyse_tuple' qui prend en entrée un tuple de nombres et retourne un nouveau tuple contenant trois éléments: le premier élément du tuple original, le dernier élément et le nombre total d'éléments dans le tuple.\nContraintes:\n- Le tuple d'entrée doit contenir uniquement des nombres (entiers ou flottants).\n- La fonction doit renvoyer un tuple, même si l'entrée est un tuple vide.\n- Ne pas utiliser de fonctions ou de méthodes qui ne sont pas abordées dans les leçons précédentes.\nHints:\n- Utilisez l'indexation pour accéder au premier et au dernier élément d'un tuple.\n- Pour gérer les tuples vides, vérifiez la longueur du tuple avant d'essayer d'accéder aux éléments.\nExemple: Entrée: (4, 5, 6, 7, 8) / Sortie: (4, 8, 5)",
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Statut : Erreur détectée\nErreur détectée : La fonction ne gère pas correctement les tuples vides.\nConseil : Vérifiez la longueur du tuple avant de tenter d'accéder à ses éléments.\nProchaine action : Ajoutez une condition pour traiter le cas où le tuple est vide avant de retourner les valeurs.",
+        "timestamp": "2026-03-02T15:10:34.198106+00:00"
+      },
+      {
+        "step": 1,
+        "student_answer": "comment ca? j'ai pas compris",
+        "assistant_response": "Statut : Erreur détectée\nErreur détectée : La fonction ne vérifie pas si le tuple est vide avant d'essayer d'accéder à ses éléments.\nConseil : Imaginez ce qui se passe si le tuple est vide et vous essayez d'accéder à t[0] ou t[-1].\nProchaine action : Réfléchissez à comment vous pourriez vérifier la longueur du tuple avant d'essayer d'accéder à ses éléments pour éviter une erreur.",
+        "timestamp": "2026-03-02T15:11:00.310999+00:00"
+      }
+    ]
+  },
+  "65983f3f-c754-4654-8c2d-48fcf1a3d87a": {
+    "session_id": "65983f3f-c754-4654-8c2d-48fcf1a3d87a",
+    "created_at": "2026-03-02T15:34:38.872089+00:00",
+    "updated_at": "2026-03-02T15:34:44.503202+00:00",
+    "code": "def trouver_indices(tuple_entree, nombre_cible):\r\n    indices = []\r\n    for index, valeur in enumerate(tuple_entree):\r\n        if valeur == nombre_cible:\r\n            indices.append(index)\r\n    return indices",
+    "level": "débutant",
+    "challenge_description": "Énoncé: Créez une fonction 'trouver_indices' qui prend en entrée un tuple de nombres et un nombre cible. La fonction doit retourner un tuple contenant tous les indices où le nombre cible apparaît dans le tuple d'entrée. Si le nombre cible n'est pas trouvé, retournez un tuple vide.\nContraintes:\n- La fonction doit traiter correctement les tuples vides.\n- Le nombre cible peut apparaître plusieurs fois dans le tuple.\n- Ne pas utiliser de méthodes de liste ou de conversion de types; travailler uniquement avec des tuples.\nHints:\n- Utilisez une boucle pour parcourir les éléments du tuple et vérifier s'ils correspondent au nombre cible.\n- Pour ajouter un élément à un tuple, utilisez la concaténation de tuples.\nExemple: Si tuple_entree = (5, 3, 7, 5, 3, 1) et nombre_cible = 3, alors la sortie doit être (1, 4).",
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Statut : Erreur détectée\nErreur détectée : La fonction retourne une liste au lieu d'un tuple.\nConseil : Vérifiez comment transformer une liste en tuple en Python.\nProchaine action : Modifiez le type de la variable 'indices' pour qu'elle soit un tuple dès le départ et ajustez le processus d'ajout d'éléments en conséquence.",
+        "timestamp": "2026-03-02T15:34:44.503181+00:00"
+      }
+    ]
+  },
+  "3d556714-f4a0-4f20-9ac8-e9a0b925a756": {
+    "session_id": "3d556714-f4a0-4f20-9ac8-e9a0b925a756",
+    "created_at": "2026-03-03T10:39:12.205186+00:00",
+    "updated_at": "2026-03-03T10:39:17.176520+00:00",
+    "code": "# Correction guidée\n# Функция 'compare_numbers' принимает два аргумента 'num1' и 'num2', которые являются целыми числами. В функции используется условный оператор 'if' для сравнения этих чисел. Если 'num1' больше 'num2', функция возвращает сообщение 'Первое число больше второго'. Если числа равны, возвращается 'Числа равны'. В противном случае, если 'num1' меньше 'num2', возвращается 'Второе число больше первого'. Это обеспечивает корректную обработку всех возможных сценариев сравнения двух чисел.\ndef compare_numbers(num1, num2):\n    if num1 > num2:\n        return 'Первое число больше второго'\n    elif num1 == num2:\n        return 'Числа равны'\n    else:\n        return 'Второе число больше первого'",
+    "level": "débutant",
+    "challenge_description": "Énoncé: Напишите функцию, которая определяет, какой из двух чисел больше и возвращает соответствующее сообщение. Если числа равны, функция должна сообщить об этом отдельно.\nContraintes:\n- Функция должна принимать два аргумента типа int.\n- Функция должна возвращать строку.\n- Не используйте встроенные функции Python, кроме тех, что изучены в курсе.\nHints:\n- Используйте условный оператор if для сравнения двух чисел.\n- Для вывода результата используйте return, а не print.\nExemple: { 'entrée': (5, 3), 'sortie': 'Первое число больше второго' }",
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Statut : Pas d'erreur bloquante\nConseil : Assurez-vous que les types des paramètres 'num1' et 'num2' sont bien des entiers avant de les comparer.\nProchaine action : Testez la fonction avec différents types de valeurs pour voir si elle gère correctement les erreurs de type.",
+        "timestamp": "2026-03-03T10:39:17.176502+00:00"
+      }
+    ]
+  },
+  "d4eda579-7dfa-4dde-9000-a39f4c461e8f": {
+    "session_id": "d4eda579-7dfa-4dde-9000-a39f4c461e8f",
+    "created_at": "2026-03-03T11:03:39.291885+00:00",
+    "updated_at": "2026-03-03T11:03:45.277784+00:00",
+    "code": "def оценить_температуру(температура):\n    # ваш код здесь\n    return",
+    "level": "débutant",
+    "challenge_description": "Énoncé: Давайте разработаем функцию, которая будет определять, подходит ли температура воды для купания. Функция принимает один аргумент - температура воды (целое число) и возвращает 'идеально', 'тепло', 'холодно' или 'очень холодно' в зависимости от температуры.\nContraintes:\n- Температура воды должна быть целым числом.\n- Функция должна возвращать строку, не выводить ее.\n- Обработайте диапазон температур: от -10 до 50 градусов Цельсия.\nHints:\n- Используйте условные операторы if, elif и else для проверки диапазона температур.\n- Проверяйте условия от самого строгого к менее строгому (начните с самой низкой или самой высокой температуры).\nExemple: {\"вход\": 22, \"выход\": 'идеально'}",
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Statut : Erreur détectée\nErreur détectée : La fonction ne contient aucun code pour évaluer la température.\nConseil : Commencez par vérifier si la température est dans les limites extrêmes (-10 à 50 degrés). Utilisez des instructions if pour déterminer dans quel intervalle la température se situe.\nProchaine action : Ajoutez des conditions pour évaluer si la température est 'очень холодно', 'холодно', 'тепло', ou 'идеально'.",
+        "timestamp": "2026-03-03T11:03:45.277762+00:00"
+      }
+    ]
+  },
+  "86ffbd7f-bb7f-4bee-891b-65d1dac3ec25": {
+    "session_id": "86ffbd7f-bb7f-4bee-891b-65d1dac3ec25",
+    "created_at": "2026-03-03T11:14:31.204962+00:00",
+    "updated_at": "2026-03-03T11:14:34.123959+00:00",
+    "code": "def evaluer_temperature(temp):\n    # Votre code ici\n    pass",
+    "level": "débutant",
+    "challenge_description": "Énoncé: Créez une fonction 'evaluer_temperature' qui prend en entrée un nombre représentant la température en degrés Celsius et renvoie une chaîne de caractères décrivant cette température. Les descriptions possibles sont : 'Froid', 'Modéré', 'Chaud'.\nContraintes:\n- Si la température est inférieure à 10 degrés, la fonction doit retourner 'Froid'.\n- Si la température est entre 10 et 25 degrés inclus, la fonction doit retourner 'Modéré'.\n- Si la température est supérieure à 25 degrés, la fonction doit retourner 'Chaud'.\nHints:\n- Utilisez des instructions if, elif et else pour traiter les différentes plages de températures.\n- Assurez-vous de bien comprendre comment les conditions sont évaluées en Python pour utiliser correctement les comparateurs.\nExemple: Si la température est de 15, la fonction doit retourner 'Modéré'.",
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Statut : Pas d'erreur bloquante\nConseil : Commencez par ajouter les conditions nécessaires pour évaluer la température selon les plages spécifiées.\nProchaine action : Ajoutez une instruction if pour vérifier si la température est inférieure à 10 degrés.",
+        "timestamp": "2026-03-03T11:14:34.123935+00:00"
+      }
+    ]
+  },
+  "9828036a-8300-4ee4-97bb-306249e3a856": {
+    "session_id": "9828036a-8300-4ee4-97bb-306249e3a856",
+    "created_at": "2026-03-03T11:16:26.364456+00:00",
+    "updated_at": "2026-03-03T11:16:30.604057+00:00",
+    "code": "def classify_temperature(temp):\n    # Ваш код здесь\n    return",
+    "level": "débutant",
+    "challenge_description": "Énoncé: Напишите функцию `classify_temperature`, которая принимает один аргумент - температуру воздуха (целое число) и возвращает строку, классифицирующую температуру. Если температура меньше 0, верните 'Холодно', если температура от 0 до 15 градусов включительно, верните 'Прохладно', а если больше 15 градусов - 'Тепло'.\nContraintes:\n- Функция должна корректно обрабатывать граничные значения: 0 и 15.\n- Функция принимает только целые числа.\n- Функция должна возвращать только строки: 'Холодно', 'Прохладно', 'Тепло'.\nHints:\n- Используйте условные операторы if, elif и else для проверки разных диапазонов температур.\n- Не забудьте про включение граничных значений в соответствующие категории.\nExemple: Вход: 10, Выход: 'Прохладно'",
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Statut : Erreur détectée\nErreur détectée : La fonction ne contient aucun code pour traiter la température.\nConseil : Pensez à utiliser des instructions conditionnelles pour vérifier si la température est inférieure à zéro, entre zéro et quinze, ou supérieure à quinze.\nProchaine action : Ajoutez des conditions dans votre fonction pour classer correctement la température et retourner les chaînes appropriées.",
+        "timestamp": "2026-03-03T11:16:30.604038+00:00"
+      }
+    ]
+  },
+  "bf037f37-482c-4ac6-a16d-9cdb130fc398": {
+    "session_id": "bf037f37-482c-4ac6-a16d-9cdb130fc398",
+    "created_at": "2026-03-03T14:18:30.386770+00:00",
+    "updated_at": "2026-03-03T14:18:34.012459+00:00",
+    "code": "# Correction guidée\n# Le code corrigé implémente la logique de classification des températures en utilisant des instructions 'if', 'elif' et 'else'. Si la température est inférieure à 10 degrés, la fonction retourne 'Froide'. Si elle est entre 10 et 25 degrés inclus, elle retourne 'Moderée'. Pour les températures supérieures à 25 degrés, elle retourne 'Chaude'. Cela garantit que tous les cas possibles sont couverts et que la classification est conforme aux seuils spécifiés.\ndef classer_temperatures(temp):\n    if temp < 10:\n        return 'Froide'\n    elif temp <= 25:\n        return 'Moderée'\n    else:\n        return 'Chaude'",
+    "level": "débutant",
+    "challenge_description": "Énoncé: Creez une fonction 'classer_temperatures' qui prend en entree une temperature en degres Celsius et retourne une chaine de caracteres decrivant si cette temperature est 'Froide', 'Moderée' ou 'Chaude'. La classification est definie comme suit: les temperatures inferieures a 10 degres sont 'Froide', les temperatures entre 10 et 25 degres sont 'Moderée', et les temperatures superieures a 25 degres sont 'Chaude'.\nContraintes:\n- La temperature doit etre un nombre entier ou flottant.\n- La fonction ne doit pas imprimer ou lire de donnees, elle doit uniquement retourner une valeur.\n- La classification doit etre exacte selon les seuils specifies.\nHints:\n- Utilisez des instructions 'if', 'elif' et 'else' pour implementer la logique de classification.\n- Assurez-vous de couvrir tous les cas possibles de temperature pour eviter les erreurs de logique.\nExemple: Entree: 17  / Sortie: 'Moderée'",
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Statut : Pas d'erreur bloquante\nConseil : Vérifiez que la fonction répond correctement pour les valeurs limites comme 10 et 25.\nProchaine action : Testez la fonction avec des températures de 10 et 25 degrés pour voir si elles sont classées comme 'Moderée'.",
+        "timestamp": "2026-03-03T14:18:34.012438+00:00"
+      }
+    ]
+  }
+}
