@@ -189,7 +189,7 @@ export default async function CourseDetailPage({ params }: Props) {
           Aller au Débogueur
         </Link>
         <Link href="/challenges" className="inline-flex items-center justify-center rounded-lg border px-4 py-2 text-sm font-medium hover:bg-accent transition-colors">
-          Faire un Défi
+          Lancer un Quiz IA
         </Link>
       </section>
     </div>

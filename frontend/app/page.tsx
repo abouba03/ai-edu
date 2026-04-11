@@ -15,8 +15,8 @@ const modules = [
     icon: Bug,
   },
   {
-    title: 'Quiz & Défis',
-    description: 'Pratique active avec correction et évaluation.',
+    title: 'Quiz IA',
+    description: 'Évaluation progressive avec feedback immédiat.',
     href: '/challenges',
     icon: Trophy,
   },
@@ -33,7 +33,7 @@ export default function Home() {
               Un tuteur IA moderne pour apprendre Python avec confiance.
             </h1>
             <p className="text-muted-foreground text-base lg:text-lg">
-              Génération, correction, débogage guidé et défis interactifs dans une expérience unifiée.
+              Génération, correction, débogage guidé et quiz interactifs dans une expérience unifiée.
             </p>
             <div className="flex gap-3 flex-wrap pt-2">
               <Link href="/generator" className="inline-flex items-center gap-2 rounded-lg bg-primary text-primary-foreground px-4 py-2 text-sm font-medium hover:bg-primary/90 transition-colors">

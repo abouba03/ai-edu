@@ -5,19 +5,16 @@ import Link from 'next/link';
 import { ModeToggle } from '@/components/theme-toggle';
 import { usePathname } from 'next/navigation';
 import {
-  Code,
-  CheckSquare,
   Trophy,
-  Brain,
-  Home,
   Menu,
   X,
   User,
   LayoutDashboard,
-  BarChart3,
   BookOpen,
   Settings2,
   Sparkles,
+  Shield,
+  ChevronRight,
 } from 'lucide-react';
 import {
   Sheet,
@@ -29,6 +26,15 @@ import {
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '../ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from '@clerk/nextjs';
 
 import { useEffect } from "react"
 import { useAuth } from "@clerk/nextjs"
@@ -63,24 +69,12 @@ export default function MainLayout({ children }: MainLayoutProps) {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const routes = [
+  const primaryRoutes = [
     {
       label: 'Dashboard',
-      icon: <Home className="h-5 w-5" />,
-      href: '/',
-      active: pathname === '/',
-    },
-    {
-      label: 'Tableau de bord',
       icon: <LayoutDashboard className="h-5 w-5" />,
       href: '/dashboard',
-      active: pathname === '/dashboard',
-    },
-    {
-      label: 'Pilotage IA',
-      icon: <BarChart3 className="h-5 w-5" />,
-      href: '/dashboard/insights',
-      active: pathname.startsWith('/dashboard/insights'),
+      active: pathname === '/dashboard' || pathname === '/',
     },
     {
       label: 'Cours',
@@ -89,40 +83,16 @@ export default function MainLayout({ children }: MainLayoutProps) {
       active: pathname.startsWith('/courses'),
     },
     {
-      label: 'Admin',
-      icon: <Settings2 className="h-5 w-5" />,
-      href: '/admin',
-      active: pathname.startsWith('/admin'),
-    },
-    {
-      label: 'Générateur',
-      icon: <Code className="h-5 w-5" />,
-      href: '/generator',
-      active: pathname === '/generator',
-    },
-    {
-      label: 'Correcteur',
-      icon: <CheckSquare className="h-5 w-5" />,
-      href: '/corrector',
-      active: pathname === '/corrector',
-    },
-    {
-      label: 'Débogueur',
-      icon: <Brain className="h-5 w-5" />,
-      href: '/debugger',
-      active: pathname === '/debugger',
-    },
-    {
-      label: 'Quiz & Défis',
+      label: 'Challenges',
       icon: <Trophy className="h-5 w-5" />,
       href: '/challenges',
-      active: pathname === '/challenges',
+      active: pathname.startsWith('/challenges'),
     },
     {
       label: 'Profil',
       icon: <User className="h-5 w-5" />,
       href: '/profile',
-      active: pathname === '/profile',
+      active: pathname.startsWith('/profile'),
     },
   ];
 
@@ -132,85 +102,138 @@ export default function MainLayout({ children }: MainLayoutProps) {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      {/* Mobile Header */}
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 lg:hidden">
-        <div className="container flex h-14 items-center">
-          <div className="flex items-center justify-between w-full">
-            <Link href="/dashboard" className="flex items-center gap-2">
-              <div className="size-8 rounded-lg bg-primary/15 text-primary flex items-center justify-center">
-                <Sparkles className="h-4 w-4" />
-              </div>
-              <span className="font-bold text-lg">AI Edu Studio</span>
-            </Link>
-            <div className="flex items-center gap-1">
-              <ModeToggle />
-              <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
-                <SheetTrigger asChild>
-                  <Button variant="ghost" size="icon">
-                    {isMobileMenuOpen ? (
-                      <X className="h-5 w-5" />
-                    ) : (
-                      <Menu className="h-5 w-5" />
-                    )}
-                  </Button>
-                </SheetTrigger>
-                <SheetContent className="w-[80%] sm:w-[350px]">
-                  <SheetHeader>
-                    <SheetTitle className="text-left font-bold text-xl">AI Edu Studio</SheetTitle>
-                  </SheetHeader>
-                  <div className="py-6">
-                    <div className="flex items-center gap-4 p-4 mb-6 rounded-xl bg-card border">
-                      <Avatar>
-                        <AvatarFallback>{userName.slice(0, 2).toUpperCase()}</AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <div className="font-medium">{userLoaded ? userName : "Chargement..."}</div>
-                        <div className="text-sm text-muted-foreground">Niveau: {userLevel}</div>
-                      </div>
+      <header className="sticky top-0 z-50 border-b bg-background/90 backdrop-blur supports-[backdrop-filter]:bg-background/70">
+        <div className="px-4 lg:px-8 h-16 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-3 min-w-0">
+            <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
+              <SheetTrigger asChild>
+                <Button variant="outline" size="icon" className="lg:hidden rounded-xl">
+                  {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+                </Button>
+              </SheetTrigger>
+              <SheetContent className="w-[86%] sm:w-[360px]">
+                <SheetHeader>
+                  <SheetTitle className="text-left">Navigation</SheetTitle>
+                </SheetHeader>
+                <div className="py-5 space-y-5">
+                  <div className="flex items-center gap-3 rounded-xl border bg-card px-3 py-3">
+                    <Avatar>
+                      <AvatarFallback>{userName.slice(0, 2).toUpperCase()}</AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <p className="font-medium text-sm">{userLoaded ? userName : 'Chargement...'}</p>
+                      <p className="text-xs text-muted-foreground">Niveau: {userLevel}</p>
                     </div>
-                    <nav className="flex flex-col space-y-1">
-                      {routes.map((route) => (
-                        <Link
-                          key={route.href}
-                          href={route.href}
-                          onClick={closeMobileMenu}
-                          className={cn(
-                            "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all",
-                            route.active
-                              ? "bg-primary text-primary-foreground"
-                              : "hover:bg-muted"
-                          )}
-                        >
-                          {route.icon}
-                          {route.label}
-                        </Link>
-                      ))}
-                    </nav>
                   </div>
-                </SheetContent>
-              </Sheet>
-            </div>
+
+                  <div className="space-y-1">
+                    {primaryRoutes.map((route) => (
+                      <Link
+                        key={route.href}
+                        href={route.href}
+                        onClick={closeMobileMenu}
+                        className={cn(
+                          'flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-all border',
+                          route.active
+                            ? 'bg-primary text-primary-foreground border-primary'
+                            : 'bg-background hover:bg-accent border-border',
+                        )}
+                      >
+                        {route.icon}
+                        {route.label}
+                        <ChevronRight className="ml-auto h-4 w-4 opacity-60" />
+                      </Link>
+                    ))}
+                  </div>
+
+                  <div className="flex items-center justify-between rounded-xl border bg-card px-3 py-2.5">
+                    <ModeToggle />
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="outline" size="sm" className="rounded-lg">
+                          <Settings2 className="h-4 w-4" /> Options
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end" className="w-52">
+                        <DropdownMenuLabel>Options</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem asChild>
+                          <Link href="/admin" onClick={closeMobileMenu} className="cursor-pointer">
+                            <Shield className="h-4 w-4" /> Page Admin
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                          <Link href="/profile" onClick={closeMobileMenu} className="cursor-pointer">
+                            <User className="h-4 w-4" /> Profil utilisateur
+                          </Link>
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+                </div>
+              </SheetContent>
+            </Sheet>
+
+            <Link href="/dashboard" className="flex items-center gap-2.5 min-w-0">
+              <div className="size-9 rounded-xl bg-primary/15 text-primary flex items-center justify-center shrink-0">
+                <Sparkles className="h-4.5 w-4.5" />
+              </div>
+              <div className="min-w-0">
+                <p className="font-semibold leading-tight">AI Edu Platform</p>
+                <p className="text-xs text-muted-foreground truncate">Learning Workspace</p>
+              </div>
+            </Link>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <ModeToggle />
+
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="icon" className="rounded-xl">
+                  <Settings2 className="h-4.5 w-4.5" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuLabel>Options</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link href="/admin" className="cursor-pointer">
+                    <Shield className="h-4 w-4" /> Page Admin
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/profile" className="cursor-pointer">
+                    <User className="h-4 w-4" /> Profil utilisateur
+                  </Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            <SignedOut>
+              <div className="hidden sm:flex items-center gap-2">
+                <SignInButton />
+                <SignUpButton />
+              </div>
+            </SignedOut>
+            <SignedIn>
+              <UserButton />
+            </SignedIn>
           </div>
         </div>
       </header>
 
-      <div className="flex min-h-[calc(100vh-56px)] lg:min-h-screen">
+      <div className="flex min-h-[calc(100vh-64px)] lg:min-h-[calc(100vh-64px)]">
         {/* Desktop Sidebar */}
-        <aside className="hidden lg:flex h-screen w-[280px] flex-col fixed inset-y-0 z-50 border-r bg-card/50 backdrop-blur">
-          <div className="px-4 py-4 h-16 flex items-center border-b">
-            <Link href="/dashboard" className="flex items-center gap-3">
-              <div className="size-9 rounded-xl bg-primary/15 text-primary flex items-center justify-center">
-                <Sparkles className="h-5 w-5" />
-              </div>
-              <div>
-                <p className="font-bold text-base">AI Edu Studio</p>
-                <p className="text-xs text-muted-foreground">Master Project Platform</p>
-              </div>
-            </Link>
+        <aside className="hidden lg:flex w-[300px] flex-col border-r bg-card/40 backdrop-blur px-4 py-4">
+          <div className="rounded-2xl border bg-background px-3 py-3 mb-4">
+            <p className="text-xs uppercase tracking-wide text-muted-foreground">Navigation principale</p>
+            <p className="text-sm font-semibold mt-1">Accès rapide</p>
           </div>
-          <div className="flex flex-col flex-1 overflow-auto py-4 px-3">
+
+          <div className="flex flex-col flex-1 overflow-auto">
             <nav className="flex flex-col space-y-1.5">
-              {routes.map((route) => (
+              {primaryRoutes.map((route) => (
                 <Link
                   key={route.href}
                   href={route.href}
@@ -223,14 +246,37 @@ export default function MainLayout({ children }: MainLayoutProps) {
                 >
                   {route.icon}
                   {route.label}
+                  <ChevronRight className="ml-auto h-4 w-4 opacity-50" />
                 </Link>
               ))}
             </nav>
 
             <div className="mt-auto space-y-4">
-              <div className="px-2">
-                <ModeToggle />
+              <div className="rounded-xl border bg-background p-2 flex items-center justify-between">
+                <span className="text-xs text-muted-foreground">Options</span>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" size="sm" className="rounded-lg">
+                      <Settings2 className="h-4 w-4" /> Ouvrir
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-52">
+                    <DropdownMenuLabel>Options</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                      <Link href="/admin" className="cursor-pointer">
+                        <Shield className="h-4 w-4" /> Page Admin
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link href="/profile" className="cursor-pointer">
+                        <User className="h-4 w-4" /> Profil utilisateur
+                      </Link>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
+
               <div className="flex items-center gap-3 rounded-xl px-3 py-3 mt-auto border bg-background">
                 <Avatar className="h-9 w-9">
                   <AvatarFallback>{userName.slice(0, 2).toUpperCase()}</AvatarFallback>
@@ -245,7 +291,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
         </aside>
 
         {/* Main Content */}
-        <main className="flex-1 lg:pl-[280px]">
+        <main className="flex-1">
           <div className="p-4 lg:p-8">{children}</div>
         </main>
       </div>

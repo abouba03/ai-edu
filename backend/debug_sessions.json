@@ -882,5 +882,43 @@
         "timestamp": "2026-03-03T14:18:34.012438+00:00"
       }
     ]
+  },
+  "86df1a51-7daa-437f-b68b-0505297f8628": {
+    "session_id": "86df1a51-7daa-437f-b68b-0505297f8628",
+    "created_at": "2026-03-06T14:39:55.578067+00:00",
+    "updated_at": "2026-03-06T14:40:47.535282+00:00",
+    "code": "print('Enter your name:')\r\nx = input()\r\ny = input()\r\nprint('Hello, ' + x)\r\nprint('I am, ' + y)",
+    "level": "débutant",
+    "challenge_description": "Énoncé: Vous devez créer une fonction 'evaluate_discount' qui calcule le prix final d'un p\nÉnoncé: Vous devez créer une fonction 'evaluate_discount' qui calcule le prix final d'un produit après application d'une réduction. La réduction s'applique seulement si le prix initial du produit est supérieur à un certain seuil.\nContraintes:\n- La fonction doit accepter deux paramètres: le prix initial (float) et le seuil (float).\n- Si le prix est supérieur au seuil, appliquer une réduction de 20%.\n- Retourner le prix final arrondi à deux décimales.\nHints:\n- Utilisez l'opérateur conditionnel 'if' pour décider si la réduction doit être appliquée.\n- Pour calculer le pourcentage de réduction, multipliez le prix initial par 0.80.\nExemple: Entrée: (100.0, 50.0) / Sortie: 80.0",
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Statut : Erreur détectée\nErreur détectée : Le code actuel n'implémente pas la fonction demandée pour calculer la réduction.\nConseil : Commence par créer une fonction qui prendra deux paramètres pour le prix initial et le seuil.\nProchaine action : Définis cette fonction et pense à comment tu pourrais utiliser une condition pour vérifier si le prix initial dépasse le seuil.",
+        "timestamp": "2026-03-06T14:40:00.801052+00:00"
+      },
+      {
+        "step": 1,
+        "student_answer": "mais comment faire ca?",
+        "assistant_response": "Statut : Pas d'erreur bloquante\nErreur détectée : Manque de compréhension sur la création de la fonction.\nConseil : Réfléchis à ce que signifie \"créer une fonction\". Cela implique de définir une tâche spécifique que cette fonction doit accomplir.\nProchaine action : Pense à ce que ta fonction doit faire : prendre deux nombres, comparer le premier au second, et ajuster le premier nombre si nécessaire. Comment pourrais-tu structurer cela?",
+        "timestamp": "2026-03-06T14:40:47.535260+00:00"
+      }
+    ]
+  },
+  "397a5204-86b8-4f27-89e6-ed923845472e": {
+    "session_id": "397a5204-86b8-4f27-89e6-ed923845472e",
+    "created_at": "2026-03-12T11:38:56.123968+00:00",
+    "updated_at": "2026-03-12T11:38:58.973756+00:00",
+    "code": "def nombres_pairs(liste):\r\n    resultat = []  # liste pour stocker les nombres pairs\r\n\r\n    for nombre in liste:  # parcourir chaque élément de la liste\r\n        if nombre % 2 == 0:  # vérifier si le nombre est pair\r\n            resultat.append(nombre)  # ajouter à la liste résultat\r\n\r\n    return resultat",
+    "level": "avancé",
+    "challenge_description": "Énoncé: Vous devez créer une fonction en Python qui prend en entrée une liste de nombres e\nÉnoncé: Vous devez créer une fonction en Python qui prend en entrée une liste de nombres entiers et retourne une nouvelle liste contenant uniquement les nombres pairs. Pour chaque élément de la liste d'entrée, vous utiliserez une boucle 'for' pour vérifier si le nombre est pair.\nContraintes:\n- Utiliser une boucle 'for' pour itérer sur la liste.\n- Ne pas utiliser de fonctions prédéfinies comme filter() ou list comprehensions pour la filtration des nombres pairs.\n- Les nombres pairs doivent être ajoutés à la liste de résultat dans le même ordre qu'ils apparaissent dans la liste d'entrée.\nHints:\n- Vous pouvez vérifier si un nombre est pair en utilisant l'opérateur modulo (%).\n- Pensez à initialiser votre liste de résultat avant de commencer la boucle.\nExemple: Si la fonction reçoit [1, 2, 3, 4, 5, 6], elle doit retourner [2, 4, 6].",
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Statut : Pas d'erreur bloquante\nConseil : Vérifiez si la fonction gère correctement les cas limites comme les listes vides ou les listes avec des nombres négatifs.\nProchaine action : Testez la fonction avec une liste vide et une liste contenant des nombres négatifs pour confirmer son comportement.",
+        "timestamp": "2026-03-12T11:38:58.973731+00:00"
+      }
+    ]
   }
 }

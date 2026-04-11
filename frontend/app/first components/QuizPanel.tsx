@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Button } from '@/components/ui/button';
 import { useSearchParams } from 'next/navigation';
+import { Sparkles } from 'lucide-react';
 
 const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
@@ -43,8 +44,15 @@ export default function QuizPanel() {
       setUserAnswers([]);
       setScore(null);
       setQuizCompleted(false);
-    } catch (e: any) {
-      setError(e?.response?.data?.detail || 'Erreur lors de la génération du quiz.');
+    } catch (e: unknown) {
+      const detail =
+        typeof e === 'object' &&
+        e !== null &&
+        'response' in e &&
+        typeof (e as { response?: { data?: { detail?: string } } }).response?.data?.detail === 'string'
+          ? (e as { response?: { data?: { detail?: string } } }).response?.data?.detail
+          : null;
+      setError(detail || 'Erreur lors de la génération du quiz.');
       setQuestions([]);
     } finally {
       setLoading(false);
@@ -80,37 +88,40 @@ export default function QuizPanel() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-6 space-y-4 rounded-2xl border bg-card">
-      <h2 className="text-2xl font-bold">🧪 Quiz interactif</h2>
+    <div className="space-y-4">
+      <div className="flex items-start justify-between gap-3 flex-wrap">
+        <div>
+          <p className="text-xs uppercase tracking-wide text-muted-foreground">Mode théorie</p>
+          <h2 className="text-xl font-semibold mt-1">🧪 Quiz interactif</h2>
+        </div>
+        {score !== null && quizCompleted && (
+          <div className="rounded-lg border bg-background px-3 py-2 text-sm font-medium">
+            Score: {score}/{questions.length}
+          </div>
+        )}
+      </div>
 
-      <div className="space-y-2">
+      <div className="grid grid-cols-1 md:grid-cols-[1fr,220px,auto] gap-2">
         <input
           type="text"
           placeholder="Ex : boucles for, erreurs d'indentation..."
           value={theme}
           onChange={(e) => setTheme(e.target.value)}
-          className="w-full px-3 py-2 border rounded"
+          className="w-full px-3 py-2 border rounded-lg bg-background"
         />
 
         <select
           value={level}
           onChange={(e) => setLevel(e.target.value as 'débutant' | 'intermédiaire' | 'avancé')}
-          className="border px-3 py-1 rounded"
+          className="border px-3 py-2 rounded-lg bg-background"
         >
           <option value="débutant">Débutant</option>
           <option value="intermédiaire">Intermédiaire</option>
           <option value="avancé">Avancé</option>
         </select>
 
-        <button
-          onClick={fetchQuiz}
-          className="hidden"
-        >
-          🎯 Générer le quiz
-        </button>
-
         <Button onClick={fetchQuiz} disabled={loading || !theme.trim()}>
-          {loading ? 'Génération...' : '🎯 Générer le quiz'}
+          <Sparkles className="size-4" /> {loading ? 'Génération...' : 'Générer'}
         </Button>
       </div>
 
@@ -121,12 +132,12 @@ export default function QuizPanel() {
       )}
 
       {questions.length > 0 && (
-        <div className="space-y-6 mt-4">
+        <div className="space-y-3 mt-2">
           {questions.map((q, i) => (
-            <div key={i} className="p-4 rounded-lg border bg-muted/30 space-y-2">
-              <p className="font-semibold">{i + 1}. {q.question}</p>
+            <div key={i} className="p-3 rounded-xl border bg-muted/20 space-y-2">
+              <p className="font-medium text-sm">{i + 1}. {q.question}</p>
               {q.choices.map((choice, j) => (
-                <label key={j} className="block rounded-md px-2 py-1 hover:bg-accent/50 cursor-pointer">
+                <label key={j} className="block rounded-md px-2 py-1 hover:bg-accent/50 cursor-pointer text-sm">
                   <input
                     type="radio"
                     name={`question-${i}`}
@@ -142,7 +153,7 @@ export default function QuizPanel() {
                   <p>
                     ✅ Bonne réponse : <strong>{q.answer}</strong>
                   </p>
-                  <p className="text-muted-foreground">💡 {q.explanation}</p>
+                  <p className="text-muted-foreground mt-1">💡 {q.explanation}</p>
                 </div>
               )}
             </div>
@@ -155,7 +166,7 @@ export default function QuizPanel() {
               ✅ Soumettre mes réponses
             </Button>
           ) : (
-            <div className="text-xl font-semibold text-center">
+            <div className="text-lg font-semibold text-center rounded-xl border bg-background p-3">
               🎉 Score : {score}/{questions.length}
             </div>
           )}

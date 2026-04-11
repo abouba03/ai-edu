@@ -19,7 +19,7 @@ const cards = [
   },
   {
     title: 'Évaluation active',
-    description: 'Mesurer la progression via quiz et défis.',
+    description: 'Mesurer la progression via quiz intelligents.',
     href: '/challenges',
     icon: Target,
   },

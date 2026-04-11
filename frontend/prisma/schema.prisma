@@ -24,6 +24,7 @@ model User {
   courseQuizAttempts      CourseQuizAttempt[]
   courseChallengeAttempts CourseChallengeAttempt[]
   courseReflections       CourseReflection[]
+  challengeAttempts       ChallengeAttempt[]
 }
 
 model Course {
@@ -37,6 +38,20 @@ model Course {
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
   progress    Progress[]
+}
+
+model Formation {
+  id          String      @id @default(uuid())
+  name        String
+  description String      @default("")
+  level       String      @default("Débutant")
+  targetHours Int         @default(20)
+  isActive    Boolean     @default(true)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  challenges  Challenge[]
+
+  @@index([updatedAt])
 }
 
 model Progress {
@@ -60,10 +75,37 @@ model Challenge {
   description String?
   difficulty  String
   points      Int          @default(0)
+  formationId String?
   testCases   Json?
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
+  formation   Formation?   @relation(fields: [formationId], references: [id], onDelete: SetNull)
   submissions Submission[]
+  attempts    ChallengeAttempt[]
+
+  @@index([formationId, updatedAt])
+}
+
+model ChallengeAttempt {
+  id               String    @id @default(uuid())
+  userId           String?
+  clerkId          String?
+  challengeId      String?
+  challengeTitle   String?
+  challengeKind    String    @default("code")
+  level            String?
+  submittedCode    String
+  durationSec      Int?
+  score            Int?
+  passed           Boolean   @default(false)
+  evaluation       Json?
+  challengeContext Json?
+  createdAt        DateTime  @default(now())
+  user             User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+  challenge        Challenge? @relation(fields: [challengeId], references: [id], onDelete: SetNull)
+
+  @@index([clerkId, createdAt])
+  @@index([challengeId, createdAt])
 }
 
 model Submission {
