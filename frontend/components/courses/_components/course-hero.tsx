@@ -1,7 +1,5 @@
 'use client';
 
-import { CircleHelp } from 'lucide-react';
-
 type CourseHeroProps = {
   formationName: string;
   courseNumber: number;
@@ -18,23 +16,21 @@ export default function CourseHero({
   progressPercent,
 }: CourseHeroProps) {
   return (
-    <section className="rounded-xl border bg-card/60 p-3">
-      <div className="space-y-1.5">
-        <div className="flex items-center justify-between gap-2">
-          <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground inline-flex items-center gap-1.5">
-            Progression du cours
-            <span title="Suivi global de ton avancement sur ce cours.">
-              <CircleHelp className="h-3.5 w-3.5" />
-            </span>
-          </p>
-          <span className="text-[11px] font-medium text-primary">{progressPercent}% complété</span>
-        </div>
-        <p className="text-xs text-muted-foreground">
-          {formationName} • Cours {courseNumber}/{totalCourses} • {courseLevel}
+    <section className="border-2 border-[#1C293C] bg-[#FBFBF9] px-4 py-3 shadow-[3px_3px_0px_0px_#1C293C]">
+      <div className="flex items-center justify-between gap-3 mb-2">
+        <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7]">
+          Progression du cours
         </p>
-        <div className="h-1.5 rounded-full bg-muted overflow-hidden">
-          <div className="h-full bg-primary" style={{ width: `${progressPercent}%` }} />
-        </div>
+        <span className="text-xs font-black text-[#1C293C]">{progressPercent}%</span>
+      </div>
+      <p className="text-[11px] font-semibold text-[#1C293C]/55 mb-2">
+        {formationName} · Cours {courseNumber}/{totalCourses} · {courseLevel}
+      </p>
+      <div className="h-1.5 border border-[#1C293C]/30 bg-white overflow-hidden">
+        <div
+          className="h-full bg-[#1C293C] transition-all duration-500"
+          style={{ width: `${progressPercent}%` }}
+        />
       </div>
     </section>
   );

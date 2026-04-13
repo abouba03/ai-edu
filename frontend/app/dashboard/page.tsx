@@ -2,169 +2,249 @@
 
 import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
-import { BarChart3, Brain, Sparkles, Target } from 'lucide-react';
+import { BarChart3, Brain, Sparkles, Target, Zap, TrendingUp, CheckCircle2, MousePointerClick } from 'lucide-react';
 
 const cards = [
   {
     title: 'Génération assistée',
-    description: 'Produire du code Python à partir d’un besoin.',
+    description: "Produire du code Python à partir d'un besoin.",
     href: '/generator',
     icon: Sparkles,
+    bg: 'bg-[#FDC800]',
+    iconBg: 'bg-[#1C293C]',
+    iconColor: 'text-[#FDC800]',
+    text: 'text-[#1C293C]',
+    border: 'border-[#1C293C]',
   },
   {
     title: 'Debug interactif',
     description: 'Comprendre les erreurs pas à pas avec guidance IA.',
     href: '/debugger',
     icon: Brain,
+    bg: 'bg-[#432DD7]',
+    iconBg: 'bg-white',
+    iconColor: 'text-[#432DD7]',
+    text: 'text-white',
+    border: 'border-[#1C293C]',
   },
   {
     title: 'Évaluation active',
     description: 'Mesurer la progression via quiz intelligents.',
     href: '/challenges',
     icon: Target,
+    bg: 'bg-white',
+    iconBg: 'bg-[#FDC800]',
+    iconColor: 'text-[#1C293C]',
+    text: 'text-[#1C293C]',
+    border: 'border-[#1C293C]',
   },
 ];
 
 type MiniChallengeKpis = {
-  ok: boolean
+  ok: boolean;
   summary?: {
-    sampleSize: number
-    started: number
-    completed: number
-    abandoned: number
-    submissions: number
-    resolveClicks: number
-    completionRate: number | null
-    abandonRate: number | null
-    resolveUsageRate: number | null
-  }
-  topTabs?: Array<{ tab: string; opens: number; avgDurationSec: number }>
+    sampleSize: number;
+    started: number;
+    completed: number;
+    abandoned: number;
+    submissions: number;
+    resolveClicks: number;
+    completionRate: number | null;
+    abandonRate: number | null;
+    resolveUsageRate: number | null;
+  };
+  topTabs?: Array<{ tab: string; opens: number; avgDurationSec: number }>;
   exerciseInsights?: Array<{
-    exerciseId: string
-    views: number
-    completes: number
-    conversionRate: number
-    bestTests: string
-    bestAttemptCount: number | null
-  }>
-}
+    exerciseId: string;
+    views: number;
+    completes: number;
+    conversionRate: number;
+    bestTests: string;
+    bestAttemptCount: number | null;
+  }>;
+};
 
 type LearnerProgression = {
-  metrics?: {
-    avgProgress?: number
-  }
-  recommendation?: {
-    reason?: string
-  }
-}
+  metrics?: { avgProgress?: number };
+  recommendation?: { reason?: string };
+};
+
+const STATS = (summary: MiniChallengeKpis['summary'], avgProgress: number | undefined, loading: boolean) => [
+  {
+    label: 'Challenges lancés',
+    value: loading ? '···' : String(summary?.started ?? 0),
+    icon: Zap,
+    accent: 'bg-[#432DD7]',
+    textColor: 'text-white',
+    labelColor: 'text-white/70',
+  },
+  {
+    label: 'Taux de complétion',
+    value: loading ? '···' : `${summary?.completionRate ?? 0}%`,
+    icon: CheckCircle2,
+    accent: 'bg-[#FDC800]',
+    textColor: 'text-[#1C293C]',
+    labelColor: 'text-[#1C293C]/70',
+  },
+  {
+    label: 'Usage de Résoudre',
+    value: loading ? '···' : `${summary?.resolveUsageRate ?? 0}%`,
+    icon: MousePointerClick,
+    accent: 'bg-white',
+    textColor: 'text-[#1C293C]',
+    labelColor: 'text-[#1C293C]/60',
+  },
+  {
+    label: 'Progression cours',
+    value: loading ? '···' : `${avgProgress ?? 0}%`,
+    icon: TrendingUp,
+    accent: 'bg-white',
+    textColor: 'text-[#1C293C]',
+    labelColor: 'text-[#1C293C]/60',
+  },
+];
 
 export default function DashboardPage() {
-  const [kpis, setKpis] = useState<MiniChallengeKpis | null>(null)
-  const [progression, setProgression] = useState<LearnerProgression | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [kpis, setKpis] = useState<MiniChallengeKpis | null>(null);
+  const [progression, setProgression] = useState<LearnerProgression | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    let isMounted = true
+    let isMounted = true;
 
-    async function loadDashboardData() {
+    async function load() {
       try {
-        const [kpiRes, progressionRes] = await Promise.all([
+        const [kpiRes, progRes] = await Promise.all([
           fetch('/api/events/mini-challenge-kpis', { cache: 'no-store' }),
           fetch('/api/learner/progression', { cache: 'no-store' }),
-        ])
-
-        const [kpiData, progressionData] = await Promise.all([
-          kpiRes.json(),
-          progressionRes.json(),
-        ])
-
-        if (!isMounted) return
-        setKpis(kpiData)
-        setProgression(progressionData)
+        ]);
+        const [kpiData, progData] = await Promise.all([kpiRes.json(), progRes.json()]);
+        if (!isMounted) return;
+        setKpis(kpiData);
+        setProgression(progData);
       } catch {
-        if (!isMounted) return
-        setKpis({ ok: false })
+        if (!isMounted) return;
+        setKpis({ ok: false });
       } finally {
-        if (isMounted) setLoading(false)
+        if (isMounted) setLoading(false);
       }
     }
 
-    loadDashboardData()
-    return () => {
-      isMounted = false
-    }
-  }, [])
+    load();
+    return () => { isMounted = false; };
+  }, []);
 
-  const topRecommendation = useMemo(() => {
-    if (!progression?.recommendation?.reason) return 'Continue avec un mini-challenge pour consolider tes acquis du cours.'
-    return progression.recommendation.reason
-  }, [progression])
+  const topRecommendation = useMemo(
+    () =>
+      progression?.recommendation?.reason ??
+      'Continue avec un mini-challenge pour consolider tes acquis du cours.',
+    [progression],
+  );
 
-  const summary = kpis?.summary
-  const topExercise = kpis?.exerciseInsights?.[0]
+  const summary = kpis?.summary;
+  const topExercise = kpis?.exerciseInsights?.[0];
+  const stats = STATS(summary, progression?.metrics?.avgProgress, loading);
 
   return (
     <div className="space-y-6">
-      <section className="rounded-2xl border bg-card p-6">
-        <p className="text-sm text-primary font-semibold">Dashboard pédagogique</p>
-        <h1 className="text-2xl lg:text-3xl font-bold mt-2">Vue d’ensemble de la plateforme</h1>
-        <p className="text-muted-foreground mt-2">
-          Ton espace central pour piloter la génération, la correction et le suivi des apprentissages.
-        </p>
-        <Link
-          href="/dashboard/insights"
-          className="mt-4 inline-flex items-center rounded-lg bg-primary text-primary-foreground px-4 py-2 text-sm font-medium hover:bg-primary/90"
-        >
-          Ouvrir le cockpit IA apprenant
-        </Link>
+
+      {/* ── HERO ── */}
+      <section className="border-2 border-[#1C293C] bg-[#FBFBF9] p-6 lg:p-8 shadow-[6px_6px_0px_0px_#1C293C]">
+        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
+          <div className="max-w-2xl">
+            <p className="text-[11px] uppercase tracking-widest font-black text-[#432DD7]">
+              Dashboard pédagogique
+            </p>
+            <h1 className="text-3xl lg:text-4xl font-black text-[#1C293C] mt-1 leading-tight">
+              Vue d&apos;ensemble<br className="hidden sm:block" /> de la plateforme
+            </h1>
+            <p className="text-[#1C293C]/60 mt-3 text-sm font-medium leading-relaxed">
+              Ton espace central pour piloter la génération, la correction et le suivi des apprentissages.
+            </p>
+          </div>
+          <Link
+            href="/dashboard/insights"
+            className="self-start lg:self-auto inline-flex items-center gap-2 border-2 border-[#1C293C] bg-[#FDC800] px-5 py-3 text-sm font-black text-[#1C293C] shadow-[5px_5px_0px_0px_#1C293C] hover:shadow-none hover:translate-x-[5px] hover:translate-y-[5px] transition-all duration-100 whitespace-nowrap"
+          >
+            <BarChart3 className="h-4 w-4" />
+            Cockpit IA apprenant
+          </Link>
+        </div>
       </section>
 
-      <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <article className="rounded-2xl border bg-card p-4">
-          <p className="text-xs text-muted-foreground">Mini-challenges lancés</p>
-          <p className="text-2xl font-bold mt-1">{loading ? '…' : (summary?.started ?? 0)}</p>
-        </article>
-        <article className="rounded-2xl border bg-card p-4">
-          <p className="text-xs text-muted-foreground">Taux de complétion</p>
-          <p className="text-2xl font-bold mt-1">
-            {loading ? '…' : `${summary?.completionRate ?? 0}%`}
-          </p>
-        </article>
-        <article className="rounded-2xl border bg-card p-4">
-          <p className="text-xs text-muted-foreground">Usage de Résoudre</p>
-          <p className="text-2xl font-bold mt-1">
-            {loading ? '…' : `${summary?.resolveUsageRate ?? 0}%`}
-          </p>
-        </article>
-        <article className="rounded-2xl border bg-card p-4">
-          <p className="text-xs text-muted-foreground">Progression cours</p>
-          <p className="text-2xl font-bold mt-1">{loading ? '…' : `${progression?.metrics?.avgProgress ?? 0}%`}</p>
-        </article>
+      {/* ── KPI STATS ── */}
+      <section className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        {stats.map((stat) => {
+          const Icon = stat.icon;
+          return (
+            <article
+              key={stat.label}
+              className={`border-2 border-[#1C293C] ${stat.accent} p-4 shadow-[4px_4px_0px_0px_#1C293C]`}
+            >
+              <div className="flex items-start justify-between gap-2">
+                <p className={`text-[10px] uppercase tracking-widest font-bold ${stat.labelColor}`}>
+                  {stat.label}
+                </p>
+                <Icon className={`h-3.5 w-3.5 shrink-0 mt-0.5 ${stat.textColor} opacity-60`} />
+              </div>
+              <p className={`text-3xl font-black mt-2 ${stat.textColor} leading-none`}>
+                {stat.value}
+              </p>
+            </article>
+          );
+        })}
       </section>
 
+      {/* ── INSIGHTS ── */}
       <section className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <article className="rounded-2xl border bg-card p-5 space-y-3">
-          <h2 className="font-semibold">Insight principal</h2>
-          <p className="text-sm text-muted-foreground">{topRecommendation}</p>
+
+        {/* Insight principal */}
+        <article className="border-2 border-[#1C293C] bg-white shadow-[4px_4px_0px_0px_#1C293C] p-5 space-y-4">
+          <div>
+            <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7]">Insight</p>
+            <h2 className="text-lg font-black text-[#1C293C] mt-0.5">Recommandation IA</h2>
+          </div>
+          <p className="text-sm font-medium text-[#1C293C]/70 leading-relaxed">
+            {topRecommendation}
+          </p>
           {topExercise ? (
-            <div className="rounded-xl border bg-accent/30 p-3 text-sm text-muted-foreground">
-              Exercice le plus fréquent: <span className="font-medium text-foreground">{topExercise.exerciseId}</span> · Conversion {topExercise.conversionRate}% · Meilleur score {topExercise.bestTests}
+            <div className="border-2 border-[#1C293C] bg-[#FDC800] p-3">
+              <p className="text-[10px] uppercase tracking-widest font-black text-[#1C293C]/70 mb-1">
+                Exercice le plus fréquent
+              </p>
+              <p className="text-sm font-black text-[#1C293C]">{topExercise.exerciseId}</p>
+              <div className="flex gap-4 mt-1.5 text-[11px] font-semibold text-[#1C293C]/70">
+                <span>Conversion {topExercise.conversionRate}%</span>
+                <span>Meilleur : {topExercise.bestTests}</span>
+              </div>
             </div>
           ) : (
-            <p className="text-sm text-muted-foreground">Aucun exercice récent détecté.</p>
+            <p className="text-sm font-medium text-[#1C293C]/40">Aucun exercice récent détecté.</p>
           )}
         </article>
 
-        <article className="rounded-2xl border bg-card p-5 space-y-3">
-          <h2 className="font-semibold">Tabs les plus utilisées</h2>
+        {/* Tabs les plus utilisées */}
+        <article className="border-2 border-[#1C293C] bg-white shadow-[4px_4px_0px_0px_#1C293C] p-5 space-y-4">
+          <div>
+            <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7]">Analytique</p>
+            <h2 className="text-lg font-black text-[#1C293C] mt-0.5">Tabs les plus utilisées</h2>
+          </div>
           {(kpis?.topTabs?.length ?? 0) === 0 ? (
-            <p className="text-sm text-muted-foreground">Pas assez de données pour afficher les habitudes de navigation.</p>
+            <p className="text-sm font-medium text-[#1C293C]/40">
+              Pas assez de données pour afficher les habitudes de navigation.
+            </p>
           ) : (
             <ul className="space-y-2">
-              {kpis?.topTabs?.slice(0, 4).map((item) => (
-                <li key={item.tab} className="rounded-xl border p-3 flex items-center justify-between text-sm">
-                  <span className="font-medium">{item.tab}</span>
-                  <span className="text-muted-foreground">{item.opens} ouvertures · {item.avgDurationSec}s</span>
+              {kpis?.topTabs?.slice(0, 4).map((item, i) => (
+                <li
+                  key={item.tab}
+                  className="border-2 border-[#1C293C] px-3 py-2.5 flex items-center justify-between gap-3 text-sm"
+                  style={{ background: i === 0 ? '#FDC800' : 'white' }}
+                >
+                  <span className="font-black text-[#1C293C] truncate">{item.tab}</span>
+                  <span className="text-[11px] font-semibold text-[#1C293C]/60 shrink-0">
+                    {item.opens} ouv. · {item.avgDurationSec}s
+                  </span>
                 </li>
               ))}
             </ul>
@@ -172,29 +252,46 @@ export default function DashboardPage() {
         </article>
       </section>
 
-      <section className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {cards.map((item) => {
-          const Icon = item.icon;
-          return (
-            <Link key={item.href} href={item.href} className="rounded-2xl border bg-card p-5 hover:bg-accent/40 transition-colors space-y-3">
-              <div className="size-10 rounded-lg bg-primary/10 text-primary grid place-items-center">
-                <Icon className="h-5 w-5" />
-              </div>
-              <h2 className="font-semibold">{item.title}</h2>
-              <p className="text-sm text-muted-foreground">{item.description}</p>
-            </Link>
-          );
-        })}
+      {/* ── QUICK ACCESS ── */}
+      <section>
+        <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7] mb-3">
+          Accès rapide
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {cards.map((item) => {
+            const Icon = item.icon;
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`border-2 ${item.border} ${item.bg} p-5 space-y-4 shadow-[5px_5px_0px_0px_#1C293C] hover:shadow-[2px_2px_0px_0px_#1C293C] hover:translate-x-[3px] hover:translate-y-[3px] transition-all duration-100 group`}
+              >
+                <div className={`size-10 border-2 border-[#1C293C] ${item.iconBg} flex items-center justify-center`}>
+                  <Icon className={`h-5 w-5 ${item.iconColor}`} />
+                </div>
+                <div>
+                  <h2 className={`font-black text-base ${item.text}`}>{item.title}</h2>
+                  <p className={`text-xs font-medium mt-1 leading-relaxed ${item.text} opacity-70`}>
+                    {item.description}
+                  </p>
+                </div>
+              </Link>
+            );
+          })}
+        </div>
       </section>
 
-      <section className="rounded-2xl border bg-card p-5 flex items-center gap-3">
-        <div className="size-10 rounded-lg bg-primary/10 text-primary grid place-items-center">
-          <BarChart3 className="h-5 w-5" />
+      {/* ── TIP ── */}
+      <section className="border-2 border-[#1C293C] bg-white p-4 flex items-start gap-4 shadow-[3px_3px_0px_0px_#1C293C]">
+        <div className="size-9 border-2 border-[#1C293C] bg-[#432DD7] flex items-center justify-center shrink-0">
+          <BarChart3 className="h-4 w-4 text-white" />
         </div>
-        <p className="text-sm text-muted-foreground">
-          Conseil: tes signaux d’apprentissage sont disponibles via les endpoints analytics pour faire évoluer les prompts, défis et feedbacks de manière continue.
+        <p className="text-sm font-medium text-[#1C293C]/70 leading-relaxed">
+          <span className="font-black text-[#1C293C]">Conseil : </span>
+          tes signaux d&apos;apprentissage sont disponibles via les endpoints analytics pour faire évoluer les prompts, défis et feedbacks de manière continue.
         </p>
       </section>
+
     </div>
   );
 }

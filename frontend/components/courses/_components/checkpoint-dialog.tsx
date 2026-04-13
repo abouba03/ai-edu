@@ -1,6 +1,5 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -72,87 +71,94 @@ export default function CheckpointDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
-        <Button id="checkpoint" className={triggerClassName}>{triggerLabel}</Button>
+        <button id="checkpoint" className={triggerClassName}>{triggerLabel}</button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-4xl">
-        <DialogHeader>
-          <DialogTitle>Checkpoint IA</DialogTitle>
-          <DialogDescription>
+      <DialogContent className="sm:max-w-4xl rounded-none border-2 border-[#1C293C] p-0 gap-0">
+        <DialogHeader className="border-b-2 border-[#1C293C] px-5 py-4">
+          <DialogTitle className="font-black text-[#1C293C]">Checkpoint IA</DialogTitle>
+          <DialogDescription className="text-xs font-medium text-[#1C293C]/55">
             Une question à la fois, feedback immédiat, progression visible.
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-4">
-          <div className="rounded-md border bg-background p-3 flex flex-wrap items-center justify-between gap-2">
-            <div className="space-y-1">
-              <p className="text-sm font-medium">Progression</p>
-              <p className="text-xs text-muted-foreground">
+        <div className="p-5 space-y-4">
+          {/* Génération + progression */}
+          <div className="border-2 border-[#1C293C] bg-[#FBFBF9] p-3 flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <p className="text-xs font-black text-[#1C293C]">Progression</p>
+              <p className="text-[11px] font-medium text-[#1C293C]/55 mt-0.5">
                 {questions.length === 0
                   ? 'Génère les questions pour démarrer.'
                   : `${answeredQuestions}/${questions.length} réponse(s) complétée(s)`}
               </p>
             </div>
-            <Button onClick={onGenerateCheckpointQuiz} disabled={quizLoading} className="h-9 text-xs">
+            <button
+              onClick={onGenerateCheckpointQuiz}
+              disabled={quizLoading}
+              className="border-2 border-[#1C293C] bg-[#FDC800] px-3 py-2 text-xs font-black text-[#1C293C] shadow-[2px_2px_0px_0px_#1C293C] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-100 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none"
+            >
               {quizLoading ? 'Génération...' : questions.length > 0 ? 'Régénérer 10 questions' : 'Générer 10 questions'}
-            </Button>
+            </button>
           </div>
 
           {questions.length > 0 && (
-            <div className="h-1.5 rounded-full bg-muted overflow-hidden">
+            <div className="h-1.5 border border-[#1C293C]/30 bg-white overflow-hidden">
               <div
-                className="h-full bg-primary transition-all duration-300"
+                className="h-full bg-[#1C293C] transition-all duration-300"
                 style={{ width: `${Math.round((answeredQuestions / questions.length) * 100)}%` }}
               />
             </div>
           )}
 
+          {/* Questions slider */}
           {questions.length > 0 && currentQuizQuestion && !quizCompleted && (
-            <div className="space-y-4">
-              <div className="rounded-md border bg-background p-3 overflow-hidden">
+            <div className="space-y-3">
+              <div className="border-2 border-[#1C293C] bg-white overflow-hidden">
                 <div
                   className="flex transition-transform duration-300 ease-out"
                   style={{ transform: `translateX(-${currentQuizIndex * 100}%)` }}
                 >
                   {questions.map((q, i) => {
                     const selectedAnswer = userAnswers[i] ?? '';
-
                     return (
-                      <div key={`${q.question}-${i}`} className="w-full shrink-0 px-1">
-                        <div className="rounded-md border p-3 space-y-3 bg-background">
-                          <div className="flex items-start justify-between gap-3">
-                            <div className="space-y-1.5">
-                              <p className="text-[11px] text-muted-foreground">Question {i + 1}/{questions.length}</p>
-                              <p className="font-medium text-sm leading-snug">{q.question}</p>
-                            </div>
-                            <span className="inline-flex items-center rounded-md border px-2 py-0.5 text-[11px] font-medium text-muted-foreground">
-                              {getQuestionTypeLabel(q)}
-                            </span>
+                      <div key={`${q.question}-${i}`} className="w-full shrink-0 p-4 space-y-3">
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="space-y-1">
+                            <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7]">
+                              Question {i + 1}/{questions.length}
+                            </p>
+                            <p className="font-black text-sm text-[#1C293C] leading-snug">{q.question}</p>
                           </div>
+                          <span className="border border-[#1C293C]/30 px-2 py-0.5 text-[10px] font-bold text-[#1C293C]/60 shrink-0">
+                            {getQuestionTypeLabel(q)}
+                          </span>
+                        </div>
 
-                          <div className="grid grid-cols-1 gap-2">
-                            {q.choices.map((choice) => {
-                              const isSelected = selectedAnswer === choice;
-                              return (
-                                <label
-                                  key={`${q.question}-${choice}`}
-                                  className={`flex items-start gap-2 rounded-md border px-3 py-2 cursor-pointer transition-colors ${
-                                    isSelected ? 'border-primary/40 bg-primary/5' : 'border-border hover:bg-accent'
-                                  }`}
-                                >
-                                  <input
-                                    type="radio"
-                                    className="mt-0.5"
-                                    name={`checkpoint-${i}`}
-                                    value={choice}
-                                    checked={isSelected}
-                                    disabled={quizCompleted}
-                                    onChange={() => onSelectAnswer(i, choice)}
-                                  />
-                                  <span className="text-sm leading-snug">{choice}</span>
-                                </label>
-                              );
-                            })}
-                          </div>
+                        <div className="grid grid-cols-1 gap-2">
+                          {q.choices.map((choice) => {
+                            const isSelected = selectedAnswer === choice;
+                            return (
+                              <label
+                                key={`${q.question}-${choice}`}
+                                className={`flex items-start gap-2.5 border-2 px-3 py-2.5 cursor-pointer transition-all duration-100 ${
+                                  isSelected
+                                    ? 'border-[#1C293C] bg-[#FDC800]'
+                                    : 'border-[#1C293C]/30 bg-white hover:border-[#1C293C] hover:bg-[#FBFBF9]'
+                                }`}
+                              >
+                                <input
+                                  type="radio"
+                                  className="mt-0.5 shrink-0"
+                                  name={`checkpoint-${i}`}
+                                  value={choice}
+                                  checked={isSelected}
+                                  disabled={quizCompleted}
+                                  onChange={() => onSelectAnswer(i, choice)}
+                                />
+                                <span className="text-sm font-medium text-[#1C293C] leading-snug">{choice}</span>
+                              </label>
+                            );
+                          })}
                         </div>
                       </div>
                     );
@@ -161,53 +167,65 @@ export default function CheckpointDialog({
               </div>
 
               <div className="flex items-center justify-between gap-2">
-                <Button variant="outline" disabled={currentQuizIndex === 0} onClick={onPrevQuestion} className="h-9 text-xs">
+                <button
+                  disabled={currentQuizIndex === 0}
+                  onClick={onPrevQuestion}
+                  className="border-2 border-[#1C293C] bg-white px-4 py-2 text-xs font-black text-[#1C293C] shadow-[2px_2px_0px_0px_#1C293C] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-100 disabled:opacity-30 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none"
+                >
                   Précédent
-                </Button>
+                </button>
 
                 {isLastQuizQuestion ? (
-                  <Button onClick={onSubmitCheckpointQuiz} disabled={!canSubmitQuiz} className="h-9 text-xs">
+                  <button
+                    onClick={onSubmitCheckpointQuiz}
+                    disabled={!canSubmitQuiz}
+                    className="border-2 border-[#1C293C] bg-[#FDC800] px-4 py-2 text-xs font-black text-[#1C293C] shadow-[2px_2px_0px_0px_#1C293C] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-100 disabled:opacity-40 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none"
+                  >
                     Terminer
-                  </Button>
+                  </button>
                 ) : (
-                  <Button onClick={onNextQuestion} disabled={!canAdvanceCurrentQuiz} className="h-9 text-xs">
+                  <button
+                    onClick={onNextQuestion}
+                    disabled={!canAdvanceCurrentQuiz}
+                    className="border-2 border-[#1C293C] bg-[#FDC800] px-4 py-2 text-xs font-black text-[#1C293C] shadow-[2px_2px_0px_0px_#1C293C] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-100 disabled:opacity-40 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none"
+                  >
                     Avancer
-                  </Button>
+                  </button>
                 )}
               </div>
             </div>
           )}
 
+          {/* Résultats */}
           {questions.length > 0 && quizCompleted && quizScore !== null && (
             <div className="space-y-3">
-              <div className={`rounded-md border p-4 space-y-3 ${quizPassed ? 'border-primary/30 bg-primary/10' : 'border-destructive/30 bg-destructive/10'}`}>
+              <div className={`border-2 border-[#1C293C] p-4 space-y-3 ${quizPassed ? 'bg-[#16A34A]/8' : 'bg-[#DC2626]/5'}`}>
                 <div className="flex items-start justify-between gap-3 flex-wrap">
                   <div>
-                    <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Résultat checkpoint</p>
-                    <p className="text-base font-semibold mt-1">{quizPassed ? 'Checkpoint validé' : 'Checkpoint à renforcer'}</p>
+                    <p className="text-[10px] uppercase tracking-widest font-black text-[#1C293C]/50">
+                      Résultat checkpoint
+                    </p>
+                    <p className="text-base font-black text-[#1C293C] mt-0.5">
+                      {quizPassed ? 'Checkpoint validé ✓' : 'Checkpoint à renforcer'}
+                    </p>
                   </div>
-                  <span className="inline-flex items-center rounded-md border border-primary/30 bg-background px-2.5 py-1 text-xs font-semibold">
-                    Score: {quizScorePercent}%
+                  <span className={`border-2 border-[#1C293C] px-3 py-1 text-sm font-black ${quizPassed ? 'bg-[#FDC800]' : 'bg-white'} text-[#1C293C]`}>
+                    {quizScorePercent}%
                   </span>
                 </div>
 
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                  <div className="rounded-md border bg-background p-2">
-                    <p className="text-[11px] text-muted-foreground">Questions</p>
-                    <p className="text-sm font-semibold">{questions.length}</p>
-                  </div>
-                  <div className="rounded-md border bg-background p-2">
-                    <p className="text-[11px] text-muted-foreground">Correctes</p>
-                    <p className="text-sm font-semibold text-primary">{correctAnswersCount}</p>
-                  </div>
-                  <div className="rounded-md border bg-background p-2">
-                    <p className="text-[11px] text-muted-foreground">À corriger</p>
-                    <p className="text-sm font-semibold text-destructive">{wrongAnswersCount}</p>
-                  </div>
-                  <div className="rounded-md border bg-background p-2">
-                    <p className="text-[11px] text-muted-foreground">Minimum</p>
-                    <p className="text-sm font-semibold">{minimumToPass}</p>
-                  </div>
+                  {[
+                    { label: 'Questions', value: questions.length, color: '' },
+                    { label: 'Correctes', value: correctAnswersCount, color: 'text-[#16A34A]' },
+                    { label: 'À corriger', value: wrongAnswersCount, color: 'text-[#DC2626]' },
+                    { label: 'Minimum', value: minimumToPass, color: '' },
+                  ].map((stat) => (
+                    <div key={stat.label} className="border border-[#1C293C]/20 bg-white p-2">
+                      <p className="text-[10px] font-bold text-[#1C293C]/50">{stat.label}</p>
+                      <p className={`text-sm font-black text-[#1C293C] ${stat.color}`}>{stat.value}</p>
+                    </div>
+                  ))}
                 </div>
               </div>
 
@@ -217,47 +235,56 @@ export default function CheckpointDialog({
                   const isCorrect = selectedAnswer === q.answer;
 
                   return (
-                    <div key={`checkpoint-result-${q.question}-${i}`} className={`rounded-md border p-3 space-y-2 ${isCorrect ? 'border-primary/30 bg-primary/5' : 'border-destructive/30 bg-destructive/5'}`}>
+                    <div
+                      key={`result-${i}`}
+                      className={`border-2 border-[#1C293C] p-3 space-y-2 ${isCorrect ? 'border-l-4 border-l-[#16A34A]' : 'border-l-4 border-l-[#DC2626]'}`}
+                    >
                       <div className="flex items-start justify-between gap-3">
                         <div>
-                          <p className="text-[11px] text-muted-foreground">Question {i + 1}/{questions.length} • {getQuestionTypeLabel(q)}</p>
-                          <p className="text-sm font-medium leading-snug">{q.question}</p>
+                          <p className="text-[10px] font-black text-[#432DD7]">
+                            Q{i + 1} · {getQuestionTypeLabel(q)}
+                          </p>
+                          <p className="text-sm font-black text-[#1C293C] mt-0.5 leading-snug">{q.question}</p>
                         </div>
                         {isCorrect ? (
-                          <span className="inline-flex items-center gap-1 rounded-md border border-primary/30 bg-primary/10 px-2 py-0.5 text-[11px] font-medium text-primary">
-                            <CheckCircle2 className="h-3.5 w-3.5" /> Correct
+                          <span className="inline-flex items-center gap-1 text-[10px] font-black text-[#16A34A] shrink-0">
+                            <CheckCircle2 className="h-3 w-3" /> Correct
                           </span>
                         ) : (
-                          <span className="inline-flex items-center gap-1 rounded-md border border-destructive/30 bg-destructive/10 px-2 py-0.5 text-[11px] font-medium text-destructive">
-                            <CircleAlert className="h-3.5 w-3.5" /> À revoir
+                          <span className="inline-flex items-center gap-1 text-[10px] font-black text-[#DC2626] shrink-0">
+                            <CircleAlert className="h-3 w-3" /> À revoir
                           </span>
                         )}
                       </div>
 
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                        <div className="rounded-md border bg-background p-2">
-                          <p className="text-[11px] text-muted-foreground">Ta réponse</p>
-                          <p className="text-xs font-medium">{selectedAnswer || '—'}</p>
+                        <div className="border border-[#1C293C]/20 bg-[#FBFBF9] p-2">
+                          <p className="text-[10px] font-bold text-[#1C293C]/50">Ta réponse</p>
+                          <p className="text-xs font-semibold text-[#1C293C]">{selectedAnswer || '—'}</p>
                         </div>
-                        <div className="rounded-md border bg-background p-2">
-                          <p className="text-[11px] text-muted-foreground">Bonne réponse</p>
-                          <p className="text-xs font-medium">{q.answer}</p>
+                        <div className="border border-[#16A34A]/40 bg-[#16A34A]/5 p-2">
+                          <p className="text-[10px] font-bold text-[#16A34A]/70">Bonne réponse</p>
+                          <p className="text-xs font-semibold text-[#1C293C]">{q.answer}</p>
                         </div>
                       </div>
 
-                      <div className="rounded-md border bg-background p-2">
-                        <p className="text-[11px] text-muted-foreground">Explication</p>
-                        <p className="text-xs text-muted-foreground leading-relaxed">{q.explanation}</p>
+                      <div className="border border-[#1C293C]/15 bg-[#FBFBF9] p-2">
+                        <p className="text-[10px] font-bold text-[#1C293C]/40 mb-0.5">Explication</p>
+                        <p className="text-xs font-medium text-[#1C293C]/60 leading-relaxed">{q.explanation}</p>
                       </div>
                     </div>
                   );
                 })}
               </div>
 
-              <div className="flex items-center justify-end">
-                <Button onClick={onGenerateCheckpointQuiz} disabled={quizLoading} className="h-9 text-xs">
+              <div className="flex justify-end">
+                <button
+                  onClick={onGenerateCheckpointQuiz}
+                  disabled={quizLoading}
+                  className="border-2 border-[#1C293C] bg-[#FDC800] px-4 py-2 text-xs font-black text-[#1C293C] shadow-[3px_3px_0px_0px_#1C293C] hover:shadow-none hover:translate-x-[3px] hover:translate-y-[3px] transition-all duration-100 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none"
+                >
                   {quizLoading ? 'Génération...' : 'Refaire un checkpoint'}
-                </Button>
+                </button>
               </div>
             </div>
           )}

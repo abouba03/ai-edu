@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { CheckCircle2, CircleAlert, Clock3, GraduationCap, Layers3 } from 'lucide-react';
+import { CheckCircle2, CircleAlert, Clock3, GraduationCap, Layers3, ArrowLeft } from 'lucide-react';
 import { auth } from '@clerk/nextjs/server';
 import prisma from '@/lib/prisma';
 import { courseCatalog } from '@/lib/course-catalog';
@@ -29,18 +29,20 @@ function extractCourseSlug(metadata: unknown): string | null {
 }
 
 function slugify(value: string) {
-  return value
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/(^-|-$)/g, '') || 'formation';
+  return (
+    value
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)/g, '') || 'formation'
+  );
 }
 
 function getMissingSteps(status: CourseStatus) {
   const missing: string[] = [];
-  if (!status.quizDone) missing.push('Faire le quiz');
-  if (!status.challengeDone) missing.push('Faire le mini challenge');
+  if (!status.quizDone) missing.push('Quiz');
+  if (!status.challengeDone) missing.push('Mini challenge');
   return missing;
 }
 
@@ -64,17 +66,11 @@ export default async function FormationCoursesPage({ params }: Props) {
       const events = await prisma.learningEvent.findMany({
         where: {
           clerkId,
-          action: {
-            in: ['quiz_passed', 'quiz_failed', 'mini_challenge_submitted'],
-          },
+          action: { in: ['quiz_passed', 'quiz_failed', 'mini_challenge_submitted'] },
         },
         orderBy: { createdAt: 'desc' },
         take: 2000,
-        select: {
-          action: true,
-          status: true,
-          metadata: true,
-        },
+        select: { action: true, status: true, metadata: true },
       });
 
       for (const event of events) {
@@ -86,7 +82,6 @@ export default async function FormationCoursesPage({ params }: Props) {
         if (event.action === 'quiz_passed' || event.action === 'quiz_failed') {
           current.quizDone = true;
         }
-
         if (event.action === 'mini_challenge_submitted' && event.status === 'success') {
           current.challengeDone = true;
         }
@@ -124,9 +119,7 @@ export default async function FormationCoursesPage({ params }: Props) {
 
   const filtered = cards.filter((course) => slugify(course.formationName) === formationSlug);
 
-  if (filtered.length === 0) {
-    notFound();
-  }
+  if (filtered.length === 0) notFound();
 
   const sortedCourses = [...filtered].sort((a, b) => a.courseIndex - b.courseIndex);
   const formationName = sortedCourses[0].formationName;
@@ -139,71 +132,147 @@ export default async function FormationCoursesPage({ params }: Props) {
   const completionPercent = Math.round((validatedCount / sortedCourses.length) * 100);
 
   return (
-    <div className="space-y-4">
-      <section className="rounded-xl border bg-card p-4 lg:p-5 space-y-3">
-        <div className="flex items-start justify-between gap-3 flex-wrap">
-          <div className="space-y-1.5">
-            <p className="text-[11px] text-primary font-semibold uppercase tracking-wide">Formation</p>
-            <h1 className="text-xl lg:text-2xl font-bold leading-tight">{formationName}</h1>
-            <p className="text-xs text-muted-foreground max-w-3xl">Parcours structuré: valide chaque cours avec quiz + mini challenge pour verrouiller les acquis.</p>
+    <div className="space-y-5">
+
+      {/* ── EN-TÊTE FORMATION ── */}
+      <section className="border-2 border-[#1C293C] bg-[#FBFBF9] p-5 lg:p-6 shadow-[5px_5px_0px_0px_#1C293C]">
+        <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
+
+          <div className="space-y-2 max-w-2xl">
+            <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7]">
+              Formation
+            </p>
+            <h1 className="text-2xl lg:text-3xl font-black text-[#1C293C] leading-tight">
+              {formationName}
+            </h1>
+            <p className="text-sm font-medium text-[#1C293C]/60 leading-relaxed">
+              Parcours structuré — valide chaque cours avec quiz + mini challenge pour verrouiller les acquis.
+            </p>
           </div>
 
-          <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
-            <span className="rounded-md border bg-background px-2 py-1">{sortedCourses.length} cours</span>
-            <span className="rounded-md border bg-primary/10 border-primary/30 px-2 py-1 text-primary">{validatedCount} validés</span>
-            <span className="rounded-md border bg-background px-2 py-1">{completionPercent}%</span>
+          {/* Stats bloc */}
+          <div className="flex items-center gap-2 shrink-0 flex-wrap">
+            <div className="border-2 border-[#1C293C] bg-white px-4 py-2.5 text-center shadow-[3px_3px_0px_0px_#1C293C]">
+              <p className="text-[10px] uppercase tracking-widest font-bold text-[#1C293C]/60">Cours</p>
+              <p className="text-2xl font-black text-[#1C293C]">{sortedCourses.length}</p>
+            </div>
+            <div className="border-2 border-[#1C293C] bg-[#FDC800] px-4 py-2.5 text-center shadow-[3px_3px_0px_0px_#1C293C]">
+              <p className="text-[10px] uppercase tracking-widest font-bold text-[#1C293C]/70">Validés</p>
+              <p className="text-2xl font-black text-[#1C293C]">{validatedCount}</p>
+            </div>
+            <div className="border-2 border-[#1C293C] bg-white px-4 py-2.5 text-center shadow-[3px_3px_0px_0px_#1C293C]">
+              <p className="text-[10px] uppercase tracking-widest font-bold text-[#1C293C]/60">Progression</p>
+              <p className="text-2xl font-black text-[#1C293C]">{completionPercent}%</p>
+            </div>
           </div>
         </div>
 
-        <div className="h-1.5 rounded-full bg-muted overflow-hidden">
-          <div className="h-full bg-primary transition-all" style={{ width: `${completionPercent}%` }} />
+        {/* Barre de progression */}
+        <div className="mt-5 space-y-1.5">
+          <div className="flex items-center justify-between text-[11px] font-bold text-[#1C293C]/60">
+            <span>{validatedCount} cours validés sur {sortedCourses.length}</span>
+            <span>{completionPercent}%</span>
+          </div>
+          <div className="h-2 border border-[#1C293C] bg-white overflow-hidden">
+            <div
+              className="h-full bg-[#1C293C] transition-all duration-500"
+              style={{ width: `${completionPercent}%` }}
+            />
+          </div>
         </div>
 
-        <Link href="/courses" className="inline-flex items-center gap-2 rounded-md border px-2.5 py-1.5 text-xs hover:bg-accent">
-          <Layers3 className="h-3.5 w-3.5" /> Retour aux formations
-        </Link>
+        {/* Retour */}
+        <div className="mt-4">
+          <Link
+            href="/courses"
+            className="inline-flex items-center gap-2 border-2 border-[#1C293C] bg-white px-3 py-2 text-xs font-black text-[#1C293C] shadow-[2px_2px_0px_0px_#1C293C] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-100"
+          >
+            <ArrowLeft className="h-3.5 w-3.5" />
+            Retour aux formations
+          </Link>
+        </div>
       </section>
 
-      <section className="rounded-xl border bg-card overflow-hidden">
-        <div className="px-3 py-2 border-b bg-background/60 text-[11px] text-muted-foreground uppercase tracking-wide font-semibold">
-          Cours de la formation
+      {/* ── GRILLE DES COURS ── */}
+      <section>
+        <div className="flex items-center justify-between gap-2 mb-3">
+          <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7]">
+            Cours de la formation
+          </p>
+          <span className="border border-[#1C293C]/30 bg-white px-2 py-0.5 text-[10px] font-bold text-[#1C293C]">
+            {sortedCourses.length} cours
+          </span>
         </div>
 
-        <div className="p-3 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2.5">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
           {sortedCourses.map((course) => {
             const status = courseStatusMap.get(course.slug) ?? DEFAULT_STATUS;
             const missingSteps = getMissingSteps(status);
 
             return (
-              <article key={course.slug} className="rounded-lg border bg-background p-3 space-y-2.5 hover:bg-accent/40 transition-colors">
+              <article
+                key={course.slug}
+                className={`border-2 border-[#1C293C] bg-white p-4 flex flex-col gap-3 shadow-[4px_4px_0px_0px_#1C293C] hover:shadow-[2px_2px_0px_0px_#1C293C] hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-100 ${
+                  status.validated ? 'border-l-4 border-l-[#16A34A]' : ''
+                }`}
+              >
+                {/* Course header */}
                 <div className="flex items-start justify-between gap-2">
-                  <p className="text-[11px] text-muted-foreground">#{course.courseIndex}</p>
-                  <span className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-semibold ${status.validated ? 'border-primary/40 bg-primary/15 text-primary' : 'text-muted-foreground'}`}>
-                    {status.validated && <CheckCircle2 className="h-3 w-3" />}
-                    {status.validated ? 'Validé' : 'En cours'}
+                  <span className="text-[10px] font-black text-[#1C293C]/40 border border-[#1C293C]/20 px-1.5 py-0.5">
+                    #{course.courseIndex}
+                  </span>
+                  {status.validated ? (
+                    <span className="inline-flex items-center gap-1 text-[10px] font-black text-[#16A34A]">
+                      <CheckCircle2 className="h-3 w-3" /> Validé
+                    </span>
+                  ) : (
+                    <span className="text-[10px] font-bold text-[#1C293C]/40">
+                      En cours
+                    </span>
+                  )}
+                </div>
+
+                {/* Title + description */}
+                <div className="space-y-1 flex-1">
+                  <h2 className="font-black text-sm text-[#1C293C] leading-tight line-clamp-2">
+                    {course.title}
+                  </h2>
+                  <p className="text-xs font-medium text-[#1C293C]/55 line-clamp-2 leading-relaxed">
+                    {course.description}
+                  </p>
+                </div>
+
+                {/* Metadata */}
+                <div className="flex items-center gap-2 flex-wrap text-[11px] font-semibold text-[#1C293C]/50">
+                  <span className="inline-flex items-center gap-1">
+                    <GraduationCap className="h-3 w-3" /> {course.level}
+                  </span>
+                  <span className="inline-flex items-center gap-1">
+                    <Clock3 className="h-3 w-3" /> {course.duration}
+                  </span>
+                  <span className="inline-flex items-center gap-1">
+                    <Layers3 className="h-3 w-3" /> {course.modulesCount} module{course.modulesCount > 1 ? 's' : ''}
                   </span>
                 </div>
 
-                <div className="space-y-1">
-                  <h2 className="font-semibold text-sm leading-tight line-clamp-2">{course.title}</h2>
-                  <p className="text-xs text-muted-foreground line-clamp-2">{course.description}</p>
-                </div>
-
-                <div className="flex items-center gap-2 text-[11px] text-muted-foreground flex-wrap">
-                  <span className="inline-flex items-center gap-1"><GraduationCap className="h-3 w-3" /> {course.level}</span>
-                  <span className="inline-flex items-center gap-1"><Clock3 className="h-3 w-3" /> {course.duration}</span>
-                  <span>{course.modulesCount} modules</span>
-                </div>
-
-                {!status.validated && (
-                  <p className="text-[11px] text-muted-foreground inline-flex items-center gap-1"><CircleAlert className="h-3 w-3" /> {missingSteps.join(' • ')}</p>
+                {/* Étapes manquantes */}
+                {!status.validated && missingSteps.length > 0 && (
+                  <p className="text-[11px] font-semibold text-[#1C293C]/40 inline-flex items-center gap-1">
+                    <CircleAlert className="h-3 w-3 shrink-0" />
+                    Manque : {missingSteps.join(' + ')}
+                  </p>
                 )}
 
+                {/* CTA */}
                 <Link
                   href={`/courses/${course.slug}`}
-                  className="inline-flex w-full items-center justify-center rounded-md bg-primary text-primary-foreground px-3 py-1.5 text-xs font-medium hover:bg-primary/90"
+                  className={`inline-flex w-full items-center justify-center border-2 border-[#1C293C] px-3 py-2 text-xs font-black transition-all duration-100 shadow-[3px_3px_0px_0px_#1C293C] hover:shadow-none hover:translate-x-[3px] hover:translate-y-[3px] ${
+                    status.validated
+                      ? 'bg-white text-[#1C293C]'
+                      : 'bg-[#FDC800] text-[#1C293C]'
+                  }`}
                 >
-                  Ouvrir le cours
+                  {status.validated ? 'Revoir le cours' : 'Ouvrir le cours'}
                 </Link>
               </article>
             );

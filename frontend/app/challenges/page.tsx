@@ -51,50 +51,59 @@ export default function ChallengesPage() {
 
   return (
     <div className="space-y-6">
-      <section className="rounded-2xl border bg-card p-5 lg:p-6">
-        <div className="rounded-2xl border bg-background p-5 lg:p-6 space-y-4">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-            <div>
-              <p className="text-xs uppercase tracking-wide text-primary font-semibold">Challenges Arena</p>
-              <h1 className="text-2xl lg:text-3xl font-bold mt-2">Défis & Classement</h1>
-              <p className="text-muted-foreground mt-2 max-w-2xl">
-                Releve les challenges publiés, améliore ton score et compare ta progression avec les autres apprenants.
-              </p>
-            </div>
-            <div className="rounded-xl border bg-card px-4 py-3 text-center min-w-36">
-              <p className="text-[11px] uppercase tracking-wide text-muted-foreground">Progression</p>
-              <p className="text-2xl font-extrabold text-primary mt-1">{progress}%</p>
-            </div>
+      {/* Hero */}
+      <section className="border-2 border-[#1C293C] bg-[#FBFBF9] p-6 shadow-[6px_6px_0px_0px_#1C293C]">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <p className="text-[11px] uppercase tracking-widest font-black text-[#432DD7]">Challenges Arena</p>
+            <h1 className="text-3xl lg:text-4xl font-black text-[#1C293C] mt-1 leading-tight">
+              Défis &amp; Classement
+            </h1>
+            <p className="text-[#1C293C]/60 mt-2 max-w-2xl text-sm font-medium">
+              Relève les challenges publiés, améliore ton score et compare ta progression avec les autres apprenants.
+            </p>
           </div>
+          <div className="border-2 border-[#1C293C] bg-[#FDC800] px-6 py-4 text-center shadow-[4px_4px_0px_0px_#1C293C] shrink-0">
+            <p className="text-[10px] uppercase tracking-widest font-black text-[#1C293C]">Progression</p>
+            <p className="text-4xl font-black text-[#1C293C] mt-0.5">{progress}%</p>
+          </div>
+        </div>
 
-          <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4 text-xs">
-            <article className="rounded-xl border bg-card p-3">
-              <p className="text-muted-foreground">Position actuelle</p>
-              <p className="mt-1 font-semibold inline-flex items-center gap-1"><Trophy className="h-3.5 w-3.5" /> Top en cours</p>
-            </article>
-            <article className="rounded-xl border bg-card p-3">
-              <p className="text-muted-foreground">Score total</p>
-              <p className="mt-1 font-semibold inline-flex items-center gap-1"><Star className="h-3.5 w-3.5" /> {totalScore} pts</p>
-            </article>
-            <article className="rounded-xl border bg-card p-3">
-              <p className="text-muted-foreground">Challenges faits</p>
-              <p className="mt-1 font-semibold inline-flex items-center gap-1"><Medal className="h-3.5 w-3.5" /> {completedCount}</p>
-            </article>
-            <article className="rounded-xl border bg-card p-3">
-              <p className="text-muted-foreground">Tentatives validées</p>
-              <p className="mt-1 font-semibold inline-flex items-center gap-1"><Target className="h-3.5 w-3.5" /> {passedCount}</p>
-            </article>
-          </div>
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 mt-5">
+          <article className="border-2 border-[#1C293C] bg-[#432DD7] p-4 shadow-[3px_3px_0px_0px_#1C293C]">
+            <p className="text-[10px] uppercase tracking-widest font-bold text-white/70">Position actuelle</p>
+            <p className="mt-1.5 font-black text-base inline-flex items-center gap-1.5 text-white">
+              <Trophy className="h-4 w-4" /> Top en cours
+            </p>
+          </article>
+          <article className="border-2 border-[#1C293C] bg-[#FDC800] p-4 shadow-[3px_3px_0px_0px_#1C293C]">
+            <p className="text-[10px] uppercase tracking-widest font-bold text-[#1C293C]/70">Score total</p>
+            <p className="mt-1.5 font-black text-base inline-flex items-center gap-1.5 text-[#1C293C]">
+              <Star className="h-4 w-4" /> {totalScore} pts
+            </p>
+          </article>
+          <article className="border-2 border-[#1C293C] bg-white p-4 shadow-[3px_3px_0px_0px_#1C293C]">
+            <p className="text-[10px] uppercase tracking-widest font-bold text-[#1C293C]/70">Challenges faits</p>
+            <p className="mt-1.5 font-black text-base inline-flex items-center gap-1.5 text-[#1C293C]">
+              <Medal className="h-4 w-4" /> {completedCount}
+            </p>
+          </article>
+          <article className="border-2 border-[#1C293C] bg-white p-4 shadow-[3px_3px_0px_0px_#1C293C]">
+            <p className="text-[10px] uppercase tracking-widest font-bold text-[#1C293C]/70">Tentatives validées</p>
+            <p className="mt-1.5 font-black text-base inline-flex items-center gap-1.5 text-[#1C293C]">
+              <Target className="h-4 w-4" /> {passedCount}
+            </p>
+          </article>
         </div>
       </section>
 
       <section className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_340px] items-start">
         <div className="order-1">
           <ChallengeList
-          challenges={challenges}
-          attempts={attempts}
-          showAll={showAll}
-          onToggleShowAll={() => setShowAll((prev) => !prev)}
+            challenges={challenges}
+            attempts={attempts}
+            showAll={showAll}
+            onToggleShowAll={() => setShowAll((prev) => !prev)}
           />
         </div>
 

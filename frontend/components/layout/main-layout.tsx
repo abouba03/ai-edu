@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { ModeToggle } from '@/components/theme-toggle';
 import { usePathname } from 'next/navigation';
@@ -11,9 +11,9 @@ import {
   User,
   LayoutDashboard,
   BookOpen,
-  Settings2,
   Sparkles,
   Shield,
+  Bug,
   ChevronRight,
 } from 'lucide-react';
 import {
@@ -21,277 +21,283 @@ import {
   SheetContent,
   SheetHeader,
   SheetTitle,
-  SheetTrigger
+  SheetTrigger,
 } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Button } from '../ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from '@clerk/nextjs';
-
-import { useEffect } from "react"
-import { useAuth } from "@clerk/nextjs"
+import { useAuth } from '@clerk/nextjs';
 
 interface MainLayoutProps {
   children: React.ReactNode;
 }
 
+const NAV_MAIN = [
+  {
+    label: 'Dashboard',
+    icon: LayoutDashboard,
+    href: '/dashboard',
+    match: (p: string) => p === '/dashboard' || p === '/',
+  },
+  {
+    label: 'Cours',
+    icon: BookOpen,
+    href: '/courses',
+    match: (p: string) => p.startsWith('/courses'),
+  },
+  {
+    label: 'Challenges',
+    icon: Trophy,
+    href: '/challenges',
+    match: (p: string) => p.startsWith('/challenges'),
+  },
+];
+
+const NAV_TOOLS = [
+  {
+    label: 'Générateur IA',
+    icon: Sparkles,
+    href: '/generator',
+    match: (p: string) => p.startsWith('/generator'),
+  },
+  {
+    label: 'Debugger IA',
+    icon: Bug,
+    href: '/debugger',
+    match: (p: string) => p.startsWith('/debugger'),
+  },
+];
+
+function NavItem({
+  href,
+  label,
+  icon: Icon,
+  active,
+  onClick,
+}: {
+  href: string;
+  label: string;
+  icon: React.ElementType;
+  active: boolean;
+  onClick?: () => void;
+}) {
+  return (
+    <Link
+      href={href}
+      onClick={onClick}
+      className={cn(
+        'group flex items-center gap-3 px-3 py-2.5 text-sm font-bold border-2 transition-all duration-100',
+        active
+          ? 'bg-[#FDC800] border-[#1C293C] text-[#1C293C] shadow-[3px_3px_0px_0px_#1C293C]'
+          : 'bg-white border-transparent text-[#1C293C]/70 hover:border-[#1C293C] hover:text-[#1C293C] hover:bg-[#FBFBF9]',
+      )}
+    >
+      <Icon className="h-4 w-4 shrink-0" />
+      <span>{label}</span>
+      {active && <ChevronRight className="ml-auto h-3.5 w-3.5 shrink-0" />}
+    </Link>
+  );
+}
+
+function SectionLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7] px-1 mb-1.5">
+      {children}
+    </p>
+  );
+}
+
+function UserCard({ name, level, loaded }: { name: string; level: string; loaded: boolean }) {
+  return (
+    <div className="border-2 border-[#1C293C] bg-white px-3 py-3 flex items-center gap-3 shadow-[3px_3px_0px_0px_#1C293C]">
+      <div className="size-9 border-2 border-[#1C293C] bg-[#FDC800] flex items-center justify-center font-black text-sm text-[#1C293C] shrink-0 select-none">
+        {name.slice(0, 2).toUpperCase()}
+      </div>
+      <div className="overflow-hidden">
+        <p className="font-black text-sm text-[#1C293C] truncate">
+          {loaded ? name : '···'}
+        </p>
+        <p className="text-[11px] font-semibold text-[#1C293C]/55 truncate">
+          Niveau : {level}
+        </p>
+      </div>
+    </div>
+  );
+}
+
 export default function MainLayout({ children }: MainLayoutProps) {
-
-  const { isSignedIn } = useAuth()
-  const [userName, setUserName] = useState("Étudiant")
-  const [userLevel, setUserLevel] = useState("débutant")
-  const [userLoaded, setUserLoaded] = useState(false)
-
-  useEffect(() => {
-    if (isSignedIn) {
-      fetch("/api/sync-user", { method: "POST" })
-    }
-  }, [isSignedIn])
-
-  useEffect(() => {
-    fetch("/api/me")
-      .then((res) => res.json())
-      .then((data) => {
-        setUserName(data?.name ?? "Étudiant")
-        setUserLevel(data?.level ?? "débutant")
-      })
-      .finally(() => setUserLoaded(true))
-  }, [isSignedIn])
-
+  const { isSignedIn } = useAuth();
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [userName, setUserName] = useState('Étudiant');
+  const [userLevel, setUserLevel] = useState('débutant');
+  const [userLoaded, setUserLoaded] = useState(false);
 
-  const primaryRoutes = [
-    {
-      label: 'Dashboard',
-      icon: <LayoutDashboard className="h-5 w-5" />,
-      href: '/dashboard',
-      active: pathname === '/dashboard' || pathname === '/',
-    },
-    {
-      label: 'Cours',
-      icon: <BookOpen className="h-5 w-5" />,
-      href: '/courses',
-      active: pathname.startsWith('/courses'),
-    },
-    {
-      label: 'Challenges',
-      icon: <Trophy className="h-5 w-5" />,
-      href: '/challenges',
-      active: pathname.startsWith('/challenges'),
-    },
-    {
-      label: 'Profil',
-      icon: <User className="h-5 w-5" />,
-      href: '/profile',
-      active: pathname.startsWith('/profile'),
-    },
-  ];
+  useEffect(() => {
+    if (isSignedIn) fetch('/api/sync-user', { method: 'POST' });
+  }, [isSignedIn]);
 
-  const closeMobileMenu = () => {
-    setIsMobileMenuOpen(false);
-  };
+  useEffect(() => {
+    fetch('/api/me')
+      .then((r) => r.json())
+      .then((d) => {
+        setUserName(d?.name ?? 'Étudiant');
+        setUserLevel(d?.level ?? 'débutant');
+      })
+      .finally(() => setUserLoaded(true));
+  }, [isSignedIn]);
+
+  const closeMenu = () => setIsMobileMenuOpen(false);
+
+  const SidebarContent = ({ onNav }: { onNav?: () => void }) => (
+    <div className="flex flex-col flex-1 px-3 py-4 gap-5 overflow-auto">
+      {/* Main nav */}
+      <div>
+        <SectionLabel>Principal</SectionLabel>
+        <div className="space-y-1">
+          {NAV_MAIN.map((r) => (
+            <NavItem
+              key={r.href}
+              href={r.href}
+              label={r.label}
+              icon={r.icon}
+              active={r.match(pathname)}
+              onClick={onNav}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Tools nav */}
+      <div>
+        <SectionLabel>Outils IA</SectionLabel>
+        <div className="space-y-1">
+          {NAV_TOOLS.map((r) => (
+            <NavItem
+              key={r.href}
+              href={r.href}
+              label={r.label}
+              icon={r.icon}
+              active={r.match(pathname)}
+              onClick={onNav}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Bottom */}
+      <div className="mt-auto space-y-2">
+        <Link
+          href="/admin"
+          onClick={onNav}
+          className={cn(
+            'flex items-center gap-3 px-3 py-2.5 text-sm font-bold border-2 transition-all duration-100',
+            pathname.startsWith('/admin')
+              ? 'bg-[#432DD7] border-[#1C293C] text-white shadow-[3px_3px_0px_0px_#1C293C]'
+              : 'bg-white border-transparent text-[#1C293C]/70 hover:border-[#1C293C] hover:text-[#1C293C] hover:bg-[#FBFBF9]',
+          )}
+        >
+          <Shield className="h-4 w-4 shrink-0" />
+          Admin
+          {pathname.startsWith('/admin') && <ChevronRight className="ml-auto h-3.5 w-3.5" />}
+        </Link>
+
+        <UserCard name={userName} level={userLevel} loaded={userLoaded} />
+      </div>
+    </div>
+  );
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <header className="sticky top-0 z-50 border-b bg-background/90 backdrop-blur supports-[backdrop-filter]:bg-background/70">
-        <div className="px-4 lg:px-8 h-16 flex items-center justify-between gap-4">
-          <div className="flex items-center gap-3 min-w-0">
-            <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
-              <SheetTrigger asChild>
-                <Button variant="outline" size="icon" className="lg:hidden rounded-xl">
-                  {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-                </Button>
-              </SheetTrigger>
-              <SheetContent className="w-[86%] sm:w-[360px]">
-                <SheetHeader>
-                  <SheetTitle className="text-left">Navigation</SheetTitle>
-                </SheetHeader>
-                <div className="py-5 space-y-5">
-                  <div className="flex items-center gap-3 rounded-xl border bg-card px-3 py-3">
-                    <Avatar>
-                      <AvatarFallback>{userName.slice(0, 2).toUpperCase()}</AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <p className="font-medium text-sm">{userLoaded ? userName : 'Chargement...'}</p>
-                      <p className="text-xs text-muted-foreground">Niveau: {userLevel}</p>
-                    </div>
-                  </div>
+    <div className="min-h-screen bg-[#FBFBF9] text-[#1C293C]">
 
-                  <div className="space-y-1">
-                    {primaryRoutes.map((route) => (
-                      <Link
-                        key={route.href}
-                        href={route.href}
-                        onClick={closeMobileMenu}
-                        className={cn(
-                          'flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-all border',
-                          route.active
-                            ? 'bg-primary text-primary-foreground border-primary'
-                            : 'bg-background hover:bg-accent border-border',
-                        )}
-                      >
-                        {route.icon}
-                        {route.label}
-                        <ChevronRight className="ml-auto h-4 w-4 opacity-60" />
-                      </Link>
-                    ))}
-                  </div>
+      {/* ── NAVBAR ── */}
+      <header className="sticky top-0 z-50 h-[60px] border-b-2 border-[#1C293C] bg-[#FBFBF9] flex items-center px-4 lg:px-6 justify-between gap-4">
 
-                  <div className="flex items-center justify-between rounded-xl border bg-card px-3 py-2.5">
-                    <ModeToggle />
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="outline" size="sm" className="rounded-lg">
-                          <Settings2 className="h-4 w-4" /> Options
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="w-52">
-                        <DropdownMenuLabel>Options</DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem asChild>
-                          <Link href="/admin" onClick={closeMobileMenu} className="cursor-pointer">
-                            <Shield className="h-4 w-4" /> Page Admin
-                          </Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem asChild>
-                          <Link href="/profile" onClick={closeMobileMenu} className="cursor-pointer">
-                            <User className="h-4 w-4" /> Profil utilisateur
-                          </Link>
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </div>
+        {/* Left: mobile trigger + logo */}
+        <div className="flex items-center gap-3">
+          {/* Mobile hamburger */}
+          <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
+            <SheetTrigger asChild>
+              <button
+                aria-label="Ouvrir le menu"
+                className="lg:hidden border-2 border-[#1C293C] bg-white p-2 shadow-[2px_2px_0px_0px_#1C293C] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-100"
+              >
+                {isMobileMenuOpen ? (
+                  <X className="h-4 w-4" />
+                ) : (
+                  <Menu className="h-4 w-4" />
+                )}
+              </button>
+            </SheetTrigger>
+
+            <SheetContent
+              side="left"
+              className="w-[280px] sm:w-[300px] rounded-none border-r-2 border-[#1C293C] bg-[#FBFBF9] p-0 flex flex-col"
+            >
+              <SheetHeader className="border-b-2 border-[#1C293C] px-5 py-4 shrink-0">
+                <SheetTitle className="text-left font-black text-[#1C293C]">
+                  AI Edu<span className="text-[#432DD7]">.</span>
+                </SheetTitle>
+              </SheetHeader>
+
+              <div className="flex flex-col flex-1 overflow-hidden">
+                {/* Mobile user card */}
+                <div className="px-3 pt-4 pb-2 border-b-2 border-[#1C293C]/10">
+                  <UserCard name={userName} level={userLevel} loaded={userLoaded} />
                 </div>
-              </SheetContent>
-            </Sheet>
-
-            <Link href="/dashboard" className="flex items-center gap-2.5 min-w-0">
-              <div className="size-9 rounded-xl bg-primary/15 text-primary flex items-center justify-center shrink-0">
-                <Sparkles className="h-4.5 w-4.5" />
+                <SidebarContent onNav={closeMenu} />
               </div>
-              <div className="min-w-0">
-                <p className="font-semibold leading-tight">AI Edu Platform</p>
-                <p className="text-xs text-muted-foreground truncate">Learning Workspace</p>
-              </div>
-            </Link>
-          </div>
+            </SheetContent>
+          </Sheet>
 
-          <div className="flex items-center gap-2">
-            <ModeToggle />
+          {/* Logo */}
+          <Link href="/dashboard" className="flex items-center gap-2.5 select-none">
+            <div className="size-8 border-2 border-[#1C293C] bg-[#FDC800] flex items-center justify-center shadow-[2px_2px_0px_0px_#1C293C] shrink-0">
+              <Sparkles className="h-4 w-4 text-[#1C293C]" />
+            </div>
+            <div className="leading-none">
+              <span className="font-black text-[15px] text-[#1C293C]">AI Edu</span>
+              <span className="font-black text-[15px] text-[#432DD7]">.</span>
+              <p className="text-[10px] font-semibold text-[#1C293C]/50 tracking-wide -mt-0.5">
+                Learning Platform
+              </p>
+            </div>
+          </Link>
+        </div>
 
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="icon" className="rounded-xl">
-                  <Settings2 className="h-4.5 w-4.5" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuLabel>Options</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                  <Link href="/admin" className="cursor-pointer">
-                    <Shield className="h-4 w-4" /> Page Admin
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/profile" className="cursor-pointer">
-                    <User className="h-4 w-4" /> Profil utilisateur
-                  </Link>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+        {/* Right: theme + admin pill + clerk */}
+        <div className="flex items-center gap-2">
+          <ModeToggle />
 
-            <SignedOut>
-              <div className="hidden sm:flex items-center gap-2">
-                <SignInButton />
-                <SignUpButton />
-              </div>
-            </SignedOut>
-            <SignedIn>
-              <UserButton />
-            </SignedIn>
-          </div>
+          <Link
+            href="/admin"
+            className="hidden sm:inline-flex items-center gap-1.5 border-2 border-[#1C293C] bg-white px-3 py-1.5 text-xs font-black text-[#1C293C] shadow-[2px_2px_0px_0px_#1C293C] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-100"
+          >
+            <Shield className="h-3.5 w-3.5" />
+            Admin
+          </Link>
+
+          <SignedOut>
+            <div className="hidden sm:flex items-center gap-2">
+              <SignInButton />
+              <SignUpButton />
+            </div>
+          </SignedOut>
+          <SignedIn>
+            <UserButton />
+          </SignedIn>
         </div>
       </header>
 
-      <div className="flex min-h-[calc(100vh-64px)] lg:min-h-[calc(100vh-64px)]">
+      {/* ── BODY ── */}
+      <div className="flex min-h-[calc(100vh-60px)]">
+
         {/* Desktop Sidebar */}
-        <aside className="hidden lg:flex w-[300px] flex-col border-r bg-card/40 backdrop-blur px-4 py-4">
-          <div className="rounded-2xl border bg-background px-3 py-3 mb-4">
-            <p className="text-xs uppercase tracking-wide text-muted-foreground">Navigation principale</p>
-            <p className="text-sm font-semibold mt-1">Accès rapide</p>
-          </div>
-
-          <div className="flex flex-col flex-1 overflow-auto">
-            <nav className="flex flex-col space-y-1.5">
-              {primaryRoutes.map((route) => (
-                <Link
-                  key={route.href}
-                  href={route.href}
-                  className={cn(
-                    "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-all border",
-                    route.active
-                      ? "bg-primary text-primary-foreground border-primary"
-                      : "bg-background hover:bg-accent border-border"
-                  )}
-                >
-                  {route.icon}
-                  {route.label}
-                  <ChevronRight className="ml-auto h-4 w-4 opacity-50" />
-                </Link>
-              ))}
-            </nav>
-
-            <div className="mt-auto space-y-4">
-              <div className="rounded-xl border bg-background p-2 flex items-center justify-between">
-                <span className="text-xs text-muted-foreground">Options</span>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="outline" size="sm" className="rounded-lg">
-                      <Settings2 className="h-4 w-4" /> Ouvrir
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-52">
-                    <DropdownMenuLabel>Options</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem asChild>
-                      <Link href="/admin" className="cursor-pointer">
-                        <Shield className="h-4 w-4" /> Page Admin
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link href="/profile" className="cursor-pointer">
-                        <User className="h-4 w-4" /> Profil utilisateur
-                      </Link>
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
-
-              <div className="flex items-center gap-3 rounded-xl px-3 py-3 mt-auto border bg-background">
-                <Avatar className="h-9 w-9">
-                  <AvatarFallback>{userName.slice(0, 2).toUpperCase()}</AvatarFallback>
-                </Avatar>
-                <div className="overflow-hidden text-ellipsis">
-                  <div className="font-medium">{userLoaded ? userName : "Chargement..."}</div>
-                  <div className="text-sm text-muted-foreground">Niveau: {userLevel}</div>
-                </div>
-              </div>
-            </div>
-          </div>
+        <aside className="hidden lg:flex w-[240px] shrink-0 flex-col border-r-2 border-[#1C293C] bg-[#FBFBF9]">
+          <SidebarContent />
         </aside>
 
-        {/* Main Content */}
-        <main className="flex-1">
+        {/* Main content */}
+        <main className="flex-1 min-w-0">
           <div className="p-4 lg:p-8">{children}</div>
         </main>
       </div>

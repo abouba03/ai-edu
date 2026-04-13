@@ -7,7 +7,6 @@ import { useAuth } from '@clerk/nextjs';
 import Editor from '@monaco-editor/react';
 import axios from 'axios';
 import { AlertTriangle, ArrowLeft, ChevronLeft, ChevronRight, Code2, Lightbulb, PlayCircle } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { trackEvent } from '@/lib/event-tracker';
 import type { ParsedChallengeFeedback } from './_components/types';
 
@@ -637,7 +636,7 @@ export default function CourseMiniChallengePage() {
               .map((line) => `# ${line}`),
             '',
           ].join('\n')
-        : '# Correction guidée\n# Version proposée par le tuteur pour débloquer l’exercice.\n\n';
+        : '# Correction guidée\n# Version proposée par le tuteur pour débloquer l\'exercice.\n\n';
 
       setChallengeCode(`${explanationHeader}${correctedCode}`);
       setInstructionPage(testsTabIndex >= 0 ? testsTabIndex : 0);
@@ -753,7 +752,7 @@ export default function CourseMiniChallengePage() {
       const statement = challengeSections.statement.trim();
       const example = challengeSections.example.trim();
       if (!statement && !example) {
-        return 'Clique sur “Nouveau challenge” pour générer un énoncé.';
+        return 'Clique sur "Nouveau challenge" pour générer un énoncé.';
       }
       if (statement && example) {
         return `${statement}\n\nExemple:\n${example}`;
@@ -767,7 +766,7 @@ export default function CourseMiniChallengePage() {
       }
       return [
         '1) Écris uniquement du code Python exécutable.',
-        '2) Respecte les entrées/sorties demandées dans l’énoncé.',
+        '2) Respecte les entrées/sorties demandées dans l\'énoncé.',
         '3) Favorise une solution claire et robuste.',
         '4) Gère les cas limites mentionnés dans le challenge.',
       ].join('\n');
@@ -884,7 +883,7 @@ export default function CourseMiniChallengePage() {
 
   async function runInlineDebugger() {
     if (!challengeCode.trim()) {
-      setDebugResponse('Ajoute d’abord du code dans l’éditeur, puis lance le debug guidé.');
+      setDebugResponse('Ajoute d\'abord du code dans l\'éditeur, puis lance le debug guidé.');
       return;
     }
 
@@ -1000,8 +999,8 @@ export default function CourseMiniChallengePage() {
       });
     } catch (error: unknown) {
       const message = axios.isAxiosError(error)
-        ? (error.response?.data as { detail?: string } | undefined)?.detail || 'Impossible d’envoyer ta réponse au debug.'
-        : 'Impossible d’envoyer ta réponse au debug.';
+        ? (error.response?.data as { detail?: string } | undefined)?.detail || 'Impossible d\'envoyer ta réponse au debug.'
+        : 'Impossible d\'envoyer ta réponse au debug.';
       setDebugResponse(String(message));
 
       await trackEvent({
@@ -1020,348 +1019,402 @@ export default function CourseMiniChallengePage() {
   }
 
   return (
-    <div className="space-y-4">
-      <section className="rounded-2xl border bg-card px-3 py-2">
-        <Link href={`/courses/${courseSlug}`} className="inline-flex items-center gap-2 rounded-md border bg-background px-3 py-1.5 text-xs font-medium hover:bg-accent">
+    <div className="mx-auto w-full max-w-[1240px] space-y-3 pb-4">
+
+      {/* ── HEADER ── */}
+      <div className="border-2 border-[#1C293C] bg-[#FBFBF9] p-3 shadow-[2px_2px_0px_0px_#1C293C] flex items-center justify-between gap-3 flex-wrap">
+        <Link
+          href={`/courses/${courseSlug}`}
+          className="inline-flex items-center gap-1.5 border-2 border-[#1C293C] bg-white px-3 py-1.5 text-xs font-black text-[#1C293C] shadow-[2px_2px_0px_0px_#1C293C] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-100"
+        >
           <ArrowLeft className="h-3.5 w-3.5" /> Retour au cours
         </Link>
-      </section>
+        <div>
+          <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7]">Mini Challenge</p>
+          <h1 className="font-black text-sm text-[#1C293C] mt-0.5">{courseTitle}</h1>
+        </div>
+        <div className="flex items-center gap-1.5 flex-wrap">
+          <span className="border border-[#1C293C]/20 bg-[#FBFBF9] px-2 py-0.5 text-[10px] font-semibold text-[#1C293C]/60">{courseLevel}</span>
+          <span className="border border-[#1C293C]/20 bg-[#FBFBF9] px-2 py-0.5 text-[10px] font-semibold text-[#1C293C]/60">{progressPercent}%</span>
+          <span className="border border-[#1C293C]/20 bg-[#FBFBF9] px-2 py-0.5 text-[10px] font-semibold text-[#1C293C]/60">{formationName}</span>
+        </div>
+      </div>
 
-      <section className="rounded-2xl border bg-card p-2">
-        <div className="grid grid-cols-1 xl:grid-cols-12 gap-2 min-h-[72vh]">
-          <aside className="xl:col-span-4 rounded-xl border bg-background p-3 space-y-3">
-            <div className="flex items-center gap-1.5 text-xs">
-              {instructionPages.map((label, index) => (
-                <button
-                  key={label}
-                  type="button"
-                  onClick={() => setInstructionPage(index)}
-                  className={`rounded-md border px-2.5 py-1 ${instructionPage === index ? 'bg-primary text-primary-foreground border-primary' : 'hover:bg-accent'} ${label === 'Tests' && (isSubmittingChallenge || testsTabHighlight) ? 'animate-pulse border-primary/60' : ''}`}
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
+      {/* ── MAIN GRID ── */}
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-3 items-start">
 
-            <div className="rounded-lg border bg-card p-3 space-y-2 min-h-[280px]">
-              <p className="text-[11px] text-muted-foreground">Page {instructionPage + 1}/{instructionPages.length}</p>
-              <div className="max-h-[52vh] overflow-y-auto pr-1">
-                {instructionPages[instructionPage] === 'Debugger' ? (
-                  <div className="space-y-2 text-sm">
-                    <div className="rounded-md border bg-background px-2.5 py-2">
-                      <div className="flex items-center justify-between gap-2">
-                        <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Debugger</p>
-                        {structuredDebug.status && (
-                          <span className={`rounded-full border px-2 py-0.5 text-[10px] ${structuredDebug.status.toLowerCase().includes('pas d') ? 'text-primary border-primary/30 bg-primary/10' : 'text-muted-foreground'}`}>
-                            {structuredDebug.status}
-                          </span>
-                        )}
-                      </div>
-                      <div className="mt-2 flex items-center justify-between gap-2">
-                        <p className="text-[11px] text-muted-foreground">Analyse guidée du code courant</p>
-                        <Button variant="outline" className="h-7 text-xs" onClick={runInlineDebugger} disabled={debugLoading || !challengeCode.trim()}>
-                          {debugLoading ? 'Analyse...' : 'Analyser'}
-                        </Button>
-                      </div>
-                    </div>
+        {/* ── LEFT: INSTRUCTION PANEL ── */}
+        <aside className="xl:col-span-5 border-2 border-[#1C293C] bg-[#FBFBF9] shadow-[4px_4px_0px_0px_#1C293C] p-3 space-y-3">
 
-                    {!debugResponse ? (
-                      <div className="rounded-md border bg-muted/30 px-2.5 py-2">
-                        <p className="text-[11px] text-muted-foreground">Lance une analyse pour afficher l’erreur principale et la prochaine action.</p>
-                      </div>
-                    ) : (
-                      <div className="space-y-1.5">
-                        <div className="rounded-sm border bg-background px-2 py-1.5">
-                          <p className="text-[10px] uppercase tracking-wide text-muted-foreground inline-flex items-center gap-1">
-                            <AlertTriangle className="h-3 w-3" /> Erreur détectée
-                          </p>
-                          <p className="mt-0.5 text-[12px] leading-relaxed text-foreground">
-                            {structuredDebug.detectedError || 'Aucune erreur précise détectée.'}
-                          </p>
-                        </div>
+          {/* Tabs */}
+          <div className="flex items-center gap-1.5 flex-wrap">
+            {instructionPages.map((label, index) => (
+              <button
+                key={label}
+                type="button"
+                onClick={() => setInstructionPage(index)}
+                className={`border-2 px-2.5 py-1 text-xs font-black transition-all duration-100 ${
+                  instructionPage === index
+                    ? 'border-[#1C293C] bg-[#FDC800] text-[#1C293C] shadow-[2px_2px_0px_0px_#1C293C]'
+                    : 'border-[#1C293C]/30 text-[#1C293C]/60 hover:border-[#1C293C] hover:text-[#1C293C]'
+                } ${label === 'Tests' && (isSubmittingChallenge || testsTabHighlight) ? 'animate-pulse' : ''}`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
 
-                        {structuredDebug.advice && (
-                          <div className="rounded-sm border bg-background px-2 py-1.5">
-                            <p className="text-[10px] uppercase tracking-wide text-muted-foreground inline-flex items-center gap-1">
-                              <Lightbulb className="h-3 w-3" /> Conseil
-                            </p>
-                            <p className="mt-0.5 text-[12px] leading-relaxed text-foreground">{structuredDebug.advice}</p>
-                          </div>
-                        )}
-
-                        {structuredDebug.nextAction && (
-                          <div className="rounded-sm border bg-background px-2 py-1.5">
-                            <p className="text-[10px] uppercase tracking-wide text-muted-foreground inline-flex items-center gap-1">
-                              <PlayCircle className="h-3 w-3" /> Prochaine action
-                            </p>
-                            <p className="mt-0.5 text-[12px] leading-relaxed text-foreground">{structuredDebug.nextAction}</p>
-                          </div>
-                        )}
-                      </div>
-                    )}
-
-                    <div className="rounded-md border bg-background p-1.5">
-                      <div className="flex gap-1.5">
-                        <input
-                          type="text"
-                          value={debugAnswer}
-                          onChange={(e) => setDebugAnswer(e.target.value)}
-                          placeholder="Pose une question ciblée sur ton bug..."
-                          className="w-full rounded-sm border bg-background px-2 py-1.5 text-xs"
-                        />
-                        <Button
-                          variant="secondary"
-                          className="h-8 text-xs"
-                          onClick={sendInlineDebuggerReply}
-                          disabled={debugLoading || !debugSessionId || !debugAnswer.trim()}
-                        >
-                          Envoyer
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                ) : instructionPages[instructionPage] === 'Énoncé' ? (
-                  <div className="space-y-1.5 text-sm">
-                    <div className="rounded-md border bg-background p-2 space-y-1">
-                      <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Objectif</p>
-                      <p className="text-[12px] leading-relaxed text-foreground">
-                        {formattedStatement.objective || 'Clique sur “Nouveau challenge” pour générer un énoncé.'}
-                      </p>
-                    </div>
-
-                    {(formattedStatement.input || formattedStatement.output || formattedStatement.example) && (
-                      <div className="rounded-md border bg-background p-2 space-y-1.5">
-                        <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Exemple</p>
-                        {formattedStatement.input && (
-                          <div className="rounded-sm border bg-card px-2 py-1.5">
-                            <p className="text-[10px] text-muted-foreground mb-0.5">Entrée</p>
-                            <pre className="text-[11px] whitespace-pre-wrap">{formattedStatement.input}</pre>
-                          </div>
-                        )}
-                        {formattedStatement.output && (
-                          <div className="rounded-sm border bg-card px-2 py-1.5">
-                            <p className="text-[10px] text-muted-foreground mb-0.5">Sortie attendue</p>
-                            <pre className="text-[11px] whitespace-pre-wrap">{formattedStatement.output}</pre>
-                          </div>
-                        )}
-                        {!formattedStatement.input && !formattedStatement.output && formattedStatement.example && (
-                          <pre className="text-[11px] whitespace-pre-wrap rounded-sm border bg-card px-2 py-1.5">{formattedStatement.example}</pre>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                ) : instructionPages[instructionPage] === 'Contraintes' ? (
-                  <div className="space-y-1.5 text-sm">
-                    <div className="rounded-md border bg-background p-2 space-y-1.5">
-                      <div className="flex items-center justify-between gap-2">
-                        <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Contraintes</p>
-                        <span className="rounded-full border px-2 py-0.5 text-[10px] text-muted-foreground">
-                          {challengeSections.constraints.length > 0 ? challengeSections.constraints.length : 4} règles
+          {/* Content panel */}
+          <div className="border-2 border-[#1C293C] bg-white p-3 space-y-2 min-h-[280px]">
+            <p className="text-[10px] uppercase tracking-widest font-black text-[#1C293C]/50">
+              Page {instructionPage + 1}/{instructionPages.length}
+            </p>
+            <div className="max-h-[52vh] overflow-y-auto pr-1">
+              {instructionPages[instructionPage] === 'Debugger' ? (
+                <div className="space-y-2 text-sm">
+                  <div className="border-2 border-[#1C293C] bg-[#FBFBF9] p-2.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7]">Debugger IA</p>
+                      {structuredDebug.status && (
+                        <span className={`border px-2 py-0.5 text-[10px] font-semibold ${
+                          structuredDebug.status.toLowerCase().includes('pas d')
+                            ? 'border-[#16A34A] text-[#16A34A]'
+                            : 'border-[#1C293C]/30 text-[#1C293C]/60'
+                        }`}>
+                          {structuredDebug.status}
                         </span>
+                      )}
+                    </div>
+                    <div className="mt-2 flex items-center justify-between gap-2">
+                      <p className="text-[11px] text-[#1C293C]/60">Analyse guidée du code courant</p>
+                      <button
+                        type="button"
+                        onClick={runInlineDebugger}
+                        disabled={debugLoading || !challengeCode.trim()}
+                        className="border-2 border-[#1C293C] bg-white px-3 py-1 text-[11px] font-black text-[#1C293C] shadow-[2px_2px_0px_0px_#1C293C] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-100 disabled:opacity-40 disabled:cursor-not-allowed"
+                      >
+                        {debugLoading ? 'Analyse...' : 'Analyser'}
+                      </button>
+                    </div>
+                  </div>
+
+                  {!debugResponse ? (
+                    <div className="border border-[#1C293C]/20 bg-[#FBFBF9] px-2.5 py-2">
+                      <p className="text-[11px] text-[#1C293C]/60">Lance une analyse pour afficher l&apos;erreur principale et la prochaine action.</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-1.5">
+                      <div className="border-2 border-[#DC2626]/40 bg-[#DC2626]/5 px-2 py-1.5">
+                        <p className="text-[10px] uppercase tracking-widest font-black text-[#DC2626] inline-flex items-center gap-1">
+                          <AlertTriangle className="h-3 w-3" /> Erreur détectée
+                        </p>
+                        <p className="mt-0.5 text-[12px] leading-relaxed text-[#1C293C]">
+                          {structuredDebug.detectedError || 'Aucune erreur précise détectée.'}
+                        </p>
                       </div>
 
+                      {structuredDebug.advice && (
+                        <div className="border-2 border-[#D97706]/40 bg-[#D97706]/5 px-2 py-1.5">
+                          <p className="text-[10px] uppercase tracking-widest font-black text-[#D97706] inline-flex items-center gap-1">
+                            <Lightbulb className="h-3 w-3" /> Conseil
+                          </p>
+                          <p className="mt-0.5 text-[12px] leading-relaxed text-[#1C293C]">{structuredDebug.advice}</p>
+                        </div>
+                      )}
+
+                      {structuredDebug.nextAction && (
+                        <div className="border-2 border-[#432DD7]/40 bg-[#432DD7]/5 px-2 py-1.5">
+                          <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7] inline-flex items-center gap-1">
+                            <PlayCircle className="h-3 w-3" /> Prochaine action
+                          </p>
+                          <p className="mt-0.5 text-[12px] leading-relaxed text-[#1C293C]">{structuredDebug.nextAction}</p>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  <div className="border-2 border-[#1C293C] bg-[#FBFBF9] p-1.5">
+                    <div className="flex gap-1.5">
+                      <input
+                        type="text"
+                        value={debugAnswer}
+                        onChange={(e) => setDebugAnswer(e.target.value)}
+                        placeholder="Pose une question ciblée sur ton bug..."
+                        className="w-full border-2 border-[#1C293C] bg-white px-2 py-1.5 text-xs text-[#1C293C] placeholder:text-[#1C293C]/40 focus:outline-none focus:border-[#432DD7]"
+                      />
+                      <button
+                        type="button"
+                        onClick={sendInlineDebuggerReply}
+                        disabled={debugLoading || !debugSessionId || !debugAnswer.trim()}
+                        className="border-2 border-[#1C293C] bg-[#432DD7] px-3 py-1.5 text-xs font-black text-white shadow-[2px_2px_0px_0px_#1C293C] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-100 disabled:opacity-40"
+                      >
+                        Envoyer
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ) : instructionPages[instructionPage] === 'Énoncé' ? (
+                <div className="space-y-1.5 text-sm">
+                  <div className="border-2 border-[#1C293C] bg-[#FBFBF9] p-2 space-y-1">
+                    <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7]">Objectif</p>
+                    <p className="text-[12px] leading-relaxed text-[#1C293C]">
+                      {formattedStatement.objective || 'Clique sur "Nouveau challenge" pour générer un énoncé.'}
+                    </p>
+                  </div>
+
+                  {(formattedStatement.input || formattedStatement.output || formattedStatement.example) && (
+                    <div className="border-2 border-[#1C293C] bg-[#FBFBF9] p-2 space-y-1.5">
+                      <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7]">Exemple</p>
+                      {formattedStatement.input && (
+                        <div className="border border-[#1C293C]/20 bg-white px-2 py-1.5">
+                          <p className="text-[10px] text-[#1C293C]/50 mb-0.5">Entrée</p>
+                          <pre className="text-[11px] whitespace-pre-wrap text-[#1C293C]">{formattedStatement.input}</pre>
+                        </div>
+                      )}
+                      {formattedStatement.output && (
+                        <div className="border border-[#1C293C]/20 bg-white px-2 py-1.5">
+                          <p className="text-[10px] text-[#1C293C]/50 mb-0.5">Sortie attendue</p>
+                          <pre className="text-[11px] whitespace-pre-wrap text-[#1C293C]">{formattedStatement.output}</pre>
+                        </div>
+                      )}
+                      {!formattedStatement.input && !formattedStatement.output && formattedStatement.example && (
+                        <pre className="text-[11px] whitespace-pre-wrap border border-[#1C293C]/20 bg-white px-2 py-1.5 text-[#1C293C]">{formattedStatement.example}</pre>
+                      )}
+                    </div>
+                  )}
+                </div>
+              ) : instructionPages[instructionPage] === 'Contraintes' ? (
+                <div className="space-y-1.5 text-sm">
+                  <div className="border-2 border-[#1C293C] bg-[#FBFBF9] p-2 space-y-1.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7]">Contraintes</p>
+                      <span className="border border-[#1C293C]/20 bg-[#FBFBF9] px-2 py-0.5 text-[10px] font-semibold text-[#1C293C]/60">
+                        {challengeSections.constraints.length > 0 ? challengeSections.constraints.length : 4} règles
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-1 gap-1">
+                      {(challengeSections.constraints.length > 0
+                        ? challengeSections.constraints
+                        : [
+                            'Écris uniquement du code Python exécutable.',
+                            'Respecte les entrées/sorties demandées dans l\u2019énoncé.',
+                            'Favorise une solution claire et robuste.',
+                            'Gère les cas limites mentionnés dans le challenge.',
+                          ]
+                      ).map((item, index) => (
+                        <div key={`${item}-${index}`} className="border border-[#1C293C]/20 bg-white px-2 py-1.5">
+                          <p className="text-[11px] leading-relaxed text-[#1C293C]">{index + 1}. {item}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ) : instructionPages[instructionPage] === 'Tests' ? (
+                <div className="space-y-1.5 text-sm">
+                  {(isSubmittingChallenge || testsTabHighlight) && (
+                    <div className="border-2 border-[#FDC800] bg-[#FDC800]/20 px-2 py-1.5 animate-pulse">
+                      <p className="text-[11px] uppercase tracking-widest font-black text-[#1C293C]">Validation en cours…</p>
+                    </div>
+                  )}
+
+                  <div className="border-2 border-[#1C293C] bg-[#FBFBF9] p-2 space-y-1.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7]">Cas de validation</p>
+                      {Array.isArray(challengeTests?.test_cases) && challengeTests.test_cases.length > 0 && (
+                        <span className="border border-[#1C293C]/20 bg-[#FBFBF9] px-2 py-0.5 text-[10px] font-semibold text-[#1C293C]/60">
+                          {challengeTests.test_cases.length} cas
+                        </span>
+                      )}
+                    </div>
+                    {Array.isArray(challengeTests?.test_cases) && challengeTests.test_cases.length > 0 ? (
                       <div className="grid grid-cols-1 gap-1">
-                        {(challengeSections.constraints.length > 0
-                          ? challengeSections.constraints
-                          : [
-                              'Écris uniquement du code Python exécutable.',
-                              'Respecte les entrées/sorties demandées dans l’énoncé.',
-                              'Favorise une solution claire et robuste.',
-                              'Gère les cas limites mentionnés dans le challenge.',
-                            ]
-                        ).map((item, index) => (
-                          <div key={`${item}-${index}`} className="rounded-sm border bg-card px-2 py-1.5">
-                            <p className="text-[11px] leading-relaxed text-foreground">{index + 1}. {item}</p>
+                        {challengeTests.test_cases.slice(0, 8).map((testCase, index) => (
+                          <div key={`${testCase?.name || 'test'}-${index}`} className="border border-[#1C293C]/20 bg-white px-2 py-1.5 space-y-0.5">
+                            <div className="flex items-center justify-between gap-2">
+                              <p className="text-[11px] font-black text-[#1C293C] truncate">{testCase?.name || `Cas ${index + 1}`}</p>
+                              <span className="border border-[#1C293C]/20 px-1.5 py-0.5 text-[10px] text-[#1C293C]/60">#{index + 1}</span>
+                            </div>
+                            {(testCase?.args_literal || testCase?.stdin_lines) && (
+                              <p className="text-[10px] text-[#1C293C]/50 truncate">
+                                Entrée: {testCase?.args_literal || JSON.stringify(testCase?.stdin_lines || [])}
+                              </p>
+                            )}
+                            {(testCase?.expected_literal || testCase?.expected_stdout) && (
+                              <p className="text-[10px] text-[#1C293C]/50 truncate">
+                                Attendu: {testCase?.expected_literal || testCase?.expected_stdout}
+                              </p>
+                            )}
+                            {testCase?.constraint && (
+                              <p className="text-[10px] text-[#1C293C]/50 truncate">Contrainte: {testCase.constraint}</p>
+                            )}
                           </div>
                         ))}
                       </div>
-                    </div>
+                    ) : (
+                      <p className="text-[11px] text-[#1C293C]/60">Aucun cas généré pour le moment.</p>
+                    )}
                   </div>
-                ) : instructionPages[instructionPage] === 'Tests' ? (
-                  <div className="space-y-1.5 text-sm">
-                    {(isSubmittingChallenge || testsTabHighlight) && (
-                      <div className="rounded-md border border-primary/30 bg-primary/10 px-2 py-1.5 animate-pulse">
-                        <p className="text-[11px] uppercase tracking-wide text-primary font-semibold">Validation en cours…</p>
+
+                  <div className="border-2 border-[#1C293C] bg-[#FBFBF9] p-2 space-y-1.5">
+                    <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7]">Résultats</p>
+                    {parsedChallengeFeedback.testSummary ? (
+                      <div
+                        className={`border-2 px-2 py-1.5 text-[11px] font-black ${
+                          parsedChallengeFeedback.testSummary.passed === parsedChallengeFeedback.testSummary.total && parsedChallengeFeedback.testSummary.total > 0
+                            ? 'border-[#16A34A] bg-[#16A34A]/10 text-[#16A34A]'
+                            : 'border-[#DC2626] bg-[#DC2626]/10 text-[#DC2626]'
+                        }`}
+                      >
+                        {parsedChallengeFeedback.testSummary.passed}/{parsedChallengeFeedback.testSummary.total} validés
+                        {parsedChallengeFeedback.testSummary.runtime_error ? ` · ${parsedChallengeFeedback.testSummary.runtime_error}` : ''}
                       </div>
+                    ) : (
+                      <p className="text-[11px] text-[#1C293C]/60">Soumets ton code pour voir les résultats.</p>
                     )}
 
-                    <div className="rounded-md border bg-background p-2 space-y-1.5">
-                      <div className="flex items-center justify-between gap-2">
-                        <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Cas de validation</p>
-                        {Array.isArray(challengeTests?.test_cases) && challengeTests.test_cases.length > 0 && (
-                          <span className="rounded-full border px-2 py-0.5 text-[10px] text-muted-foreground">
-                            {challengeTests.test_cases.length} cas
-                          </span>
-                        )}
+                    {parsedChallengeFeedback.testResults.length > 0 && (
+                      <div className="grid grid-cols-1 gap-1">
+                        {parsedChallengeFeedback.testResults.slice(0, 8).map((item, index) => (
+                          <div
+                            key={`${item.name}-${index}`}
+                            className={`border-2 px-2 py-1.5 ${
+                              item.status === 'passed'
+                                ? 'border-[#16A34A] bg-[#16A34A]/10'
+                                : 'border-[#DC2626] bg-[#DC2626]/10'
+                            }`}
+                          >
+                            <div className="flex items-center justify-between gap-2">
+                              <p className={`text-[11px] font-black truncate ${item.status === 'passed' ? 'text-[#16A34A]' : 'text-[#DC2626]'}`}>
+                                {item.name}
+                              </p>
+                              <span className={`border px-1.5 py-0.5 text-[10px] font-black ${item.status === 'passed' ? 'border-[#16A34A] text-[#16A34A]' : 'border-[#DC2626] text-[#DC2626]'}`}>
+                                {item.status === 'passed' ? 'ok' : 'ko'}
+                              </span>
+                            </div>
+                            <p className={`mt-0.5 text-[10px] truncate ${item.status === 'passed' ? 'text-[#16A34A]/80' : 'text-[#DC2626]/80'}`}>Attendu: {item.expected}</p>
+                            <p className={`text-[10px] truncate ${item.status === 'passed' ? 'text-[#16A34A]/80' : 'text-[#DC2626]/80'}`}>Obtenu: {item.actual}</p>
+                          </div>
+                        ))}
                       </div>
-                      {Array.isArray(challengeTests?.test_cases) && challengeTests.test_cases.length > 0 ? (
-                        <div className="grid grid-cols-1 gap-1">
-                          {challengeTests.test_cases.slice(0, 8).map((testCase, index) => (
-                            <div key={`${testCase?.name || 'test'}-${index}`} className="rounded-sm border bg-card px-2 py-1.5 space-y-0.5">
-                              <div className="flex items-center justify-between gap-2">
-                                <p className="text-[11px] font-semibold truncate">{testCase?.name || `Cas ${index + 1}`}</p>
-                                <span className="rounded-full border px-1.5 py-0.5 text-[10px] text-muted-foreground">#{index + 1}</span>
-                              </div>
-                              {(testCase?.args_literal || testCase?.stdin_lines) && (
-                                <p className="text-[10px] text-muted-foreground truncate">
-                                  Entrée: {testCase?.args_literal || JSON.stringify(testCase?.stdin_lines || [])}
-                                </p>
-                              )}
-                              {(testCase?.expected_literal || testCase?.expected_stdout) && (
-                                <p className="text-[10px] text-muted-foreground truncate">
-                                  Attendu: {testCase?.expected_literal || testCase?.expected_stdout}
-                                </p>
-                              )}
-                              {testCase?.constraint && (
-                                <p className="text-[10px] text-muted-foreground truncate">Contrainte: {testCase.constraint}</p>
-                              )}
-                            </div>
-                          ))}
-                        </div>
-                      ) : (
-                        <p className="text-sm text-muted-foreground">Aucun cas généré pour le moment.</p>
-                      )}
-                    </div>
-
-                    <div className="rounded-md border bg-background p-2 space-y-1.5">
-                      <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">Résultats</p>
-                      {parsedChallengeFeedback.testSummary ? (
-                        <div
-                          className={`rounded-sm border px-2 py-1.5 text-[11px] font-medium ${
-                            parsedChallengeFeedback.testSummary.passed === parsedChallengeFeedback.testSummary.total && parsedChallengeFeedback.testSummary.total > 0
-                              ? 'border-emerald-300 bg-emerald-50 text-emerald-800'
-                              : 'border-rose-300 bg-rose-50 text-rose-800'
-                          }`}
-                        >
-                          {parsedChallengeFeedback.testSummary.passed}/{parsedChallengeFeedback.testSummary.total} validés
-                          {parsedChallengeFeedback.testSummary.runtime_error ? ` · ${parsedChallengeFeedback.testSummary.runtime_error}` : ''}
-                        </div>
-                      ) : (
-                        <p className="text-xs text-muted-foreground">Soumets ton code pour voir les résultats.</p>
-                      )}
-
-                      {parsedChallengeFeedback.testResults.length > 0 && (
-                        <div className="grid grid-cols-1 gap-1">
-                          {parsedChallengeFeedback.testResults.slice(0, 8).map((item, index) => (
-                            <div
-                              key={`${item.name}-${index}`}
-                              className={`rounded-sm border px-2 py-1.5 ${
-                                item.status === 'passed'
-                                  ? 'border-emerald-300 bg-emerald-50'
-                                  : 'border-rose-300 bg-rose-50'
-                              }`}
-                            >
-                              <div className="flex items-center justify-between gap-2">
-                                <p className={`text-[11px] font-semibold truncate ${item.status === 'passed' ? 'text-emerald-800' : 'text-rose-800'}`}>
-                                  {item.name}
-                                </p>
-                                <span className={`rounded-full border px-1.5 py-0.5 text-[10px] ${item.status === 'passed' ? 'border-emerald-400 text-emerald-800' : 'border-rose-400 text-rose-800'}`}>
-                                  {item.status === 'passed' ? 'ok' : 'ko'}
-                                </span>
-                              </div>
-                              <p className={`mt-0.5 text-[10px] truncate ${item.status === 'passed' ? 'text-emerald-700' : 'text-rose-700'}`}>Attendu: {item.expected}</p>
-                              <p className={`text-[10px] truncate ${item.status === 'passed' ? 'text-emerald-700' : 'text-rose-700'}`}>Obtenu: {item.actual}</p>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </div>
+                    )}
                   </div>
-                ) : (
-                  <ul className="space-y-1.5 text-sm leading-relaxed text-foreground">
-                    {instructionLines.map((line, index) => (
-                      <li key={`${line}-${index}`} className={line.startsWith('•') ? 'ml-2 list-disc' : ''}>
-                        {line}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between gap-2">
-              <Button
-                variant="outline"
-                className="h-8 text-xs"
-                disabled={instructionPage === 0}
-                onClick={() => setInstructionPage((value) => Math.max(0, value - 1))}
-              >
-                <ChevronLeft className="h-3.5 w-3.5 mr-1" /> Précédent
-              </Button>
-              <Button
-                variant="outline"
-                className="h-8 text-xs"
-                disabled={instructionPage === instructionPages.length - 1}
-                onClick={() => setInstructionPage((value) => Math.min(instructionPages.length - 1, value + 1))}
-              >
-                Suivant <ChevronRight className="h-3.5 w-3.5 ml-1" />
-              </Button>
-            </div>
-          </aside>
-
-          <div className="xl:col-span-8 rounded-xl border bg-background p-3 space-y-3">
-            <div className="flex items-center justify-between gap-2 flex-wrap">
-              <p className="text-sm font-semibold inline-flex items-center gap-1.5">
-                <Code2 className="h-4 w-4" /> Zone de code Python
-              </p>
-              <div className="flex items-center gap-2">
-                <Button className="h-8 text-xs" onClick={submitMiniChallenge} disabled={isSubmittingChallenge || !challenge.trim() || !challengeCode.trim()}>
-                  {isSubmittingChallenge ? 'Correction...' : 'Soumettre la solution'}
-                </Button>
-                {canResolve && (
-                  <Button variant="outline" className="h-8 text-xs" onClick={resolveChallenge} disabled={isResolving}>
-                    {isResolving ? 'Résolution...' : 'Résoudre'}
-                  </Button>
-                )}
-              </div>
-            </div>
-
-            <div className="rounded-lg border overflow-hidden">
-              <Editor
-                height="380px"
-                defaultLanguage="python"
-                value={challengeCode}
-                onChange={(value) => setChallengeCode(value || '')}
-                options={{
-                  minimap: { enabled: false },
-                  fontSize: 14,
-                  wordWrap: 'on',
-                  automaticLayout: true,
-                  lineNumbersMinChars: 3,
-                }}
-              />
-            </div>
-
-            {!parsedChallengeFeedback.comment
-              && parsedChallengeFeedback.consignes.length === 0
-              && parsedChallengeFeedback.idees.length === 0
-              && parsedChallengeFeedback.nextSteps.length === 0
-              && parsedChallengeFeedback.raw && (
-              <pre className="max-h-44 overflow-y-auto whitespace-pre-wrap text-xs leading-relaxed">
-                {parsedChallengeFeedback.raw}
-              </pre>
-            )}
-
-            <div className="rounded-lg border bg-card p-3 space-y-2">
-              <div className="flex items-center justify-between gap-2">
-                <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Tentatives effectuées</p>
-                <span className="text-xs rounded-md border px-2 py-1">{attemptCount}</span>
-              </div>
-              {attemptHistory.length > 0 ? (
-                <ul className="space-y-1.5">
-                  {attemptHistory.map((item, index) => (
-                    <li key={`${item.at}-${index}`} className={`rounded-md border px-2.5 py-2 text-xs ${item.status === 'validated' ? 'border-emerald-300 bg-emerald-50 text-emerald-800' : 'border-rose-300 bg-rose-50 text-rose-800'}`}>
-                      Tentative #{attemptHistory.length - index} · {item.note} · {item.status === 'validated' ? 'réussie' : 'non validée'}
+                </div>
+              ) : (
+                <ul className="space-y-1.5 text-sm leading-relaxed text-[#1C293C]">
+                  {instructionLines.map((line, index) => (
+                    <li key={`${line}-${index}`} className={line.startsWith('•') ? 'ml-2' : ''}>
+                      {line}
                     </li>
                   ))}
                 </ul>
-              ) : (
-                <p className="text-xs text-muted-foreground">Aucune tentative enregistrée.</p>
               )}
             </div>
           </div>
+
+          {/* Prev / Next navigation */}
+          <div className="flex items-center justify-between gap-2">
+            <button
+              type="button"
+              disabled={instructionPage === 0}
+              onClick={() => setInstructionPage((value) => Math.max(0, value - 1))}
+              className="inline-flex items-center gap-1.5 border-2 border-[#1C293C] bg-white px-3 py-1.5 text-xs font-black text-[#1C293C] shadow-[2px_2px_0px_0px_#1C293C] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-100 disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              <ChevronLeft className="h-3.5 w-3.5" /> Précédent
+            </button>
+            <button
+              type="button"
+              disabled={instructionPage === instructionPages.length - 1}
+              onClick={() => setInstructionPage((value) => Math.min(instructionPages.length - 1, value + 1))}
+              className="inline-flex items-center gap-1.5 border-2 border-[#1C293C] bg-white px-3 py-1.5 text-xs font-black text-[#1C293C] shadow-[2px_2px_0px_0px_#1C293C] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-100 disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              Suivant <ChevronRight className="h-3.5 w-3.5" />
+            </button>
+          </div>
+        </aside>
+
+        {/* ── RIGHT: CODE EDITOR PANEL ── */}
+        <div className="xl:col-span-7 border-2 border-[#1C293C] bg-[#FBFBF9] shadow-[4px_4px_0px_0px_#1C293C] p-3 space-y-3">
+          <div className="flex items-center justify-between gap-2 flex-wrap">
+            <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7] inline-flex items-center gap-1.5">
+              <Code2 className="h-3.5 w-3.5" /> Zone de code Python
+            </p>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={submitMiniChallenge}
+                disabled={isSubmittingChallenge || !challenge.trim() || !challengeCode.trim()}
+                className="border-2 border-[#1C293C] bg-[#FDC800] px-4 py-1.5 text-xs font-black text-[#1C293C] shadow-[2px_2px_0px_0px_#1C293C] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-100 disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                {isSubmittingChallenge ? 'Correction...' : 'Soumettre la solution'}
+              </button>
+              {canResolve && (
+                <button
+                  type="button"
+                  onClick={resolveChallenge}
+                  disabled={isResolving}
+                  className="border-2 border-[#1C293C] bg-white px-4 py-1.5 text-xs font-black text-[#1C293C] shadow-[2px_2px_0px_0px_#1C293C] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-100 disabled:opacity-40"
+                >
+                  {isResolving ? 'Résolution...' : 'Résoudre'}
+                </button>
+              )}
+            </div>
+          </div>
+
+          <div className="border-2 border-[#1C293C] overflow-hidden">
+            <Editor
+              height="380px"
+              defaultLanguage="python"
+              value={challengeCode}
+              onChange={(value) => setChallengeCode(value || '')}
+              options={{
+                minimap: { enabled: false },
+                fontSize: 14,
+                wordWrap: 'on',
+                automaticLayout: true,
+                lineNumbersMinChars: 3,
+              }}
+            />
+          </div>
+
+          {!parsedChallengeFeedback.comment
+            && parsedChallengeFeedback.consignes.length === 0
+            && parsedChallengeFeedback.idees.length === 0
+            && parsedChallengeFeedback.nextSteps.length === 0
+            && parsedChallengeFeedback.raw && (
+            <pre className="max-h-44 overflow-y-auto whitespace-pre-wrap text-xs leading-relaxed border-2 border-[#1C293C] bg-white p-2 text-[#1C293C]">
+              {parsedChallengeFeedback.raw}
+            </pre>
+          )}
+
+          {/* Attempt history */}
+          <div className="border-2 border-[#1C293C] bg-white p-3 space-y-2">
+            <div className="flex items-center justify-between gap-2">
+              <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7]">Tentatives effectuées</p>
+              <span className="border border-[#1C293C] px-2 py-0.5 text-xs font-black text-[#1C293C]">{attemptCount}</span>
+            </div>
+            {attemptHistory.length > 0 ? (
+              <ul className="space-y-1.5">
+                {attemptHistory.map((item, index) => (
+                  <li
+                    key={`${item.at}-${index}`}
+                    className={`border-2 px-2.5 py-2 text-xs font-semibold ${
+                      item.status === 'validated'
+                        ? 'border-[#16A34A] bg-[#16A34A]/10 text-[#16A34A]'
+                        : 'border-[#DC2626]/40 bg-[#DC2626]/5 text-[#DC2626]'
+                    }`}
+                  >
+                    Tentative #{attemptHistory.length - index} · {item.note} · {item.status === 'validated' ? 'réussie' : 'non validée'}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-xs text-[#1C293C]/60">Aucune tentative enregistrée.</p>
+            )}
+          </div>
         </div>
-      </section>
+
+      </div>
     </div>
   );
 }

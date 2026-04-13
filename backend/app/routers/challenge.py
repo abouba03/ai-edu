@@ -780,6 +780,7 @@ Réponds strictement en JSON :
         )
 
         raw = response.choices[0].message.content or ""
+        print("[DEBUG] OpenAI response received successfully")
         try:
             parsed = parse_json_response(raw)
             enonce = str(parsed.get("enonce") or "")
@@ -853,5 +854,10 @@ Réponds strictement en JSON :
             raise HTTPException(status_code=502, detail="Réponse IA non exploitable pour ce challenge.")
     except HTTPException:
         raise
-    except Exception:
-        raise HTTPException(status_code=503, detail="Service de génération IA temporairement indisponible.")
+    except Exception as e:
+        import traceback
+        error_msg = str(e)
+        tb = traceback.format_exc()
+        print(f"[ERROR] OpenAI Error: {error_msg}")
+        print(f"[ERROR] Traceback: {tb}")
+        raise HTTPException(status_code=503, detail=f"Service de génération IA temporairement indisponible: {error_msg}")

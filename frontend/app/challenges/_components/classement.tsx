@@ -37,25 +37,41 @@ export default function Classement() {
   }, []);
 
   return (
-    <section className="rounded-2xl border bg-card p-4 space-y-3">
+    <section className="border-2 border-[#1C293C] bg-[#FBFBF9] p-4 shadow-[5px_5px_0px_0px_#1C293C] space-y-3">
       <div>
-        <p className="text-xs uppercase tracking-wide text-muted-foreground">Classement</p>
-        <h2 className="text-lg font-semibold mt-1">Top 30 jours</h2>
+        <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7]">Classement</p>
+        <h2 className="text-xl font-black text-[#1C293C] mt-0.5">Top 30 jours</h2>
       </div>
 
       {loading ? (
-        <p className="text-sm text-muted-foreground">Chargement...</p>
+        <p className="text-sm font-semibold text-[#1C293C]/50">Chargement...</p>
       ) : rows.length === 0 ? (
-        <p className="text-sm text-muted-foreground">Pas encore de classement.</p>
+        <p className="text-sm font-semibold text-[#1C293C]/50">Pas encore de classement.</p>
       ) : (
         <div className="space-y-1.5 max-h-72 overflow-auto pr-1">
           {rows.slice(0, 8).map((row, index) => (
-            <article key={row.clerkId} className="rounded-lg border bg-background px-2.5 py-2 text-xs flex items-center justify-between gap-2">
-              <p className="truncate inline-flex items-center gap-1.5">
-                {index === 0 ? <Trophy className="h-3.5 w-3.5 text-amber-500" /> : <Medal className="h-3.5 w-3.5 text-muted-foreground" />}
+            <article
+              key={row.clerkId}
+              className={`px-3 py-2 text-xs flex items-center justify-between gap-2 border-2 border-[#1C293C] font-bold ${
+                index === 0
+                  ? 'bg-[#FDC800] shadow-[3px_3px_0px_0px_#1C293C]'
+                  : index === 1
+                  ? 'bg-[#432DD7] text-white shadow-[2px_2px_0px_0px_#1C293C]'
+                  : 'bg-white'
+              }`}
+            >
+              <p className={`truncate inline-flex items-center gap-1.5 ${index === 1 ? 'text-white' : 'text-[#1C293C]'}`}>
+                {index === 0 ? (
+                  <Trophy className="h-3.5 w-3.5 shrink-0" />
+                ) : (
+                  <Medal className={`h-3.5 w-3.5 shrink-0 ${index === 1 ? 'text-white/70' : 'text-[#1C293C]/40'}`} />
+                )}
+                <span className="font-black mr-1 shrink-0">{index + 1}.</span>
                 {row.displayName}
               </p>
-              <p className="font-medium">{row.totalPoints} pts</p>
+              <p className={`font-black shrink-0 ${index === 1 ? 'text-white' : 'text-[#1C293C]'}`}>
+                {row.totalPoints} pts
+              </p>
             </article>
           ))}
         </div>

@@ -5,7 +5,6 @@ import Link from 'next/link';
 import axios from 'axios';
 import { trackEvent } from '@/lib/event-tracker';
 import { useAuth } from '@clerk/nextjs';
-import { Button } from '@/components/ui/button';
 import CourseHero from '@/components/courses/_components/course-hero';
 import CheckpointDialog from '@/components/courses/_components/checkpoint-dialog';
 import VideoStudioSection from '@/components/courses/_components/video-studio-section';
@@ -75,7 +74,7 @@ export default function PersonalizedCoursePanel({
 
   const objectives = useMemo(
     () => [
-      'Comprendre le concept clé du cours et l’expliquer avec ses propres mots.',
+      'Comprendre le concept clé du cours et l\'expliquer avec ses propres mots.',
       'Réaliser 2 exercices pratiques sans erreur de syntaxe bloquante.',
       'Valider au moins 2/3 au checkpoint IA pour confirmer la compréhension immédiate.',
     ],
@@ -343,23 +342,38 @@ export default function PersonalizedCoursePanel({
         progressPercent={progressPercent}
       />
 
-      <section className="rounded-xl border bg-card p-3">
-        <div className="flex items-center justify-between gap-2 flex-wrap text-xs">
-          <div className="inline-flex items-center gap-1.5 text-muted-foreground">
-            <span className="font-semibold uppercase tracking-wide">Niveau</span>
-            <span className="rounded-md border bg-background px-2 py-1 text-foreground">{adaptiveLevel}</span>
-            <span className={`rounded-md border px-2 py-1 ${strictValidatedFromServer ? 'border-primary/30 bg-primary/10 text-primary' : 'text-muted-foreground'}`}>
+      {/* ── STATUS BAR ── */}
+      <section className="border-2 border-[#1C293C] bg-white p-3 shadow-[2px_2px_0px_0px_#1C293C]">
+        <div className="flex items-center justify-between gap-2 flex-wrap">
+          <div className="inline-flex items-center gap-2 text-xs flex-wrap">
+            <span className="text-[10px] uppercase tracking-widest font-black text-[#1C293C]/50">Niveau</span>
+            <span className="border border-[#1C293C] px-2 py-0.5 text-xs font-black text-[#1C293C]">
+              {adaptiveLevel}
+            </span>
+            <span className={`border px-2 py-0.5 text-xs font-black ${
+              strictValidatedFromServer
+                ? 'border-[#16A34A] text-[#16A34A]'
+                : 'border-[#1C293C]/20 text-[#1C293C]/40'
+            }`}>
               {strictValidatedFromServer ? 'Validé' : 'En cours'}
             </span>
           </div>
-          <div className="flex items-center gap-1.5 text-muted-foreground">
-            <span className="rounded-md border bg-background px-2 py-1">Quiz {quizCompleted ? `${quizScorePercent}%` : '—'}</span>
-            <span className="rounded-md border bg-background px-2 py-1">Retries {challengeRetries}</span>
-            <span className="rounded-md border bg-background px-2 py-1">{checkpointDurationMin ? `${checkpointDurationMin} min` : '—'}</span>
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <span className="border border-[#1C293C]/20 bg-[#FBFBF9] px-2 py-0.5 text-[11px] font-semibold text-[#1C293C]/60">
+              Quiz {quizCompleted ? `${quizScorePercent}%` : '—'}
+            </span>
+            <span className="border border-[#1C293C]/20 bg-[#FBFBF9] px-2 py-0.5 text-[11px] font-semibold text-[#1C293C]/60">
+              Retries {challengeRetries}
+            </span>
+            {checkpointDurationMin && (
+              <span className="border border-[#1C293C]/20 bg-[#FBFBF9] px-2 py-0.5 text-[11px] font-semibold text-[#1C293C]/60">
+                {checkpointDurationMin} min
+              </span>
+            )}
           </div>
         </div>
         {(motivationalMessage || isLoadingMotivation) && (
-          <p className="mt-2 text-xs text-muted-foreground">
+          <p className="mt-2 text-xs font-medium text-[#1C293C]/60 border-t border-[#1C293C]/10 pt-2">
             {isLoadingMotivation ? 'Génération du message motivant...' : motivationalMessage}
           </p>
         )}
@@ -367,23 +381,28 @@ export default function PersonalizedCoursePanel({
 
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-3 items-start">
         <aside className="order-1 xl:order-2 xl:col-span-4 space-y-3 xl:sticky xl:top-3">
-          <section className="rounded-xl border bg-card p-3 space-y-2">
+
+          {/* ── ACTIONS ── */}
+          <section className="border-2 border-[#1C293C] bg-[#FBFBF9] p-4 shadow-[4px_4px_0px_0px_#1C293C] space-y-3">
             <div>
-              <h3 className="font-semibold text-sm">Actions pédagogiques rapides</h3>
-              <p className="text-[11px] text-muted-foreground">3 actions clés, format cartes compactes.</p>
+              <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7]">Actions pédagogiques</p>
+              <h3 className="font-black text-sm text-[#1C293C] mt-0.5">3 actions clés</h3>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
-              <div className="rounded-lg border bg-background p-2.5 space-y-2">
-                <div className="min-w-0">
-                  <p className="text-xs font-semibold inline-flex items-center gap-1.5"><Target className="h-3.5 w-3.5 text-primary" /> Checkpoint IA</p>
-                  <p className="text-[11px] text-muted-foreground">Quiz rapide 8-12 questions.</p>
+            <div className="space-y-2">
+              {/* Checkpoint IA */}
+              <div className="border-2 border-[#1C293C] bg-white p-3 space-y-2.5 shadow-[2px_2px_0px_0px_#1C293C]">
+                <div>
+                  <p className="text-xs font-black text-[#1C293C] inline-flex items-center gap-1.5">
+                    <Target className="h-3.5 w-3.5 text-[#432DD7]" /> Checkpoint IA
+                  </p>
+                  <p className="text-[11px] font-medium text-[#1C293C]/55 mt-0.5">Quiz adaptatif 8-12 questions.</p>
                 </div>
                 <CheckpointDialog
                   open={quizDialogOpen}
                   onOpenChange={setQuizDialogOpen}
-                  triggerLabel="Lancer"
-                  triggerClassName="h-7 w-full px-2.5 text-[11px]"
+                  triggerLabel="Lancer le checkpoint"
+                  triggerClassName="h-8 w-full text-[11px] font-black border-2 border-[#1C293C] bg-[#FDC800] text-[#1C293C] rounded-none shadow-[2px_2px_0px_0px_#1C293C] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-100"
                   questions={questions}
                   currentQuizQuestion={currentQuizQuestion}
                   quizCompleted={quizCompleted}
@@ -414,33 +433,42 @@ export default function PersonalizedCoursePanel({
                 />
               </div>
 
-              <div className="rounded-lg border bg-background p-2.5 space-y-2">
-                <div className="min-w-0">
-                  <p className="text-xs font-semibold inline-flex items-center gap-1.5"><Brain className="h-3.5 w-3.5 text-primary" /> Mini challenge</p>
-                  <p className="text-[11px] text-muted-foreground">Pratique immédiate sur la leçon.</p>
+              {/* Mini challenge */}
+              <div className="border-2 border-[#1C293C] bg-white p-3 space-y-2.5 shadow-[2px_2px_0px_0px_#1C293C]">
+                <div>
+                  <p className="text-xs font-black text-[#1C293C] inline-flex items-center gap-1.5">
+                    <Brain className="h-3.5 w-3.5 text-[#432DD7]" /> Mini challenge
+                  </p>
+                  <p className="text-[11px] font-medium text-[#1C293C]/55 mt-0.5">Pratique immédiate sur la leçon.</p>
                 </div>
                 <Link
                   href={`/courses/${courseSlug}/mini-challenge?title=${encodeURIComponent(courseTitle)}&level=${encodeURIComponent(adaptiveLevel)}&formation=${encodeURIComponent(formationName)}&progress=${progressPercent}`}
+                  className="inline-flex w-full items-center justify-center border-2 border-[#1C293C] bg-white px-3 py-1.5 text-[11px] font-black text-[#1C293C] shadow-[2px_2px_0px_0px_#1C293C] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-100"
                 >
-                  <Button variant="secondary" className="h-7 w-full px-2.5 text-[11px]">Ouvrir</Button>
+                  Ouvrir
                 </Link>
               </div>
 
-              <div className="rounded-lg border bg-background p-2.5 space-y-2">
-                <div className="min-w-0">
-                  <p className="text-xs font-semibold inline-flex items-center gap-1.5"><Brain className="h-3.5 w-3.5 text-primary" /> Assistant IA</p>
-                  <p className="text-[11px] text-muted-foreground">Aide contextuelle instantanée.</p>
+              {/* Assistant IA */}
+              <div className="border-2 border-[#1C293C] bg-white p-3 space-y-2.5 shadow-[2px_2px_0px_0px_#1C293C]">
+                <div>
+                  <p className="text-xs font-black text-[#1C293C] inline-flex items-center gap-1.5">
+                    <Brain className="h-3.5 w-3.5 text-[#432DD7]" /> Assistant IA
+                  </p>
+                  <p className="text-[11px] font-medium text-[#1C293C]/55 mt-0.5">Aide contextuelle instantanée.</p>
                 </div>
-                <Link href={`/generator?prompt=${helperPrompt}`} onClick={askForHelp}>
-                  <Button className="h-7 w-full px-2.5 text-[11px]">Ouvrir</Button>
+                <Link
+                  href={`/generator?prompt=${helperPrompt}`}
+                  onClick={askForHelp}
+                  className="inline-flex w-full items-center justify-center border-2 border-[#1C293C] bg-[#FDC800] px-3 py-1.5 text-[11px] font-black text-[#1C293C] shadow-[2px_2px_0px_0px_#1C293C] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-100"
+                >
+                  Ouvrir
                 </Link>
               </div>
             </div>
           </section>
 
-          <CourseSidebar
-            objectives={objectives}
-          />
+          <CourseSidebar objectives={objectives} />
         </aside>
 
         <div className="order-2 xl:order-1 xl:col-span-8">
@@ -457,9 +485,12 @@ export default function PersonalizedCoursePanel({
         </div>
       </div>
 
-      <section className="rounded-xl border bg-card p-2.5 flex items-center gap-2 text-[11px] text-muted-foreground">
-        <ListChecks className="h-3.5 w-3.5 text-primary" />
-        Les signaux d’apprentissage adaptent automatiquement les prochaines activités.
+      {/* ── TIP ── */}
+      <section className="border-2 border-[#1C293C] bg-white p-3 flex items-center gap-2.5 shadow-[2px_2px_0px_0px_#1C293C]">
+        <ListChecks className="h-4 w-4 text-[#432DD7] shrink-0" />
+        <p className="text-[11px] font-medium text-[#1C293C]/60">
+          Les signaux d&apos;apprentissage adaptent automatiquement les prochaines activités.
+        </p>
       </section>
     </div>
   );

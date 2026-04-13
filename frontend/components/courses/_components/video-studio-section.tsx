@@ -1,8 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { Film, Rocket } from 'lucide-react';
+import { Film, Rocket, PlayCircle, CheckCircle2, ExternalLink } from 'lucide-react';
 import { VideoResource } from './personalized-types';
 
 type VideoStudioSectionProps = {
@@ -27,68 +26,91 @@ export default function VideoStudioSection({
   onOpenCheckpoint,
 }: VideoStudioSectionProps) {
   return (
-    <section className="xl:col-span-8 rounded-xl border bg-card p-4 lg:p-5 space-y-4">
+    <section className="border-2 border-[#1C293C] bg-[#FBFBF9] p-4 lg:p-5 space-y-4 shadow-[5px_5px_0px_0px_#1C293C]">
+      {/* Header */}
       <div className="flex items-center justify-between gap-3 flex-wrap">
-        <h3 className="font-semibold inline-flex items-center gap-2 text-base">
-          <Film className="h-4.5 w-4.5 text-primary" /> Studio Vidéo
+        <h3 className="font-black text-base text-[#1C293C] inline-flex items-center gap-2">
+          <Film className="h-4 w-4" /> Studio Vidéo
         </h3>
         {nextCourseSlug && (
           <Link
             href={`/courses/${nextCourseSlug}`}
-            className="inline-flex items-center gap-2 rounded-md border bg-background px-3 py-1.5 text-xs font-medium hover:bg-accent"
+            className="inline-flex items-center gap-2 border-2 border-[#1C293C] bg-white px-3 py-1.5 text-xs font-black text-[#1C293C] shadow-[2px_2px_0px_0px_#1C293C] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-100"
           >
-            <Rocket className="h-3.5 w-3.5" /> Suivant: {nextCourseTitle}
+            <Rocket className="h-3.5 w-3.5" />
+            Suivant : {nextCourseTitle}
           </Link>
         )}
       </div>
 
       {videoResources.length === 0 ? (
-        <p className="text-sm text-muted-foreground">Aucune vidéo disponible pour ce cours.</p>
+        <div className="border-2 border-dashed border-[#1C293C]/30 bg-white p-8 text-center">
+          <p className="text-sm font-semibold text-[#1C293C]/40">Aucune vidéo disponible pour ce cours.</p>
+        </div>
       ) : (
-        <div className="space-y-3">
-          {videoResources.map((resource, index) => (
-            <article key={resource.embedUrl} className="rounded-lg border bg-background/90 p-3 space-y-3">
-              <p className="text-[11px] text-muted-foreground">Séquence {index + 1}</p>
-              <div className="rounded-lg overflow-hidden border bg-background">
-                <iframe
-                  className="w-full aspect-video"
-                  src={resource.embedUrl}
-                  title={`Vidéo ${index + 1} - ${courseTitle}`}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  referrerPolicy="strict-origin-when-cross-origin"
-                  allowFullScreen
-                />
-              </div>
-              <div className="flex flex-wrap gap-2">
-                <a
-                  href={resource.sourceUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center justify-center rounded-md border px-3 py-1.5 text-xs font-medium hover:bg-accent"
-                >
-                  Ouvrir sur YouTube
-                </a>
-                <Button variant="secondary" onClick={() => onVideoStarted(resource.sourceUrl)} className="h-8 text-xs">
-                  J’ai lancé cette vidéo
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    onMarkVideoBlockCompleted(index);
-                    onOpenCheckpoint();
-                  }}
-                  className="h-8 text-xs"
-                >
-                  Bloc {index + 1} terminé → Checkpoint
-                </Button>
-                {videoBlocksCompleted.includes(index) && (
-                  <span className="inline-flex items-center rounded-md border border-primary/30 bg-primary/10 px-2.5 py-1 text-[11px] font-medium text-primary">
-                    Bloc validé
-                  </span>
-                )}
-              </div>
-            </article>
-          ))}
+        <div className="space-y-4">
+          {videoResources.map((resource, index) => {
+            const isDone = videoBlocksCompleted.includes(index);
+            return (
+              <article
+                key={resource.embedUrl}
+                className={`border-2 border-[#1C293C] bg-white p-4 space-y-3 shadow-[3px_3px_0px_0px_#1C293C] ${isDone ? 'border-l-4 border-l-[#16A34A]' : ''}`}
+              >
+                {/* Sequence label */}
+                <div className="flex items-center justify-between gap-2">
+                  <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7]">
+                    Séquence {index + 1}
+                  </p>
+                  {isDone && (
+                    <span className="inline-flex items-center gap-1 text-[10px] font-black text-[#16A34A]">
+                      <CheckCircle2 className="h-3 w-3" /> Bloc validé
+                    </span>
+                  )}
+                </div>
+
+                {/* Video player */}
+                <div className="border-2 border-[#1C293C] overflow-hidden">
+                  <iframe
+                    className="w-full aspect-video block"
+                    src={resource.embedUrl}
+                    title={`Vidéo ${index + 1} — ${courseTitle}`}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    referrerPolicy="strict-origin-when-cross-origin"
+                    allowFullScreen
+                  />
+                </div>
+
+                {/* Actions */}
+                <div className="flex flex-wrap gap-2">
+                  <a
+                    href={resource.sourceUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1.5 border-2 border-[#1C293C] bg-white px-3 py-1.5 text-xs font-black text-[#1C293C] shadow-[2px_2px_0px_0px_#1C293C] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-100"
+                  >
+                    <ExternalLink className="h-3 w-3" /> YouTube
+                  </a>
+
+                  <button
+                    onClick={() => onVideoStarted(resource.sourceUrl)}
+                    className="inline-flex items-center gap-1.5 border-2 border-[#1C293C] bg-white px-3 py-1.5 text-xs font-black text-[#1C293C] shadow-[2px_2px_0px_0px_#1C293C] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-100"
+                  >
+                    <PlayCircle className="h-3 w-3" /> J&apos;ai lancé
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      onMarkVideoBlockCompleted(index);
+                      onOpenCheckpoint();
+                    }}
+                    className="inline-flex items-center gap-1.5 border-2 border-[#1C293C] bg-[#FDC800] px-3 py-1.5 text-xs font-black text-[#1C293C] shadow-[3px_3px_0px_0px_#1C293C] hover:shadow-none hover:translate-x-[3px] hover:translate-y-[3px] transition-all duration-100"
+                  >
+                    Bloc {index + 1} terminé → Checkpoint
+                  </button>
+                </div>
+              </article>
+            );
+          })}
         </div>
       )}
     </section>

@@ -25,33 +25,41 @@ export default async function CourseDetailPage({ params }: Props) {
 
     return (
       <div className="space-y-5">
-        <section className="rounded-xl border bg-card p-4 lg:p-5 space-y-3">
-          <div className="flex items-center justify-between gap-2 flex-wrap">
-            <p className="inline-flex items-center gap-2 rounded-md border bg-background px-2.5 py-1 text-[11px] font-semibold text-primary uppercase tracking-wide">
-              <Code2 className="h-3.5 w-3.5" /> Cours premium
-            </p>
-            <div className="flex flex-wrap gap-1.5 text-[11px] text-muted-foreground">
-              <span className="inline-flex items-center rounded-md border bg-background px-2 py-1">{adminCourse.formationName}</span>
-              <span className="inline-flex items-center rounded-md border bg-background px-2 py-1">#{adminCourse.courseIndex}</span>
-              <span className="inline-flex items-center rounded-md border bg-background px-2 py-1">{adminCourse.level}</span>
-            </div>
+        <section className="border-2 border-[#1C293C] bg-[#FBFBF9] p-5 lg:p-6 shadow-[5px_5px_0px_0px_#1C293C] space-y-4">
+          {/* Tags */}
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="border-2 border-[#432DD7] bg-white px-2.5 py-1 text-[10px] font-black text-[#432DD7] uppercase tracking-widest inline-flex items-center gap-1.5">
+              <Code2 className="h-3 w-3" /> Cours premium
+            </span>
+            <span className="border border-[#1C293C]/30 bg-white px-2 py-1 text-[10px] font-bold text-[#1C293C]">{adminCourse.formationName}</span>
+            <span className="border border-[#1C293C]/30 bg-white px-2 py-1 text-[10px] font-bold text-[#1C293C]">#{adminCourse.courseIndex}</span>
+            <span className="border border-[#1C293C]/30 bg-white px-2 py-1 text-[10px] font-bold text-[#1C293C]">{adminCourse.level}</span>
           </div>
 
-          <div className="space-y-1">
-            <h1 className="text-xl lg:text-2xl font-bold leading-tight tracking-tight">{adminCourse.title}</h1>
-            <p className="text-xs lg:text-sm text-muted-foreground max-w-4xl">{adminCourse.description}</p>
+          {/* Titre + description */}
+          <div>
+            <h1 className="text-2xl lg:text-3xl font-black text-[#1C293C] leading-tight">{adminCourse.title}</h1>
+            <p className="text-sm font-medium text-[#1C293C]/60 mt-2 max-w-3xl leading-relaxed">{adminCourse.description}</p>
           </div>
 
-          <div className="flex flex-wrap gap-1.5 text-[11px]">
-            <span className="inline-flex items-center gap-1 rounded-md border bg-background px-2 py-1"><Clock3 className="h-3 w-3" /> {adminCourse.duration}</span>
-            <span className="inline-flex items-center gap-1 rounded-md border bg-background px-2 py-1"><BookMarked className="h-3 w-3" /> {adminCourse.modules} module{adminCourse.modules > 1 ? 's' : ''}</span>
+          {/* Méta */}
+          <div className="flex flex-wrap items-center gap-4 text-[11px] font-bold text-[#1C293C]/55">
+            <span className="inline-flex items-center gap-1"><Clock3 className="h-3 w-3" /> {adminCourse.duration}</span>
+            <span className="inline-flex items-center gap-1"><BookMarked className="h-3 w-3" /> {adminCourse.modules} module{adminCourse.modules > 1 ? 's' : ''}</span>
           </div>
 
-          <div className="flex flex-wrap gap-2 pt-0.5">
-            <Link href="/courses" className="inline-flex items-center justify-center rounded-md border px-3 py-1.5 text-xs font-medium hover:bg-accent transition-colors">
+          {/* Actions */}
+          <div className="flex flex-wrap gap-2 pt-1">
+            <Link
+              href="/courses"
+              className="inline-flex items-center gap-2 border-2 border-[#1C293C] bg-white px-3 py-2 text-xs font-black text-[#1C293C] shadow-[2px_2px_0px_0px_#1C293C] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-100"
+            >
               Retour aux cours
             </Link>
-            <Link href="/admin/formation" className="inline-flex items-center justify-center rounded-md bg-primary text-primary-foreground px-3 py-1.5 text-xs font-medium hover:bg-primary/90 transition-colors">
+            <Link
+              href="/admin/formation"
+              className="inline-flex items-center gap-2 border-2 border-[#1C293C] bg-[#FDC800] px-3 py-2 text-xs font-black text-[#1C293C] shadow-[2px_2px_0px_0px_#1C293C] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-100"
+            >
               Admin
             </Link>
           </div>
@@ -119,7 +127,7 @@ export default async function CourseDetailPage({ params }: Props) {
         <section className="rounded-2xl border bg-card p-5 space-y-3">
           <h2 className="font-semibold">Playlist officielle du cours</h2>
           <p className="text-sm text-muted-foreground">
-            Suis les vidéos dans l’ordre pour compléter les leçons de la plateforme.
+            Suis les vidéos dans l'ordre pour compléter les leçons de la plateforme.
           </p>
           <div className="rounded-lg overflow-hidden border bg-background">
             <iframe
