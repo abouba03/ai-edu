@@ -1,0 +1,37 @@
+services:
+  - type: web
+    name: ai-edu-backend
+    env: docker
+    dockerfile: ./backend/Dockerfile
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port 8000
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11
+      - key: OPENAI_API_KEY
+        value: ${OPENAI_API_KEY}
+      - key: EXECUTION_MODE
+        value: local
+      - key: EXECUTION_TIMEOUT_SECONDS
+        value: "5"
+      - key: EXECUTION_MAX_CODE_CHARS
+        value: "20000"
+    healthCheckPath: /health
+    port: 8000
+
+  - type: web
+    name: ai-edu-frontend
+    env: node
+    buildCommand: npm run build
+    startCommand: npm start
+    envVars:
+      - key: NEXT_PUBLIC_API_URL
+        value: https://ai-edu-backend.onrender.com
+      - key: NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+        value: ${NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
+      - key: CLERK_SECRET_KEY
+        value: ${CLERK_SECRET_KEY}
+      - key: DATABASE_URL
+        value: ${DATABASE_URL}
+    port: 3000
+    root: ./frontend

@@ -4,10 +4,14 @@ import { loadEntityList, type FormuleItem } from '@/lib/admin-entity-store';
 import { BookOpen, Code2, FolderKanban, Layers3, Settings2, ArrowRight } from 'lucide-react';
 
 async function countTable(tableName: 'Formation' | 'Course' | 'Challenge') {
-  const rows = await prisma.$queryRawUnsafe<Array<{ count: number }>>(
-    `SELECT COUNT(*)::int AS count FROM "${tableName}"`
-  );
-  return Number(rows?.[0]?.count ?? 0);
+  try {
+    const rows = await prisma.$queryRawUnsafe<Array<{ count: number }>>(
+      `SELECT COUNT(*)::int AS count FROM "${tableName}"`
+    );
+    return Number(rows?.[0]?.count ?? 0);
+  } catch {
+    return 0;
+  }
 }
 
 const actions = [

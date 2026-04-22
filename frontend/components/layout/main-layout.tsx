@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import Link from 'next/link';
 import { ModeToggle } from '@/components/theme-toggle';
 import { usePathname } from 'next/navigation';
@@ -29,23 +29,24 @@ import { useAuth } from '@clerk/nextjs';
 
 interface MainLayoutProps {
   children: React.ReactNode;
+  initialUser?: { name: string; level: string };
 }
 
 const NAV_MAIN = [
   {
-    label: 'Dashboard',
+    label: 'Главная',
     icon: LayoutDashboard,
     href: '/dashboard',
     match: (p: string) => p === '/dashboard' || p === '/',
   },
   {
-    label: 'Cours',
+    label: 'Курсы',
     icon: BookOpen,
     href: '/courses',
     match: (p: string) => p.startsWith('/courses'),
   },
   {
-    label: 'Challenges',
+    label: 'Задания',
     icon: Trophy,
     href: '/challenges',
     match: (p: string) => p.startsWith('/challenges'),
@@ -54,16 +55,10 @@ const NAV_MAIN = [
 
 const NAV_TOOLS = [
   {
-    label: 'Générateur IA',
+    label: 'ИИ-генератор',
     icon: Sparkles,
     href: '/generator',
     match: (p: string) => p.startsWith('/generator'),
-  },
-  {
-    label: 'Debugger IA',
-    icon: Bug,
-    href: '/debugger',
-    match: (p: string) => p.startsWith('/debugger'),
   },
 ];
 
@@ -106,7 +101,7 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
   );
 }
 
-function UserCard({ name, level, loaded }: { name: string; level: string; loaded: boolean }) {
+function UserCard({ name, level, loaded }: { name: string; level: string; loaded?: boolean }) {
   return (
     <div className="border-2 border-[#1C293C] bg-white px-3 py-3 flex items-center gap-3 shadow-[3px_3px_0px_0px_#1C293C]">
       <div className="size-9 border-2 border-[#1C293C] bg-[#FDC800] flex items-center justify-center font-black text-sm text-[#1C293C] shrink-0 select-none">
@@ -114,36 +109,25 @@ function UserCard({ name, level, loaded }: { name: string; level: string; loaded
       </div>
       <div className="overflow-hidden">
         <p className="font-black text-sm text-[#1C293C] truncate">
-          {loaded ? name : '···'}
+          {name}
         </p>
         <p className="text-[11px] font-semibold text-[#1C293C]/55 truncate">
-          Niveau : {level}
+          Уровень: {level}
         </p>
       </div>
     </div>
   );
 }
 
-export default function MainLayout({ children }: MainLayoutProps) {
+export default function MainLayout({ children, initialUser }: MainLayoutProps) {
   const { isSignedIn } = useAuth();
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [userName, setUserName] = useState('Étudiant');
-  const [userLevel, setUserLevel] = useState('débutant');
-  const [userLoaded, setUserLoaded] = useState(false);
+  const userName = useMemo(() => initialUser?.name ?? 'Étudiant', [initialUser]);
+  const userLevel = useMemo(() => initialUser?.level ?? 'débutant', [initialUser]);
 
   useEffect(() => {
     if (isSignedIn) fetch('/api/sync-user', { method: 'POST' });
-  }, [isSignedIn]);
-
-  useEffect(() => {
-    fetch('/api/me')
-      .then((r) => r.json())
-      .then((d) => {
-        setUserName(d?.name ?? 'Étudiant');
-        setUserLevel(d?.level ?? 'débutant');
-      })
-      .finally(() => setUserLoaded(true));
   }, [isSignedIn]);
 
   const closeMenu = () => setIsMobileMenuOpen(false);
@@ -152,7 +136,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
     <div className="flex flex-col flex-1 px-3 py-4 gap-5 overflow-auto">
       {/* Main nav */}
       <div>
-        <SectionLabel>Principal</SectionLabel>
+        <SectionLabel>Меню</SectionLabel>
         <div className="space-y-1">
           {NAV_MAIN.map((r) => (
             <NavItem
@@ -169,7 +153,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
 
       {/* Tools nav */}
       <div>
-        <SectionLabel>Outils IA</SectionLabel>
+        <SectionLabel>Инструменты ИИ</SectionLabel>
         <div className="space-y-1">
           {NAV_TOOLS.map((r) => (
             <NavItem
@@ -201,7 +185,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
           {pathname.startsWith('/admin') && <ChevronRight className="ml-auto h-3.5 w-3.5" />}
         </Link>
 
-        <UserCard name={userName} level={userLevel} loaded={userLoaded} />
+        <UserCard name={userName} level={userLevel} />
       </div>
     </div>
   );
@@ -218,7 +202,7 @@ export default function MainLayout({ children }: MainLayoutProps) {
           <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
             <SheetTrigger asChild>
               <button
-                aria-label="Ouvrir le menu"
+                aria-label="Открыть меню"
                 className="lg:hidden border-2 border-[#1C293C] bg-white p-2 shadow-[2px_2px_0px_0px_#1C293C] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-100"
               >
                 {isMobileMenuOpen ? (
@@ -235,14 +219,14 @@ export default function MainLayout({ children }: MainLayoutProps) {
             >
               <SheetHeader className="border-b-2 border-[#1C293C] px-5 py-4 shrink-0">
                 <SheetTitle className="text-left font-black text-[#1C293C]">
-                  AI Edu<span className="text-[#432DD7]">.</span>
+                  AI Edu<span className="text-[#432DD7]">.</span> — обучение
                 </SheetTitle>
               </SheetHeader>
 
               <div className="flex flex-col flex-1 overflow-hidden">
                 {/* Mobile user card */}
                 <div className="px-3 pt-4 pb-2 border-b-2 border-[#1C293C]/10">
-                  <UserCard name={userName} level={userLevel} loaded={userLoaded} />
+                  <UserCard name={userName} level={userLevel} />
                 </div>
                 <SidebarContent onNav={closeMenu} />
               </div>

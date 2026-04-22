@@ -37,13 +37,13 @@ type CheckpointDialogProps = {
   onPrevQuestion: () => void;
   onNextQuestion: () => void;
   onSelectAnswer: (questionIndex: number, choice: string) => void;
-  getQuestionTypeLabel: (question: Question) => 'Vrai/Faux' | 'QCM';
+  getQuestionTypeLabel: (question: Question) => 'Верно/Неверно' | 'Тест';
 };
 
 export default function CheckpointDialog({
   open,
   onOpenChange,
-  triggerLabel = 'Lancer le checkpoint',
+  triggerLabel = 'Запустить квиз',
   triggerClassName = 'w-full h-9 text-xs',
   questions,
   currentQuizQuestion,
@@ -75,9 +75,9 @@ export default function CheckpointDialog({
       </DialogTrigger>
       <DialogContent className="sm:max-w-4xl rounded-none border-2 border-[#1C293C] p-0 gap-0">
         <DialogHeader className="border-b-2 border-[#1C293C] px-5 py-4">
-          <DialogTitle className="font-black text-[#1C293C]">Checkpoint IA</DialogTitle>
+          <DialogTitle className="font-black text-[#1C293C]">Квиз ИИ</DialogTitle>
           <DialogDescription className="text-xs font-medium text-[#1C293C]/55">
-            Une question à la fois, feedback immédiat, progression visible.
+            Один вопрос за раз, быстрый результат и понятный прогресс.
           </DialogDescription>
         </DialogHeader>
 
@@ -85,11 +85,11 @@ export default function CheckpointDialog({
           {/* Génération + progression */}
           <div className="border-2 border-[#1C293C] bg-[#FBFBF9] p-3 flex flex-wrap items-center justify-between gap-3">
             <div>
-              <p className="text-xs font-black text-[#1C293C]">Progression</p>
+              <p className="text-xs font-black text-[#1C293C]">Прогресс</p>
               <p className="text-[11px] font-medium text-[#1C293C]/55 mt-0.5">
                 {questions.length === 0
-                  ? 'Génère les questions pour démarrer.'
-                  : `${answeredQuestions}/${questions.length} réponse(s) complétée(s)`}
+                  ? 'Сгенерируй вопросы, чтобы начать.'
+                  : `${answeredQuestions}/${questions.length} ответов заполнено`}
               </p>
             </div>
             <button
@@ -97,7 +97,7 @@ export default function CheckpointDialog({
               disabled={quizLoading}
               className="border-2 border-[#1C293C] bg-[#FDC800] px-3 py-2 text-xs font-black text-[#1C293C] shadow-[2px_2px_0px_0px_#1C293C] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-100 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none"
             >
-              {quizLoading ? 'Génération...' : questions.length > 0 ? 'Régénérer 10 questions' : 'Générer 10 questions'}
+              {quizLoading ? 'Генерация...' : questions.length > 0 ? 'Сгенерировать заново (10 вопросов)' : 'Сгенерировать 10 вопросов'}
             </button>
           </div>
 
@@ -125,7 +125,7 @@ export default function CheckpointDialog({
                         <div className="flex items-start justify-between gap-3">
                           <div className="space-y-1">
                             <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7]">
-                              Question {i + 1}/{questions.length}
+                              Вопрос {i + 1}/{questions.length}
                             </p>
                             <p className="font-black text-sm text-[#1C293C] leading-snug">{q.question}</p>
                           </div>
@@ -172,7 +172,7 @@ export default function CheckpointDialog({
                   onClick={onPrevQuestion}
                   className="border-2 border-[#1C293C] bg-white px-4 py-2 text-xs font-black text-[#1C293C] shadow-[2px_2px_0px_0px_#1C293C] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-100 disabled:opacity-30 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none"
                 >
-                  Précédent
+                  Назад
                 </button>
 
                 {isLastQuizQuestion ? (
@@ -181,7 +181,7 @@ export default function CheckpointDialog({
                     disabled={!canSubmitQuiz}
                     className="border-2 border-[#1C293C] bg-[#FDC800] px-4 py-2 text-xs font-black text-[#1C293C] shadow-[2px_2px_0px_0px_#1C293C] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-100 disabled:opacity-40 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none"
                   >
-                    Terminer
+                    Завершить
                   </button>
                 ) : (
                   <button
@@ -189,7 +189,7 @@ export default function CheckpointDialog({
                     disabled={!canAdvanceCurrentQuiz}
                     className="border-2 border-[#1C293C] bg-[#FDC800] px-4 py-2 text-xs font-black text-[#1C293C] shadow-[2px_2px_0px_0px_#1C293C] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-100 disabled:opacity-40 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none"
                   >
-                    Avancer
+                    Далее
                   </button>
                 )}
               </div>
@@ -203,10 +203,10 @@ export default function CheckpointDialog({
                 <div className="flex items-start justify-between gap-3 flex-wrap">
                   <div>
                     <p className="text-[10px] uppercase tracking-widest font-black text-[#1C293C]/50">
-                      Résultat checkpoint
+                      Результат квиза
                     </p>
                     <p className="text-base font-black text-[#1C293C] mt-0.5">
-                      {quizPassed ? 'Checkpoint validé ✓' : 'Checkpoint à renforcer'}
+                      {quizPassed ? 'Квиз пройден ✓' : 'Квиз нужно подтянуть'}
                     </p>
                   </div>
                   <span className={`border-2 border-[#1C293C] px-3 py-1 text-sm font-black ${quizPassed ? 'bg-[#FDC800]' : 'bg-white'} text-[#1C293C]`}>
@@ -216,10 +216,10 @@ export default function CheckpointDialog({
 
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                   {[
-                    { label: 'Questions', value: questions.length, color: '' },
-                    { label: 'Correctes', value: correctAnswersCount, color: 'text-[#16A34A]' },
-                    { label: 'À corriger', value: wrongAnswersCount, color: 'text-[#DC2626]' },
-                    { label: 'Minimum', value: minimumToPass, color: '' },
+                    { label: 'Вопросы', value: questions.length, color: '' },
+                    { label: 'Верно', value: correctAnswersCount, color: 'text-[#16A34A]' },
+                    { label: 'Исправить', value: wrongAnswersCount, color: 'text-[#DC2626]' },
+                    { label: 'Минимум', value: minimumToPass, color: '' },
                   ].map((stat) => (
                     <div key={stat.label} className="border border-[#1C293C]/20 bg-white p-2">
                       <p className="text-[10px] font-bold text-[#1C293C]/50">{stat.label}</p>
@@ -248,28 +248,28 @@ export default function CheckpointDialog({
                         </div>
                         {isCorrect ? (
                           <span className="inline-flex items-center gap-1 text-[10px] font-black text-[#16A34A] shrink-0">
-                            <CheckCircle2 className="h-3 w-3" /> Correct
+                            <CheckCircle2 className="h-3 w-3" /> Верно
                           </span>
                         ) : (
                           <span className="inline-flex items-center gap-1 text-[10px] font-black text-[#DC2626] shrink-0">
-                            <CircleAlert className="h-3 w-3" /> À revoir
+                            <CircleAlert className="h-3 w-3" /> Повторить
                           </span>
                         )}
                       </div>
 
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                         <div className="border border-[#1C293C]/20 bg-[#FBFBF9] p-2">
-                          <p className="text-[10px] font-bold text-[#1C293C]/50">Ta réponse</p>
+                          <p className="text-[10px] font-bold text-[#1C293C]/50">Твой ответ</p>
                           <p className="text-xs font-semibold text-[#1C293C]">{selectedAnswer || '—'}</p>
                         </div>
                         <div className="border border-[#16A34A]/40 bg-[#16A34A]/5 p-2">
-                          <p className="text-[10px] font-bold text-[#16A34A]/70">Bonne réponse</p>
+                          <p className="text-[10px] font-bold text-[#16A34A]/70">Правильный ответ</p>
                           <p className="text-xs font-semibold text-[#1C293C]">{q.answer}</p>
                         </div>
                       </div>
 
                       <div className="border border-[#1C293C]/15 bg-[#FBFBF9] p-2">
-                        <p className="text-[10px] font-bold text-[#1C293C]/40 mb-0.5">Explication</p>
+                        <p className="text-[10px] font-bold text-[#1C293C]/40 mb-0.5">Объяснение</p>
                         <p className="text-xs font-medium text-[#1C293C]/60 leading-relaxed">{q.explanation}</p>
                       </div>
                     </div>
@@ -283,7 +283,7 @@ export default function CheckpointDialog({
                   disabled={quizLoading}
                   className="border-2 border-[#1C293C] bg-[#FDC800] px-4 py-2 text-xs font-black text-[#1C293C] shadow-[3px_3px_0px_0px_#1C293C] hover:shadow-none hover:translate-x-[3px] hover:translate-y-[3px] transition-all duration-100 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none"
                 >
-                  {quizLoading ? 'Génération...' : 'Refaire un checkpoint'}
+                  {quizLoading ? 'Генерация...' : 'Пройти квиз заново'}
                 </button>
               </div>
             </div>

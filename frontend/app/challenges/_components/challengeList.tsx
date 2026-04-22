@@ -22,17 +22,17 @@ export default function ChallengeList({ challenges, attempts, showAll, onToggleS
     <section className="border-2 border-[#1C293C] bg-[#FBFBF9] p-5 shadow-[5px_5px_0px_0px_#1C293C] space-y-5">
       <div className="flex items-center justify-between gap-2 flex-wrap">
         <div>
-          <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7]">Catalogue</p>
-          <h2 className="text-xl font-black text-[#1C293C] mt-0.5">Challenges disponibles</h2>
+          <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7]">Каталог</p>
+          <h2 className="text-xl font-black text-[#1C293C] mt-0.5">Доступные задания</h2>
         </div>
         <span className="border-2 border-[#1C293C] bg-[#FDC800] px-2.5 py-1 text-xs font-black text-[#1C293C] shadow-[2px_2px_0px_0px_#1C293C]">
-          {challenges.length} challenges
+          {challenges.length} заданий
         </span>
       </div>
 
       {challenges.length === 0 ? (
         <div className="border-2 border-dashed border-[#1C293C]/40 bg-white p-8 text-center">
-          <p className="text-sm font-semibold text-[#1C293C]/50">Aucun challenge publié pour le moment.</p>
+          <p className="text-sm font-semibold text-[#1C293C]/50">Задания пока не опубликованы.</p>
         </div>
       ) : (
         <div className="space-y-6">
@@ -40,7 +40,7 @@ export default function ChallengeList({ challenges, attempts, showAll, onToggleS
             <div className="space-y-3">
               <div className="flex items-center gap-2">
                 <Sparkles className="h-4 w-4 text-[#432DD7]" />
-                <p className="text-sm font-black text-[#1C293C]">À relever</p>
+                <p className="text-sm font-black text-[#1C293C]">К выполнению</p>
                 <span className="border border-[#1C293C] bg-white px-2 py-0.5 text-[10px] font-bold text-[#1C293C]">
                   {available.length}
                 </span>
@@ -55,12 +55,12 @@ export default function ChallengeList({ challenges, attempts, showAll, onToggleS
                     <div className="flex items-start justify-between gap-2">
                       <h3 className="text-sm font-black text-[#1C293C] line-clamp-1">{item.title}</h3>
                       <span className="shrink-0 border border-[#1C293C] bg-[#FDC800] px-2 py-0.5 text-[10px] font-black text-[#1C293C]">
-                        Nouveau
+                        Новое
                       </span>
                     </div>
 
                     <p className="text-xs text-[#1C293C]/60 font-medium line-clamp-2">
-                      {item.description || 'Sans description.'}
+                      {item.description || 'Без описания.'}
                     </p>
 
                     <div className="text-[11px] text-[#1C293C]/70 font-semibold flex flex-wrap gap-3">
@@ -73,7 +73,7 @@ export default function ChallengeList({ challenges, attempts, showAll, onToggleS
                       href={`/challenges/${item.id}`}
                       className="inline-flex w-full justify-center border-2 border-[#1C293C] bg-[#FDC800] px-3 py-2 text-xs font-black text-[#1C293C] shadow-[3px_3px_0px_0px_#1C293C] hover:shadow-none hover:translate-x-[3px] hover:translate-y-[3px] transition-all duration-100"
                     >
-                      Commencer le défi
+                      Начать задание
                     </Link>
                   </article>
                 ))}
@@ -85,7 +85,7 @@ export default function ChallengeList({ challenges, attempts, showAll, onToggleS
             <div className="space-y-3">
               <div className="flex items-center gap-2">
                 <Trophy className="h-4 w-4 text-[#16A34A]" />
-                <p className="text-sm font-black text-[#16A34A]">Complétés</p>
+                <p className="text-sm font-black text-[#16A34A]">Выполнено</p>
                 <span className="border border-[#16A34A] bg-[#16A34A]/10 px-2 py-0.5 text-[10px] font-bold text-[#16A34A]">
                   {completed.length}
                 </span>
@@ -102,12 +102,12 @@ export default function ChallengeList({ challenges, attempts, showAll, onToggleS
                       <div className="flex items-start justify-between gap-2">
                         <h3 className="text-sm font-black text-[#1C293C] line-clamp-1">{item.title}</h3>
                         <span className="shrink-0 border border-[#16A34A] bg-[#16A34A] px-2 py-0.5 text-[10px] font-black text-white">
-                          Terminé
+                          Завершено
                         </span>
                       </div>
 
                       <p className="text-xs text-[#1C293C]/60 font-medium line-clamp-2">
-                        {item.description || 'Sans description.'}
+                        {item.description || 'Без описания.'}
                       </p>
 
                       <div className="text-[11px] text-[#1C293C]/70 font-semibold flex flex-wrap gap-3">
@@ -121,7 +121,7 @@ export default function ChallengeList({ challenges, attempts, showAll, onToggleS
                         href={`/challenges/${item.id}/resultat`}
                         className="inline-flex w-full justify-center border-2 border-[#1C293C] bg-white px-3 py-2 text-xs font-black text-[#1C293C] shadow-[3px_3px_0px_0px_#1C293C] hover:shadow-none hover:translate-x-[3px] hover:translate-y-[3px] transition-all duration-100"
                       >
-                        Voir les résultats
+                        Посмотреть результаты
                       </Link>
                     </article>
                   );
@@ -136,7 +136,7 @@ export default function ChallengeList({ challenges, attempts, showAll, onToggleS
                 onClick={onToggleShowAll}
                 className="border-2 border-[#1C293C] bg-[#FBFBF9] px-5 py-2.5 text-sm font-black text-[#1C293C] shadow-[4px_4px_0px_0px_#1C293C] hover:shadow-none hover:translate-x-[4px] hover:translate-y-[4px] transition-all duration-100"
               >
-                {showAll ? 'Réduire la liste' : `Voir tous les challenges (${challenges.length})`}
+                {showAll ? 'Свернуть список' : `Показать все задания (${challenges.length})`}
               </button>
             </div>
           )}

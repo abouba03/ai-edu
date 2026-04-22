@@ -55,7 +55,7 @@ export default function CodeGenerator() {
         metadata: { promptLength: prompt.length },
       });
     } catch (e: any) {
-      const message = e?.response?.data?.detail || "Erreur lors de la génération du code";
+      const message = e?.response?.data?.detail || "Ошибка при генерации кода";
       setError(message);
       setCode('');
       await trackEvent({
@@ -71,19 +71,19 @@ export default function CodeGenerator() {
 
   return (
     <div className="p-4 space-y-4">
-      <h2 className="text-xl font-semibold">Générateur de Code Python</h2>
+      <h2 className="text-xl font-semibold">Генератор Python-кода</h2>
       <textarea
         className="w-full min-h-36 p-3 border rounded-lg bg-background"
-        placeholder="Décrivez votre besoin en code..."
+        placeholder="Опишите задачу на русском..."
         value={prompt}
         onChange={(e) => setPrompt(e.target.value)}
       ></textarea>
 
       <div className="flex items-center gap-3">
         <Button onClick={handleGenerate} disabled={loading || !prompt.trim()}>
-          {loading ? 'Génération...' : 'Générer le Code'}
+          {loading ? 'Генерирую...' : 'Сгенерировать код'}
         </Button>
-        {loading && <span className="text-sm text-muted-foreground">Traitement en cours...</span>}
+        {loading && <span className="text-sm text-muted-foreground">Обрабатываю запрос...</span>}
       </div>
 
       {error && (

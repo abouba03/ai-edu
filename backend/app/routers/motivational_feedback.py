@@ -8,24 +8,20 @@ client = OpenAI(api_key=settings.OPENAI_API_KEY or "missing-openai-key")
 
 class FeedbackRequest(BaseModel):
     username: str
-    recent_result: str  # ex: "a terminé un quiz avec 3/3", "a corrigé une erreur", etc.
-    mood: str = "neutre"  # facultatif : "heureux", "frustré", "douteux"
+    recent_result: str
+    mood: str = "нейтрально"
 
 @router.post("/motivational-feedback/")
 async def generate_feedback(req: FeedbackRequest):
     prompt = f"""
-Tu es un assistant motivant et bienveillant pour les étudiants en programmation.
+Ты доброжелательный наставник по программированию.
 
-L’étudiant {req.username} vient de faire ceci : {req.recent_result}.
-Son humeur actuelle est : {req.mood}.
+Ученик {req.username} сделал: {req.recent_result}.
+Его текущее настроение: {req.mood}.
 
-Tu dois générer un message court (1-2 phrases) pour l'encourager ou le féliciter, selon la situation.
-
-Exemples :
-- "Excellent travail, continue comme ça !"
-- "Tu t’améliores à chaque étape. Garde le cap."
-
-Le message doit être toujours positif, encourageant et adapté au contexte.
+Сгенерируй короткое сообщение (1-2 фразы), чтобы поддержать или похвалить ученика.
+Пиши только на простом русском языке.
+Сообщение должно быть позитивным, уместным и понятным.
 """
 
     response = client.chat.completions.create(

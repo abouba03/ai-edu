@@ -11,7 +11,7 @@ client = OpenAI(api_key=settings.OPENAI_API_KEY or "missing-openai-key")
 
 class QuizRequest(BaseModel):
     theme: str
-    level: str = "débutant"
+    level: str = "начинающий"
     nb_questions: int = 10
     pedagogy_context: dict[str, Any] | None = None
 
@@ -31,57 +31,57 @@ def _extract_json_payload(raw_text: str) -> str:
 async def generate_quiz(req: QuizRequest):
     theme = (req.theme or "").strip()
     if not theme:
-        raise HTTPException(status_code=400, detail="Le thème du quiz est vide.")
+        raise HTTPException(status_code=400, detail="Тема квиза пустая.")
     if len(theme) > MAX_THEME_CHARS:
         raise HTTPException(
             status_code=400,
-            detail=f"Le thème est trop long. Maximum autorisé: {MAX_THEME_CHARS} caractères."
+            detail=f"Тема слишком длинная. Максимум: {MAX_THEME_CHARS} символов."
         )
 
     level = (req.level or "").strip().lower()
     if level not in ALLOWED_LEVELS:
         raise HTTPException(
             status_code=400,
-            detail="Niveau invalide. Valeurs autorisées: débutant, intermédiaire, avancé."
+            detail="Неверный уровень. Разрешены: débutant, intermédiaire, avancé."
         )
 
     if req.nb_questions < 1 or req.nb_questions > 12:
-        raise HTTPException(status_code=400, detail="Le nombre de questions doit être entre 1 et 12.")
+        raise HTTPException(status_code=400, detail="Количество вопросов должно быть от 1 до 12.")
 
     pedagogy_block = build_pedagogy_block(req.pedagogy_context)
 
     composition_rules = f"""
-Contraintes de composition du quiz :
-- Mélange obligatoire de types de questions :
-    - au moins 3 questions Vrai/Faux avec exactement ces choix : ["Vrai", "Faux"]
-    - le reste en QCM (3 ou 4 choix plausibles)
-- Une seule bonne réponse par question.
-- Niveau de difficulté progressif et adapté au niveau {level}.
+Требования к квизу:
+- Обязательно смешать типы вопросов:
+    - минимум 3 вопроса Верно/Неверно с вариантами ["Верно", "Неверно"]
+    - остальные вопросы в формате QCM (3-4 правдоподобных варианта)
+- Только один правильный ответ.
+- Сложность должна постепенно расти и соответствовать уровню {level}.
 """ if req.nb_questions >= 8 else f"""
-Contraintes de composition du quiz :
-- Mélange recommandé de types de questions (Vrai/Faux + QCM) quand possible.
-- Une seule bonne réponse par question.
-- Niveau de difficulté progressif et adapté au niveau {level}.
+Требования к квизу:
+- По возможности смешивай вопросы Верно/Неверно и QCM.
+- Только один правильный ответ.
+- Сложность должна постепенно расти и соответствовать уровню {level}.
 """
 
     prompt = f"""
 {pedagogy_block}
 
-Tu es un professeur de programmation Python. Crée un quiz de {req.nb_questions} questions pour un étudiant de niveau {level}, sur le thème suivant : "{theme}".
+Ты преподаватель Python. Создай квиз из {req.nb_questions} вопросов для ученика уровня {level} по теме: "{theme}".
 
 {composition_rules}
 
-Format :
+Формат:
 [
-  {{
-    "question": "...",
-    "choices": ["...","...","..."],
-    "answer": "...",
-    "explanation": "..."
-  }},
-  ...
+    {{
+        "question": "...",
+        "choices": ["...","...","..."],
+        "answer": "...",
+        "explanation": "..."
+    }},
+    ...
 ]
-Réponds uniquement avec un JSON valide et strict.
+Пиши просто, только на русском языке, и верни только строгий валидный JSON.
 """
 
     try:
@@ -91,19 +91,19 @@ Réponds uniquement avec un JSON valide et strict.
             temperature=0.4
         )
     except Exception:
-        raise HTTPException(status_code=500, detail="Erreur interne lors de la génération du quiz.")
+        raise HTTPException(status_code=500, detail="Внутренняя ошибка при генерации квиза.")
 
-    # Extraire le JSON du texte généré
+    # Извлекаем JSON из ответа модели
     content = response.choices[0].message.content or ""
     normalized = _extract_json_payload(content)
 
     try:
         quiz_data = json.loads(normalized)
         if not isinstance(quiz_data, list):
-            raise ValueError("Le modèle n'a pas renvoyé une liste JSON")
+            raise ValueError("Модель не вернула JSON-массив")
         return {"quiz": quiz_data}
     except Exception:
         raise HTTPException(
             status_code=502,
-            detail="Le modèle a renvoyé une réponse invalide. Merci de réessayer."
+            detail="Модель вернула неверный ответ. Попробуйте снова."
         )

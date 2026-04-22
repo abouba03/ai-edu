@@ -55,41 +55,41 @@ export default function ChallengesPage() {
       <section className="border-2 border-[#1C293C] bg-[#FBFBF9] p-6 shadow-[6px_6px_0px_0px_#1C293C]">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
-            <p className="text-[11px] uppercase tracking-widest font-black text-[#432DD7]">Challenges Arena</p>
+            <p className="text-[11px] uppercase tracking-widest font-black text-[#432DD7]">Арена заданий</p>
             <h1 className="text-3xl lg:text-4xl font-black text-[#1C293C] mt-1 leading-tight">
-              Défis &amp; Classement
+              Задания и рейтинг
             </h1>
             <p className="text-[#1C293C]/60 mt-2 max-w-2xl text-sm font-medium">
-              Relève les challenges publiés, améliore ton score et compare ta progression avec les autres apprenants.
+              Выполняй опубликованные задания, улучшай свой счёт и сравнивай прогресс с другими учениками.
             </p>
           </div>
           <div className="border-2 border-[#1C293C] bg-[#FDC800] px-6 py-4 text-center shadow-[4px_4px_0px_0px_#1C293C] shrink-0">
-            <p className="text-[10px] uppercase tracking-widest font-black text-[#1C293C]">Progression</p>
+            <p className="text-[10px] uppercase tracking-widest font-black text-[#1C293C]">Прогресс</p>
             <p className="text-4xl font-black text-[#1C293C] mt-0.5">{progress}%</p>
           </div>
         </div>
 
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 mt-5">
           <article className="border-2 border-[#1C293C] bg-[#432DD7] p-4 shadow-[3px_3px_0px_0px_#1C293C]">
-            <p className="text-[10px] uppercase tracking-widest font-bold text-white/70">Position actuelle</p>
+            <p className="text-[10px] uppercase tracking-widest font-bold text-white/70">Текущая позиция</p>
             <p className="mt-1.5 font-black text-base inline-flex items-center gap-1.5 text-white">
-              <Trophy className="h-4 w-4" /> Top en cours
+              <Trophy className="h-4 w-4" /> В лидерах
             </p>
           </article>
           <article className="border-2 border-[#1C293C] bg-[#FDC800] p-4 shadow-[3px_3px_0px_0px_#1C293C]">
-            <p className="text-[10px] uppercase tracking-widest font-bold text-[#1C293C]/70">Score total</p>
+            <p className="text-[10px] uppercase tracking-widest font-bold text-[#1C293C]/70">Общий счёт</p>
             <p className="mt-1.5 font-black text-base inline-flex items-center gap-1.5 text-[#1C293C]">
               <Star className="h-4 w-4" /> {totalScore} pts
             </p>
           </article>
           <article className="border-2 border-[#1C293C] bg-white p-4 shadow-[3px_3px_0px_0px_#1C293C]">
-            <p className="text-[10px] uppercase tracking-widest font-bold text-[#1C293C]/70">Challenges faits</p>
+            <p className="text-[10px] uppercase tracking-widest font-bold text-[#1C293C]/70">Выполнено заданий</p>
             <p className="mt-1.5 font-black text-base inline-flex items-center gap-1.5 text-[#1C293C]">
               <Medal className="h-4 w-4" /> {completedCount}
             </p>
           </article>
           <article className="border-2 border-[#1C293C] bg-white p-4 shadow-[3px_3px_0px_0px_#1C293C]">
-            <p className="text-[10px] uppercase tracking-widest font-bold text-[#1C293C]/70">Tentatives validées</p>
+            <p className="text-[10px] uppercase tracking-widest font-bold text-[#1C293C]/70">Засчитанные попытки</p>
             <p className="mt-1.5 font-black text-base inline-flex items-center gap-1.5 text-[#1C293C]">
               <Target className="h-4 w-4" /> {passedCount}
             </p>

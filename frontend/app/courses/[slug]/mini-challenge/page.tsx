@@ -4,14 +4,16 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useParams, useSearchParams } from 'next/navigation';
 import { useAuth } from '@clerk/nextjs';
-import Editor from '@monaco-editor/react';
+import Editor, { loader } from '@monaco-editor/react';
+
+loader.config({ paths: { vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.52.2/min/vs' } });
 import axios from 'axios';
 import { AlertTriangle, ArrowLeft, ChevronLeft, ChevronRight, Code2, Lightbulb, PlayCircle } from 'lucide-react';
 import { trackEvent } from '@/lib/event-tracker';
 import type { ParsedChallengeFeedback } from './_components/types';
 
 const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-const instructionPages = ['Énoncé', 'Contraintes', 'Tests', 'Debugger'] as const;
+const instructionPages = ['Задание', 'Правила', 'Тесты', 'Отладка'] as const;
 
 type ChallengeTests = {
   mode?: string;
@@ -90,7 +92,7 @@ export default function CourseMiniChallengePage() {
 
   const [instructionPage, setInstructionPage] = useState(0);
   const [testsTabHighlight, setTestsTabHighlight] = useState(false);
-  const testsTabIndex = instructionPages.indexOf('Tests');
+  const testsTabIndex = instructionPages.indexOf('Тесты');
   const exerciseStartedAtRef = useRef<number>(Date.now());
   const lastTabOpenAtRef = useRef<number>(Date.now());
   const lastTrackedCodeRef = useRef<string>('');
@@ -398,13 +400,29 @@ export default function CourseMiniChallengePage() {
           formationName,
         },
       });
-      setChallengeCode(
-        String(
-          res.data.starter_code
-          ?? res.data.challenge_json?.starter_code
-          ?? ''
-        )
-      );
+      const rawStarterCode = String(
+        res.data.starter_code
+        ?? res.data.challenge_json?.starter_code
+        ?? ''
+      ).trim();
+
+      if (rawStarterCode) {
+        setChallengeCode(rawStarterCode);
+      } else {
+        const fnName = nextTests?.function_name?.trim();
+        if (fnName) {
+          const firstCase = nextTests?.test_cases?.[0];
+          const argsHint = firstCase?.args_literal
+            ? firstCase.args_literal.replace(/^\[|\]$/g, '').trim()
+            : '';
+          const paramList = argsHint
+            ? argsHint.split(',').map((_, i) => `arg${i + 1}`).join(', ')
+            : 'args';
+          setChallengeCode(`def ${fnName}(${paramList}):\n    # Напиши свой код здесь\n    pass\n`);
+        } else {
+          setChallengeCode('# Напиши свой Python-код здесь\n\n');
+        }
+      }
       setInstructionPage(0);
 
       await trackEvent({
@@ -417,7 +435,7 @@ export default function CourseMiniChallengePage() {
       const detail = axios.isAxiosError(error)
         ? (error.response?.data as { detail?: string } | undefined)?.detail
         : undefined;
-      setChallenge(detail ? `Impossible de générer le challenge pour le moment. (${detail})` : 'Impossible de générer le challenge pour le moment.');
+      setChallenge(detail ? `Не удалось сгенерировать задание. (${detail})` : 'Не удалось сгенерировать задание.');
       await trackEvent({
         action: 'mini_challenge_generated',
         feature: 'course_mini_challenge_page',
@@ -556,7 +574,7 @@ export default function CourseMiniChallengePage() {
         },
       });
     } catch {
-      setChallengeFeedback('Échec de la correction IA.');
+      setChallengeFeedback('Ошибка ИИ-проверки.');
       await trackEvent({
         action: 'mini_challenge_submitted',
         feature: 'course_mini_challenge_page',
@@ -608,7 +626,7 @@ export default function CourseMiniChallengePage() {
       const explanation = String(response.data?.explanation ?? '').trim();
 
       if (!correctedCode) {
-        setDebugResponse('Résolution indisponible pour le moment.');
+        setDebugResponse('Решение временно недоступно.');
         return;
       }
 
@@ -620,14 +638,14 @@ export default function CourseMiniChallengePage() {
           test_summary: summary,
           test_results: results,
           commentaire: response.data?.success
-            ? 'Correction générée et validée sur les tests du challenge.'
-            : 'Correction générée, mais certains tests restent à corriger.',
+            ? 'Исправление сгенерировано и проверено на тестах задания.'
+            : 'Исправление сгенерировано, но некоторые тесты ещё не проходят.',
         }));
       }
 
       const explanationHeader = explanation
         ? [
-            '# Correction guidée',
+            '# Направленная корректура',
             ...explanation
               .split(/\r?\n/)
               .map((line) => line.trim())
@@ -636,12 +654,12 @@ export default function CourseMiniChallengePage() {
               .map((line) => `# ${line}`),
             '',
           ].join('\n')
-        : '# Correction guidée\n# Version proposée par le tuteur pour débloquer l\'exercice.\n\n';
+        : '# Направленная корректура\n# Версия от ИИ-наставника.\n\n';
 
       setChallengeCode(`${explanationHeader}${correctedCode}`);
       setInstructionPage(testsTabIndex >= 0 ? testsTabIndex : 0);
       if (!response.data?.success) {
-        setDebugResponse('La correction proposée améliore la solution, mais ne valide pas encore tous les tests.');
+        setDebugResponse('Предложенное исправление улучшает решение, но пока не проходит все тесты.');
       }
 
       await trackEvent({
@@ -658,7 +676,7 @@ export default function CourseMiniChallengePage() {
         },
       });
     } catch {
-      setDebugResponse('Impossible de générer une résolution pour le moment.');
+      setDebugResponse('Не удалось сгенерировать решение.');
       await trackEvent({
         action: 'challenge_resolved_clicked',
         feature: 'course_mini_challenge_page',
@@ -676,7 +694,6 @@ export default function CourseMiniChallengePage() {
 
   useEffect(() => {
     generateMiniChallenge();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -696,7 +713,6 @@ export default function CourseMiniChallengePage() {
         previousTabDurationSec,
       },
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [instructionPage]);
 
   useEffect(() => {
@@ -744,59 +760,59 @@ export default function CourseMiniChallengePage() {
   }, [attemptCount, challenge, challengeTests, courseSlug, currentExerciseId]);
 
   const instructionBody = useMemo(() => {
-    if (instructionPages[instructionPage] === 'Debugger') {
+    if (instructionPages[instructionPage] === 'Отладка') {
       return '';
     }
 
-    if (instructionPages[instructionPage] === 'Énoncé') {
+    if (instructionPages[instructionPage] === 'Задание') {
       const statement = challengeSections.statement.trim();
       const example = challengeSections.example.trim();
       if (!statement && !example) {
-        return 'Clique sur "Nouveau challenge" pour générer un énoncé.';
+        return 'Нажми "Новое задание" для генерации задачи.';
       }
       if (statement && example) {
-        return `${statement}\n\nExemple:\n${example}`;
+        return `${statement}\n\nПример:\n${example}`;
       }
-      return statement || `Exemple:\n${example}`;
+      return statement || `Пример:\n${example}`;
     }
 
-    if (instructionPages[instructionPage] === 'Contraintes') {
+    if (instructionPages[instructionPage] === 'Правила') {
       if (challengeSections.constraints.length > 0) {
         return challengeSections.constraints.map((item, index) => `${index + 1}) ${item}`).join('\n');
       }
       return [
-        '1) Écris uniquement du code Python exécutable.',
-        '2) Respecte les entrées/sorties demandées dans l\'énoncé.',
-        '3) Favorise une solution claire et robuste.',
-        '4) Gère les cas limites mentionnés dans le challenge.',
+        '1) Пишите только исполняемый Python-код.',
+        '2) Соблюдай входы/выходы из задания.',
+        '3) Предпочитай ясное и надёжное решение.',
+        '4) Обрабатывай граничные случаи из задания.',
       ].join('\n');
     }
 
-    if (instructionPages[instructionPage] === 'Tests') {
+    if (instructionPages[instructionPage] === 'Тесты') {
       const testCases = Array.isArray(challengeTests?.test_cases) ? challengeTests.test_cases : [];
       const qualityChecks = Array.isArray(challengeTests?.quality_checks) ? challengeTests.quality_checks : [];
 
       if (testCases.length === 0 && qualityChecks.length === 0) {
-        return 'Aucun cas de validation disponible pour ce challenge.';
+        return 'Тест-кейсы недоступны для данного задания.';
       }
 
       const testsLines = testCases.slice(0, 8).map((testCase, index) => {
-        const name = (testCase?.name || `Cas ${index + 1}`).toString();
-        const expected = testCase?.expected_literal || testCase?.expected_stdout || 'attendu non précisé';
-        const constraint = testCase?.constraint || 'Contrainte implicite du cas';
-        return `• ${name} -> attendu: ${expected} (${constraint})`;
+        const name = (testCase?.name || `Кейс ${index + 1}`).toString();
+        const expected = testCase?.expected_literal || testCase?.expected_stdout || 'не указано';
+        const constraint = testCase?.constraint || 'Неявное условие';
+        return `• ${name} -> ожидается: ${expected} (${constraint})`;
       });
 
       const qualityLines = qualityChecks.slice(0, 4).map((item) => `• ${item}`);
 
-      return [...testsLines, ...(qualityLines.length > 0 ? ['Qualité du code:'] : []), ...qualityLines].join('\n');
+      return [...testsLines, ...(qualityLines.length > 0 ? ['Качество кода:'] : []), ...qualityLines].join('\n');
     }
 
     return [
-      '• Commence par un exemple simple puis généralise.',
-      '• Vérifie les conditions limites avant de soumettre.',
-      '• Nomme clairement tes variables et fonctions.',
-      '• Si blocage, fais une version minimale fonctionnelle puis améliore.',
+      '• Начни с простого примера, затем обобщи.',
+      '• Проверь граничные условия перед отправкой.',
+      '• Давай переменным и функциям понятные имена.',
+      '• Если застрял — сначала сделай минимальную рабочую версию.',
     ].join('\n');
   }, [instructionPage, challengeSections, challengeTests]);
 
@@ -883,7 +899,7 @@ export default function CourseMiniChallengePage() {
 
   async function runInlineDebugger() {
     if (!challengeCode.trim()) {
-      setDebugResponse('Ajoute d\'abord du code dans l\'éditeur, puis lance le debug guidé.');
+      setDebugResponse('Сначала добавь код в редактор, затем запусти анализ.');
       return;
     }
 
@@ -933,8 +949,8 @@ export default function CourseMiniChallengePage() {
       });
     } catch (error: unknown) {
       const message = axios.isAxiosError(error)
-        ? (error.response?.data as { detail?: string } | undefined)?.detail || 'Échec du debug guidé.'
-        : 'Échec du debug guidé.';
+        ? (error.response?.data as { detail?: string } | undefined)?.detail || 'Ошибка направленной отладки.'
+        : 'Ошибка направленной отладки.';
       setDebugResponse(String(message));
 
       await trackEvent({
@@ -999,8 +1015,8 @@ export default function CourseMiniChallengePage() {
       });
     } catch (error: unknown) {
       const message = axios.isAxiosError(error)
-        ? (error.response?.data as { detail?: string } | undefined)?.detail || 'Impossible d\'envoyer ta réponse au debug.'
-        : 'Impossible d\'envoyer ta réponse au debug.';
+        ? (error.response?.data as { detail?: string } | undefined)?.detail || 'Не удалось отправить ответ на отладку.'
+        : 'Не удалось отправить ответ на отладку.';
       setDebugResponse(String(message));
 
       await trackEvent({
@@ -1027,10 +1043,10 @@ export default function CourseMiniChallengePage() {
           href={`/courses/${courseSlug}`}
           className="inline-flex items-center gap-1.5 border-2 border-[#1C293C] bg-white px-3 py-1.5 text-xs font-black text-[#1C293C] shadow-[2px_2px_0px_0px_#1C293C] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-100"
         >
-          <ArrowLeft className="h-3.5 w-3.5" /> Retour au cours
+          <ArrowLeft className="h-3.5 w-3.5" /> Назад к курсу
         </Link>
         <div>
-          <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7]">Mini Challenge</p>
+          <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7]">Мини-задание</p>
           <h1 className="font-black text-sm text-[#1C293C] mt-0.5">{courseTitle}</h1>
         </div>
         <div className="flex items-center gap-1.5 flex-wrap">
@@ -1057,7 +1073,7 @@ export default function CourseMiniChallengePage() {
                   instructionPage === index
                     ? 'border-[#1C293C] bg-[#FDC800] text-[#1C293C] shadow-[2px_2px_0px_0px_#1C293C]'
                     : 'border-[#1C293C]/30 text-[#1C293C]/60 hover:border-[#1C293C] hover:text-[#1C293C]'
-                } ${label === 'Tests' && (isSubmittingChallenge || testsTabHighlight) ? 'animate-pulse' : ''}`}
+                } ${label === 'Тесты' && (isSubmittingChallenge || testsTabHighlight) ? 'animate-pulse' : ''}`}
               >
                 {label}
               </button>
@@ -1067,14 +1083,14 @@ export default function CourseMiniChallengePage() {
           {/* Content panel */}
           <div className="border-2 border-[#1C293C] bg-white p-3 space-y-2 min-h-[280px]">
             <p className="text-[10px] uppercase tracking-widest font-black text-[#1C293C]/50">
-              Page {instructionPage + 1}/{instructionPages.length}
+              Страница {instructionPage + 1}/{instructionPages.length}
             </p>
             <div className="max-h-[52vh] overflow-y-auto pr-1">
-              {instructionPages[instructionPage] === 'Debugger' ? (
+              {instructionPages[instructionPage] === 'Отладка' ? (
                 <div className="space-y-2 text-sm">
                   <div className="border-2 border-[#1C293C] bg-[#FBFBF9] p-2.5">
                     <div className="flex items-center justify-between gap-2">
-                      <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7]">Debugger IA</p>
+                      <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7]">ИИ-отладчик</p>
                       {structuredDebug.status && (
                         <span className={`border px-2 py-0.5 text-[10px] font-semibold ${
                           structuredDebug.status.toLowerCase().includes('pas d')
@@ -1086,37 +1102,37 @@ export default function CourseMiniChallengePage() {
                       )}
                     </div>
                     <div className="mt-2 flex items-center justify-between gap-2">
-                      <p className="text-[11px] text-[#1C293C]/60">Analyse guidée du code courant</p>
+                      <p className="text-[11px] text-[#1C293C]/60">Направленный анализ кода</p>
                       <button
                         type="button"
                         onClick={runInlineDebugger}
                         disabled={debugLoading || !challengeCode.trim()}
                         className="border-2 border-[#1C293C] bg-white px-3 py-1 text-[11px] font-black text-[#1C293C] shadow-[2px_2px_0px_0px_#1C293C] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-100 disabled:opacity-40 disabled:cursor-not-allowed"
                       >
-                        {debugLoading ? 'Analyse...' : 'Analyser'}
+                        {debugLoading ? 'Анализирую...' : 'Анализировать'}
                       </button>
                     </div>
                   </div>
 
                   {!debugResponse ? (
                     <div className="border border-[#1C293C]/20 bg-[#FBFBF9] px-2.5 py-2">
-                      <p className="text-[11px] text-[#1C293C]/60">Lance une analyse pour afficher l&apos;erreur principale et la prochaine action.</p>
+                      <p className="text-[11px] text-[#1C293C]/60">Запустите анализ для отображения основной ошибки и следующего действия.</p>
                     </div>
                   ) : (
                     <div className="space-y-1.5">
                       <div className="border-2 border-[#DC2626]/40 bg-[#DC2626]/5 px-2 py-1.5">
                         <p className="text-[10px] uppercase tracking-widest font-black text-[#DC2626] inline-flex items-center gap-1">
-                          <AlertTriangle className="h-3 w-3" /> Erreur détectée
+                          <AlertTriangle className="h-3 w-3" /> Обнаруженная ошибка
                         </p>
                         <p className="mt-0.5 text-[12px] leading-relaxed text-[#1C293C]">
-                          {structuredDebug.detectedError || 'Aucune erreur précise détectée.'}
+                          {structuredDebug.detectedError || 'Конкретная ошибка не обнаружена.'}
                         </p>
                       </div>
 
                       {structuredDebug.advice && (
                         <div className="border-2 border-[#D97706]/40 bg-[#D97706]/5 px-2 py-1.5">
                           <p className="text-[10px] uppercase tracking-widest font-black text-[#D97706] inline-flex items-center gap-1">
-                            <Lightbulb className="h-3 w-3" /> Conseil
+                            <Lightbulb className="h-3 w-3" /> Совет
                           </p>
                           <p className="mt-0.5 text-[12px] leading-relaxed text-[#1C293C]">{structuredDebug.advice}</p>
                         </div>
@@ -1125,7 +1141,7 @@ export default function CourseMiniChallengePage() {
                       {structuredDebug.nextAction && (
                         <div className="border-2 border-[#432DD7]/40 bg-[#432DD7]/5 px-2 py-1.5">
                           <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7] inline-flex items-center gap-1">
-                            <PlayCircle className="h-3 w-3" /> Prochaine action
+                            <PlayCircle className="h-3 w-3" /> Следующее действие
                           </p>
                           <p className="mt-0.5 text-[12px] leading-relaxed text-[#1C293C]">{structuredDebug.nextAction}</p>
                         </div>
@@ -1139,7 +1155,7 @@ export default function CourseMiniChallengePage() {
                         type="text"
                         value={debugAnswer}
                         onChange={(e) => setDebugAnswer(e.target.value)}
-                        placeholder="Pose une question ciblée sur ton bug..."
+                        placeholder="Задай вопрос по своей ошибке..."
                         className="w-full border-2 border-[#1C293C] bg-white px-2 py-1.5 text-xs text-[#1C293C] placeholder:text-[#1C293C]/40 focus:outline-none focus:border-[#432DD7]"
                       />
                       <button
@@ -1148,32 +1164,32 @@ export default function CourseMiniChallengePage() {
                         disabled={debugLoading || !debugSessionId || !debugAnswer.trim()}
                         className="border-2 border-[#1C293C] bg-[#432DD7] px-3 py-1.5 text-xs font-black text-white shadow-[2px_2px_0px_0px_#1C293C] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-100 disabled:opacity-40"
                       >
-                        Envoyer
+                        Отправить
                       </button>
                     </div>
                   </div>
                 </div>
-              ) : instructionPages[instructionPage] === 'Énoncé' ? (
+              ) : instructionPages[instructionPage] === 'Задание' ? (
                 <div className="space-y-1.5 text-sm">
                   <div className="border-2 border-[#1C293C] bg-[#FBFBF9] p-2 space-y-1">
-                    <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7]">Objectif</p>
+                    <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7]">Цель</p>
                     <p className="text-[12px] leading-relaxed text-[#1C293C]">
-                      {formattedStatement.objective || 'Clique sur "Nouveau challenge" pour générer un énoncé.'}
+                      {formattedStatement.objective || 'Нажми "Новое задание" для генерации задачи.'}
                     </p>
                   </div>
 
                   {(formattedStatement.input || formattedStatement.output || formattedStatement.example) && (
                     <div className="border-2 border-[#1C293C] bg-[#FBFBF9] p-2 space-y-1.5">
-                      <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7]">Exemple</p>
+                      <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7]">Пример</p>
                       {formattedStatement.input && (
                         <div className="border border-[#1C293C]/20 bg-white px-2 py-1.5">
-                          <p className="text-[10px] text-[#1C293C]/50 mb-0.5">Entrée</p>
+                          <p className="text-[10px] text-[#1C293C]/50 mb-0.5">Вход</p>
                           <pre className="text-[11px] whitespace-pre-wrap text-[#1C293C]">{formattedStatement.input}</pre>
                         </div>
                       )}
                       {formattedStatement.output && (
                         <div className="border border-[#1C293C]/20 bg-white px-2 py-1.5">
-                          <p className="text-[10px] text-[#1C293C]/50 mb-0.5">Sortie attendue</p>
+                          <p className="text-[10px] text-[#1C293C]/50 mb-0.5">Ожидаемый выход</p>
                           <pre className="text-[11px] whitespace-pre-wrap text-[#1C293C]">{formattedStatement.output}</pre>
                         </div>
                       )}
@@ -1183,13 +1199,13 @@ export default function CourseMiniChallengePage() {
                     </div>
                   )}
                 </div>
-              ) : instructionPages[instructionPage] === 'Contraintes' ? (
+              ) : instructionPages[instructionPage] === 'Правила' ? (
                 <div className="space-y-1.5 text-sm">
                   <div className="border-2 border-[#1C293C] bg-[#FBFBF9] p-2 space-y-1.5">
                     <div className="flex items-center justify-between gap-2">
-                      <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7]">Contraintes</p>
+                      <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7]">Правила</p>
                       <span className="border border-[#1C293C]/20 bg-[#FBFBF9] px-2 py-0.5 text-[10px] font-semibold text-[#1C293C]/60">
-                        {challengeSections.constraints.length > 0 ? challengeSections.constraints.length : 4} règles
+                        {challengeSections.constraints.length > 0 ? challengeSections.constraints.length : 4} правил
                       </span>
                     </div>
 
@@ -1197,10 +1213,10 @@ export default function CourseMiniChallengePage() {
                       {(challengeSections.constraints.length > 0
                         ? challengeSections.constraints
                         : [
-                            'Écris uniquement du code Python exécutable.',
-                            'Respecte les entrées/sorties demandées dans l\u2019énoncé.',
-                            'Favorise une solution claire et robuste.',
-                            'Gère les cas limites mentionnés dans le challenge.',
+                            'Пишите только исполняемый Python-код.',
+                            'Соблюдай входы/выходы из задания.',
+                            'Предпочитай ясное и надёжное решение.',
+                            'Обрабатывай граничные случаи из задания.',
                           ]
                       ).map((item, index) => (
                         <div key={`${item}-${index}`} className="border border-[#1C293C]/20 bg-white px-2 py-1.5">
@@ -1210,20 +1226,20 @@ export default function CourseMiniChallengePage() {
                     </div>
                   </div>
                 </div>
-              ) : instructionPages[instructionPage] === 'Tests' ? (
+              ) : instructionPages[instructionPage] === 'Тесты' ? (
                 <div className="space-y-1.5 text-sm">
                   {(isSubmittingChallenge || testsTabHighlight) && (
                     <div className="border-2 border-[#FDC800] bg-[#FDC800]/20 px-2 py-1.5 animate-pulse">
-                      <p className="text-[11px] uppercase tracking-widest font-black text-[#1C293C]">Validation en cours…</p>
+                      <p className="text-[11px] uppercase tracking-widest font-black text-[#1C293C]">Проверка...</p>
                     </div>
                   )}
 
                   <div className="border-2 border-[#1C293C] bg-[#FBFBF9] p-2 space-y-1.5">
                     <div className="flex items-center justify-between gap-2">
-                      <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7]">Cas de validation</p>
+                      <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7]">Тест-кейсы</p>
                       {Array.isArray(challengeTests?.test_cases) && challengeTests.test_cases.length > 0 && (
                         <span className="border border-[#1C293C]/20 bg-[#FBFBF9] px-2 py-0.5 text-[10px] font-semibold text-[#1C293C]/60">
-                          {challengeTests.test_cases.length} cas
+                          {challengeTests.test_cases.length} тестов
                         </span>
                       )}
                     </div>
@@ -1232,32 +1248,32 @@ export default function CourseMiniChallengePage() {
                         {challengeTests.test_cases.slice(0, 8).map((testCase, index) => (
                           <div key={`${testCase?.name || 'test'}-${index}`} className="border border-[#1C293C]/20 bg-white px-2 py-1.5 space-y-0.5">
                             <div className="flex items-center justify-between gap-2">
-                              <p className="text-[11px] font-black text-[#1C293C] truncate">{testCase?.name || `Cas ${index + 1}`}</p>
+                              <p className="text-[11px] font-black text-[#1C293C] truncate">{testCase?.name || `Кейс ${index + 1}`}</p>
                               <span className="border border-[#1C293C]/20 px-1.5 py-0.5 text-[10px] text-[#1C293C]/60">#{index + 1}</span>
                             </div>
                             {(testCase?.args_literal || testCase?.stdin_lines) && (
                               <p className="text-[10px] text-[#1C293C]/50 truncate">
-                                Entrée: {testCase?.args_literal || JSON.stringify(testCase?.stdin_lines || [])}
+                                Вход: {testCase?.args_literal || JSON.stringify(testCase?.stdin_lines || [])}
                               </p>
                             )}
                             {(testCase?.expected_literal || testCase?.expected_stdout) && (
                               <p className="text-[10px] text-[#1C293C]/50 truncate">
-                                Attendu: {testCase?.expected_literal || testCase?.expected_stdout}
+                                Ожидается: {testCase?.expected_literal || testCase?.expected_stdout}
                               </p>
                             )}
                             {testCase?.constraint && (
-                              <p className="text-[10px] text-[#1C293C]/50 truncate">Contrainte: {testCase.constraint}</p>
+                              <p className="text-[10px] text-[#1C293C]/50 truncate">Условие: {testCase.constraint}</p>
                             )}
                           </div>
                         ))}
                       </div>
                     ) : (
-                      <p className="text-[11px] text-[#1C293C]/60">Aucun cas généré pour le moment.</p>
+                      <p className="text-[11px] text-[#1C293C]/60">Тест-кейсы ещё не сгенерированы.</p>
                     )}
                   </div>
 
                   <div className="border-2 border-[#1C293C] bg-[#FBFBF9] p-2 space-y-1.5">
-                    <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7]">Résultats</p>
+                    <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7]">Результаты</p>
                     {parsedChallengeFeedback.testSummary ? (
                       <div
                         className={`border-2 px-2 py-1.5 text-[11px] font-black ${
@@ -1266,11 +1282,11 @@ export default function CourseMiniChallengePage() {
                             : 'border-[#DC2626] bg-[#DC2626]/10 text-[#DC2626]'
                         }`}
                       >
-                        {parsedChallengeFeedback.testSummary.passed}/{parsedChallengeFeedback.testSummary.total} validés
+                        {parsedChallengeFeedback.testSummary.passed}/{parsedChallengeFeedback.testSummary.total} прошло
                         {parsedChallengeFeedback.testSummary.runtime_error ? ` · ${parsedChallengeFeedback.testSummary.runtime_error}` : ''}
                       </div>
                     ) : (
-                      <p className="text-[11px] text-[#1C293C]/60">Soumets ton code pour voir les résultats.</p>
+                      <p className="text-[11px] text-[#1C293C]/60">Отправь код для просмотра результатов.</p>
                     )}
 
                     {parsedChallengeFeedback.testResults.length > 0 && (
@@ -1292,8 +1308,8 @@ export default function CourseMiniChallengePage() {
                                 {item.status === 'passed' ? 'ok' : 'ko'}
                               </span>
                             </div>
-                            <p className={`mt-0.5 text-[10px] truncate ${item.status === 'passed' ? 'text-[#16A34A]/80' : 'text-[#DC2626]/80'}`}>Attendu: {item.expected}</p>
-                            <p className={`text-[10px] truncate ${item.status === 'passed' ? 'text-[#16A34A]/80' : 'text-[#DC2626]/80'}`}>Obtenu: {item.actual}</p>
+                            <p className={`mt-0.5 text-[10px] truncate ${item.status === 'passed' ? 'text-[#16A34A]/80' : 'text-[#DC2626]/80'}`}>Ожидается: {item.expected}</p>
+                            <p className={`text-[10px] truncate ${item.status === 'passed' ? 'text-[#16A34A]/80' : 'text-[#DC2626]/80'}`}>Получено: {item.actual}</p>
                           </div>
                         ))}
                       </div>
@@ -1320,7 +1336,7 @@ export default function CourseMiniChallengePage() {
               onClick={() => setInstructionPage((value) => Math.max(0, value - 1))}
               className="inline-flex items-center gap-1.5 border-2 border-[#1C293C] bg-white px-3 py-1.5 text-xs font-black text-[#1C293C] shadow-[2px_2px_0px_0px_#1C293C] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-100 disabled:opacity-40 disabled:cursor-not-allowed"
             >
-              <ChevronLeft className="h-3.5 w-3.5" /> Précédent
+              <ChevronLeft className="h-3.5 w-3.5" /> Назад
             </button>
             <button
               type="button"
@@ -1328,7 +1344,7 @@ export default function CourseMiniChallengePage() {
               onClick={() => setInstructionPage((value) => Math.min(instructionPages.length - 1, value + 1))}
               className="inline-flex items-center gap-1.5 border-2 border-[#1C293C] bg-white px-3 py-1.5 text-xs font-black text-[#1C293C] shadow-[2px_2px_0px_0px_#1C293C] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-100 disabled:opacity-40 disabled:cursor-not-allowed"
             >
-              Suivant <ChevronRight className="h-3.5 w-3.5" />
+              Далее <ChevronRight className="h-3.5 w-3.5" />
             </button>
           </div>
         </aside>
@@ -1337,7 +1353,7 @@ export default function CourseMiniChallengePage() {
         <div className="xl:col-span-7 border-2 border-[#1C293C] bg-[#FBFBF9] shadow-[4px_4px_0px_0px_#1C293C] p-3 space-y-3">
           <div className="flex items-center justify-between gap-2 flex-wrap">
             <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7] inline-flex items-center gap-1.5">
-              <Code2 className="h-3.5 w-3.5" /> Zone de code Python
+              <Code2 className="h-3.5 w-3.5" /> Зона кода Python
             </p>
             <div className="flex items-center gap-2">
               <button
@@ -1346,7 +1362,7 @@ export default function CourseMiniChallengePage() {
                 disabled={isSubmittingChallenge || !challenge.trim() || !challengeCode.trim()}
                 className="border-2 border-[#1C293C] bg-[#FDC800] px-4 py-1.5 text-xs font-black text-[#1C293C] shadow-[2px_2px_0px_0px_#1C293C] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-100 disabled:opacity-40 disabled:cursor-not-allowed"
               >
-                {isSubmittingChallenge ? 'Correction...' : 'Soumettre la solution'}
+                {isSubmittingChallenge ? 'Проверяю...' : 'Отправить решение'}
               </button>
               {canResolve && (
                 <button
@@ -1355,7 +1371,7 @@ export default function CourseMiniChallengePage() {
                   disabled={isResolving}
                   className="border-2 border-[#1C293C] bg-white px-4 py-1.5 text-xs font-black text-[#1C293C] shadow-[2px_2px_0px_0px_#1C293C] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-100 disabled:opacity-40"
                 >
-                  {isResolving ? 'Résolution...' : 'Résoudre'}
+                  {isResolving ? 'Решаю...' : 'Решить'}
                 </button>
               )}
             </div>
@@ -1363,10 +1379,16 @@ export default function CourseMiniChallengePage() {
 
           <div className="border-2 border-[#1C293C] overflow-hidden">
             <Editor
+              key={currentExerciseId || 'default'}
               height="380px"
               defaultLanguage="python"
               value={challengeCode}
               onChange={(value) => setChallengeCode(value || '')}
+              loading={
+                <div className="flex items-center justify-center h-[380px] bg-[#1e1e1e]">
+                  <p className="text-xs text-white/40">Загрузка редактора…</p>
+                </div>
+              }
               options={{
                 minimap: { enabled: false },
                 fontSize: 14,
@@ -1390,7 +1412,7 @@ export default function CourseMiniChallengePage() {
           {/* Attempt history */}
           <div className="border-2 border-[#1C293C] bg-white p-3 space-y-2">
             <div className="flex items-center justify-between gap-2">
-              <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7]">Tentatives effectuées</p>
+              <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7]">Попытки</p>
               <span className="border border-[#1C293C] px-2 py-0.5 text-xs font-black text-[#1C293C]">{attemptCount}</span>
             </div>
             {attemptHistory.length > 0 ? (
@@ -1404,12 +1426,12 @@ export default function CourseMiniChallengePage() {
                         : 'border-[#DC2626]/40 bg-[#DC2626]/5 text-[#DC2626]'
                     }`}
                   >
-                    Tentative #{attemptHistory.length - index} · {item.note} · {item.status === 'validated' ? 'réussie' : 'non validée'}
+                    Попытка #{attemptHistory.length - index} · {item.note} · {item.status === 'validated' ? 'пройдена' : 'не пройдена'}
                   </li>
                 ))}
               </ul>
             ) : (
-              <p className="text-xs text-[#1C293C]/60">Aucune tentative enregistrée.</p>
+              <p className="text-xs text-[#1C293C]/60">Попыток пока нет.</p>
             )}
           </div>
         </div>

@@ -1,8 +1,13 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { BookMarked, CirclePlay, Code2, Clock3, Lightbulb } from 'lucide-react';
+import { CirclePlay, Code2, Clock3, Lightbulb } from 'lucide-react';
 import { getCourseBySlug } from '@/lib/course-catalog';
-import { getAdminCourseBySlug, getFormationProgressBySlug, toYouTubeResources } from '@/lib/admin-course-catalog';
+import {
+  getAdminCourseBySlug,
+  getFormationProgressBySlug,
+  toCanonicalCourseSlug,
+  toYouTubeResources,
+} from '@/lib/admin-course-catalog';
 import PersonalizedCoursePanel from '@/components/courses/personalized-course-panel';
 
 type Props = {
@@ -20,6 +25,7 @@ export default async function CourseDetailPage({ params }: Props) {
   const adminCourse = await getAdminCourseBySlug(slug);
 
   if (adminCourse) {
+    const canonicalCourseSlug = toCanonicalCourseSlug(adminCourse.slug);
     const resources = toYouTubeResources(adminCourse.videoLinks);
     const progression = await getFormationProgressBySlug(slug);
 
@@ -29,7 +35,7 @@ export default async function CourseDetailPage({ params }: Props) {
           {/* Tags */}
           <div className="flex flex-wrap items-center gap-2">
             <span className="border-2 border-[#432DD7] bg-white px-2.5 py-1 text-[10px] font-black text-[#432DD7] uppercase tracking-widest inline-flex items-center gap-1.5">
-              <Code2 className="h-3 w-3" /> Cours premium
+              <Code2 className="h-3 w-3" /> Премиум-курс
             </span>
             <span className="border border-[#1C293C]/30 bg-white px-2 py-1 text-[10px] font-bold text-[#1C293C]">{adminCourse.formationName}</span>
             <span className="border border-[#1C293C]/30 bg-white px-2 py-1 text-[10px] font-bold text-[#1C293C]">#{adminCourse.courseIndex}</span>
@@ -42,31 +48,19 @@ export default async function CourseDetailPage({ params }: Props) {
             <p className="text-sm font-medium text-[#1C293C]/60 mt-2 max-w-3xl leading-relaxed">{adminCourse.description}</p>
           </div>
 
-          {/* Méta */}
-          <div className="flex flex-wrap items-center gap-4 text-[11px] font-bold text-[#1C293C]/55">
-            <span className="inline-flex items-center gap-1"><Clock3 className="h-3 w-3" /> {adminCourse.duration}</span>
-            <span className="inline-flex items-center gap-1"><BookMarked className="h-3 w-3" /> {adminCourse.modules} module{adminCourse.modules > 1 ? 's' : ''}</span>
-          </div>
-
           {/* Actions */}
           <div className="flex flex-wrap gap-2 pt-1">
             <Link
               href="/courses"
               className="inline-flex items-center gap-2 border-2 border-[#1C293C] bg-white px-3 py-2 text-xs font-black text-[#1C293C] shadow-[2px_2px_0px_0px_#1C293C] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-100"
             >
-              Retour aux cours
-            </Link>
-            <Link
-              href="/admin/formation"
-              className="inline-flex items-center gap-2 border-2 border-[#1C293C] bg-[#FDC800] px-3 py-2 text-xs font-black text-[#1C293C] shadow-[2px_2px_0px_0px_#1C293C] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-100"
-            >
-              Admin
+              К курсам
             </Link>
           </div>
         </section>
 
         <PersonalizedCoursePanel
-          courseSlug={slug}
+          courseSlug={canonicalCourseSlug}
           courseTitle={adminCourse.title}
           courseDescription={adminCourse.description}
           courseLevel={adminCourse.level}
@@ -92,20 +86,19 @@ export default async function CourseDetailPage({ params }: Props) {
   return (
     <div className="space-y-6">
       <section className="rounded-2xl border bg-card p-6 lg:p-8 space-y-4">
-        <p className="text-sm text-primary font-semibold">Parcours pédagogique</p>
+        <p className="text-sm text-primary font-semibold">Учебный путь</p>
         <h1 className="text-2xl lg:text-3xl font-bold">{course.title}</h1>
         <p className="text-muted-foreground">{course.description}</p>
 
         <div className="flex flex-wrap gap-3 text-xs text-muted-foreground">
-          <span className="inline-flex items-center gap-1 rounded-md border px-2 py-1">Niveau: {course.level}</span>
+          <span className="inline-flex items-center gap-1 rounded-md border px-2 py-1">Уровень: {course.level}</span>
           <span className="inline-flex items-center gap-1 rounded-md border px-2 py-1"><Clock3 className="h-3 w-3" /> {course.duration}</span>
-          <span className="inline-flex items-center gap-1 rounded-md border px-2 py-1"><BookMarked className="h-3 w-3" /> {course.modules.length} modules</span>
         </div>
       </section>
 
       <section className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="rounded-2xl border bg-card p-5 space-y-3">
-          <h2 className="font-semibold">Objectifs du cours</h2>
+          <h2 className="font-semibold">Цели курса</h2>
           <ul className="space-y-2 text-sm text-muted-foreground">
             {course.objectives.map((objective) => (
               <li key={objective}>• {objective}</li>
@@ -114,7 +107,7 @@ export default async function CourseDetailPage({ params }: Props) {
         </div>
 
         <div className="rounded-2xl border bg-card p-5 space-y-3">
-          <h2 className="font-semibold">Prérequis</h2>
+          <h2 className="font-semibold">Требования</h2>
           <ul className="space-y-2 text-sm text-muted-foreground">
             {course.prerequisites.map((item) => (
               <li key={item}>• {item}</li>
@@ -125,9 +118,9 @@ export default async function CourseDetailPage({ params }: Props) {
 
       {course.playlistId && (
         <section className="rounded-2xl border bg-card p-5 space-y-3">
-          <h2 className="font-semibold">Playlist officielle du cours</h2>
+          <h2 className="font-semibold">Официальный плейлист курса</h2>
           <p className="text-sm text-muted-foreground">
-            Suis les vidéos dans l'ordre pour compléter les leçons de la plateforme.
+            Смотри видео по порядку для прохождения уроков платформы.
           </p>
           <div className="rounded-lg overflow-hidden border bg-background">
             <iframe
@@ -146,7 +139,7 @@ export default async function CourseDetailPage({ params }: Props) {
               rel="noreferrer"
               className="inline-flex items-center justify-center rounded-lg border px-4 py-2 text-sm font-medium hover:bg-accent transition-colors"
             >
-              Ouvrir la playlist sur YouTube
+              Открыть плейлист на YouTube
             </a>
           )}
         </section>
@@ -156,7 +149,7 @@ export default async function CourseDetailPage({ params }: Props) {
         {course.modules.map((module, index) => (
           <article key={module.id} className="rounded-2xl border bg-card p-5 space-y-4">
             <div>
-              <p className="text-xs text-primary font-semibold">Module {index + 1}</p>
+              <p className="text-xs text-primary font-semibold">Модуль {index + 1}</p>
               <h3 className="text-lg font-semibold mt-1">{module.title}</h3>
               <p className="text-sm text-muted-foreground mt-1">{module.description}</p>
             </div>
@@ -191,13 +184,13 @@ export default async function CourseDetailPage({ params }: Props) {
 
       <section className="rounded-2xl border bg-card p-5 flex flex-wrap gap-3">
         <Link href="/generator" className="inline-flex items-center justify-center rounded-lg bg-primary text-primary-foreground px-4 py-2 text-sm font-medium hover:bg-primary/90 transition-colors">
-          Pratiquer avec le Générateur
+          Практиковаться в генераторе
         </Link>
         <Link href="/debugger" className="inline-flex items-center justify-center rounded-lg border px-4 py-2 text-sm font-medium hover:bg-accent transition-colors">
-          Aller au Débogueur
+          Перейти к отладчику
         </Link>
         <Link href="/challenges" className="inline-flex items-center justify-center rounded-lg border px-4 py-2 text-sm font-medium hover:bg-accent transition-colors">
-          Lancer un Quiz IA
+          Запустить ИИ-квиз
         </Link>
       </section>
     </div>

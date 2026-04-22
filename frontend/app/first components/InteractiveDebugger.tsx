@@ -68,7 +68,7 @@ export default function InteractiveDebugger() {
         metadata: { level, step },
       });
     } catch {
-      setIaResponse("Erreur lors de l'analyse.");
+      setIaResponse("Ошибка при анализе кода.");
       setWaitingResponse(false);
       await trackEvent({
         action: 'debug_analyze',
@@ -113,7 +113,7 @@ export default function InteractiveDebugger() {
         metadata: { level, step: step + 1 },
       });
     } catch {
-      setIaResponse("Erreur lors de l'envoi de la réponse.");
+      setIaResponse("Ошибка при отправке ответа.");
       setWaitingResponse(false);
       await trackEvent({
         action: 'debug_reply',
@@ -127,24 +127,24 @@ export default function InteractiveDebugger() {
   return (
     <div className="space-y-4 p-6 max-w-4xl mx-auto">
       <div className="rounded-xl border bg-background p-4 space-y-2">
-        <h2 className="text-2xl font-bold">🧠 Mode Débogage Interactif</h2>
-        <p className="text-sm text-muted-foreground">Session persistante + guidage adaptatif pour comprendre l’erreur avant correction.</p>
+        <h2 className="text-2xl font-bold">🧠 Интерактивный режим отладки</h2>
+        <p className="text-sm text-muted-foreground">Постоянная сессия + адаптивное руководство для понимания ошибки перед исправлением.</p>
         <div className="flex flex-wrap gap-3 text-xs text-muted-foreground">
-          <span className="rounded-full border px-2 py-1">Session: {sessionId ? sessionId.slice(0, 8) : 'nouvelle'}</span>
-          <span className="rounded-full border px-2 py-1">Étape: {step}</span>
-          <span className="rounded-full border px-2 py-1">Niveau: {level}</span>
+          <span className="rounded-full border px-2 py-1">Сессия: {sessionId ? sessionId.slice(0, 8) : 'новая'}</span>
+          <span className="rounded-full border px-2 py-1">Шаг: {step}</span>
+          <span className="rounded-full border px-2 py-1">Уровень: {level}</span>
         </div>
       </div>
 
-      <label className="block text-sm font-medium">Choisir le niveau :</label>
+      <label className="block text-sm font-medium">Выбрать уровень:</label>
       <select
         value={level}
         onChange={(e) => setLevel(e.target.value as 'débutant' | 'intermédiaire' | 'avancé')}
         className="border px-3 py-2 rounded-lg bg-background"
       >
-        <option value="débutant">Débutant</option>
-        <option value="intermédiaire">Intermédiaire</option>
-        <option value="avancé">Avancé</option>
+        <option value="débutant">Начинающий</option>
+        <option value="intermédiaire">Средний</option>
+        <option value="avancé">Продвинутый</option>
       </select>
 
       <Editor

@@ -16,7 +16,7 @@ def correct_code(
     try:
         pedagogy_block = build_pedagogy_block(pedagogy_context)
         challenge_block = (
-            f"Énoncé du challenge:\n{challenge_description.strip()}\n\n"
+            f"Условие задачи:\n{challenge_description.strip()}\n\n"
             if challenge_description.strip()
             else ""
         )
@@ -24,24 +24,24 @@ def correct_code(
         tests_block = ""
         if isinstance(challenge_tests, dict) and challenge_tests:
             tests_block = (
-                "Tests/contraintes à respecter (source de vérité):\n"
+                "Тесты и ограничения (главный ориентир):\n"
                 f"{json.dumps(challenge_tests, ensure_ascii=False, indent=2)}\n\n"
             )
 
         failed_block = ""
         if isinstance(failed_tests, list) and failed_tests:
             failed_block = (
-                "Tests actuellement en échec (priorité de correction):\n"
+                "Тесты, которые сейчас не проходят (приоритет исправления):\n"
                 f"{json.dumps(failed_tests, ensure_ascii=False, indent=2)}\n\n"
             )
 
         prompt = (
             f"{pedagogy_block}\n"
-            "Tu es un tuteur Python fiable. Corrige le code sans halluciner. "
-            "La correction DOIT respecter strictement l'énoncé et les tests fournis. "
-            "N'invente jamais des catégories/sorties différentes de celles attendues dans les tests. "
-            "Si un libellé attendu est 'tarif réduit', ne le remplace pas par un synonyme. "
-            "Réponds STRICTEMENT en JSON valide:\n"
+            "Ты надежный наставник по Python. Отвечай только на простом русском языке. "
+            "Исправь код без выдумок. "
+            "Исправление ДОЛЖНО строго соответствовать условию и тестам. "
+            "Не меняй ожидаемые формулировки в тестах на синонимы. "
+            "Ответ строго в валидном JSON:\n"
             "{\n"
             '  "prompt_version": "v2.2-challenge-aware",\n'
             '  "corrected_code": "...",\n'
@@ -51,7 +51,7 @@ def correct_code(
             f"{challenge_block}"
             f"{tests_block}"
             f"{failed_block}"
-            "Code étudiant:\n"
+            "Код ученика:\n"
             f"{code}"
         )
         response = client.chat.completions.create(
@@ -60,8 +60,8 @@ def correct_code(
                 {
                     "role": "system",
                     "content": (
-                        "Vous êtes un expert en correction de code Python et pédagogie. "
-                        "Ne répondez qu'en JSON strict."
+                        "Ты эксперт по исправлению Python-кода и педагогике. "
+                        "Пиши только на простом русском языке и отвечай только строгим JSON."
                     ),
                 },
                 {"role": "user", "content": prompt}
@@ -71,4 +71,4 @@ def correct_code(
         )
         return response.choices[0].message.content or ""
     except Exception as e:
-        return f"Erreur lors de la correction de votre requete : {str(e)}"
+        return f"Ошибка при проверке запроса: {str(e)}"

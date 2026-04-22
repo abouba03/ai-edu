@@ -2,6 +2,8 @@ import Link from 'next/link';
 import prisma from '@/lib/prisma';
 import AdminShell from '../_components/admin-shell';
 
+export const dynamic = 'force-dynamic';
+
 export default async function AdminCoursPage() {
   const courses = await prisma.course.findMany({
     orderBy: { createdAt: 'desc' },

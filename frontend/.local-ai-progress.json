@@ -1,0 +1,32 @@
+[
+  {
+    "type": "quiz",
+    "clerkId": "local",
+    "courseSlug": "operations-et-variables-python",
+    "courseTitle": "?????????? ? ????????",
+    "score": 2,
+    "totalQuestions": 3,
+    "passed": true,
+    "createdAt": "2026-04-15T09:05:14.984Z"
+  },
+  {
+    "type": "quiz",
+    "clerkId": "local",
+    "courseSlug": "conditions-et-boucles-python",
+    "courseTitle": "Условия и Циклы",
+    "score": 0,
+    "totalQuestions": 3,
+    "passed": false,
+    "createdAt": "2026-04-15T10:31:50.690Z"
+  },
+  {
+    "type": "quiz",
+    "clerkId": "local",
+    "courseSlug": "conditions-et-boucles-python",
+    "courseTitle": "Условия и Циклы",
+    "score": 2,
+    "totalQuestions": 10,
+    "passed": false,
+    "createdAt": "2026-04-15T13:06:05.330Z"
+  }
+]

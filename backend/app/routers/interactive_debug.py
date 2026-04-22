@@ -74,7 +74,7 @@ def _append_session_history(
 
 def _build_history_context(history: list[dict[str, Any]], max_turns: int = 4) -> str:
     if not history:
-        return "Aucun échange précédent."
+        return "Предыдущих сообщений нет."
 
     selected = history[-max_turns:]
     chunks: list[str] = []
@@ -83,9 +83,9 @@ def _build_history_context(history: list[dict[str, Any]], max_turns: int = 4) ->
         student_answer = str(turn.get("student_answer") or "").strip()
         assistant_response = str(turn.get("assistant_response") or "").strip()
         chunks.append(
-            f"Étape {step}:\n"
-            f"- Réponse étudiant: {student_answer or '[vide]'}\n"
-            f"- Réponse assistant: {assistant_response or '[vide]'}"
+            f"Шаг {step}:\n"
+            f"- Ответ ученика: {student_answer or '[пусто]'}\n"
+            f"- Ответ ИИ: {assistant_response or '[пусто]'}"
         )
     return "\n\n".join(chunks)
 
@@ -96,35 +96,46 @@ async def interactive_debug(req: DebugRequest):
     if incoming_code and len(incoming_code) > MAX_DEBUG_CODE_CHARS:
         raise HTTPException(
             status_code=400,
-            detail=f"Le code est trop long. Maximum autorisé: {MAX_DEBUG_CODE_CHARS} caractères.",
+            detail=f"Код слишком длинный. Максимум: {MAX_DEBUG_CODE_CHARS} символов.",
         )
 
     incoming_level = (req.level or "").strip().lower()
+    # Accept Russian level names or map them to French equivalents
+    _level_map = {
+        "débutant": "débutant", "debutant": "débutant",
+        "intermédiaire": "intermédiaire", "intermediaire": "intermédiaire",
+        "avancé": "avancé", "avance": "avancé",
+        "начинающий": "débutant", "базовый": "débutant",
+        "средний": "intermédiaire", "продвинутый": "avancé",
+    }
+    incoming_level = _level_map.get(incoming_level, incoming_level) or "débutant"
     if incoming_level and incoming_level not in ALLOWED_LEVELS:
-        raise HTTPException(
-            status_code=400,
-            detail="Niveau invalide. Valeurs autorisées: débutant, intermédiaire, avancé.",
-        )
+        incoming_level = "débutant"
+
+    tutor_mode = bool((req.pedagogy_context or {}).get("tutorMode"))
+    course_title = str((req.pedagogy_context or {}).get("courseTitle") or "")
+    course_description = str((req.pedagogy_context or {}).get("courseDescription") or "")
 
     with SESSIONS_LOCK:
         sessions = _load_sessions()
 
         session_id = (req.session_id or "").strip() or None
         if session_id and session_id not in sessions:
-            raise HTTPException(status_code=404, detail="Session introuvable. Merci de relancer une nouvelle session.")
+            raise HTTPException(status_code=404, detail="Сессия не найдена. Запусти новую сессию.")
 
         if session_id is None:
-            if not incoming_code:
-                raise HTTPException(status_code=400, detail="Le code est vide. Merci d'ajouter du code à analyser.")
+            if not incoming_code and not tutor_mode:
+                raise HTTPException(status_code=400, detail="Код пустой. Добавь код для анализа.")
             session_id = str(uuid4())
             level_for_session = incoming_level if incoming_level else "débutant"
             sessions[session_id] = {
                 "session_id": session_id,
                 "created_at": _utc_now_iso(),
                 "updated_at": _utc_now_iso(),
-                "code": incoming_code,
+                "code": incoming_code or "# session tuteur",
                 "level": level_for_session,
                 "challenge_description": (req.challenge_description or "").strip(),
+                "tutor_mode": tutor_mode,
                 "history": [],
             }
         else:
@@ -134,88 +145,129 @@ async def interactive_debug(req: DebugRequest):
                 sessions[session_id]["level"] = incoming_level
             if (req.challenge_description or "").strip():
                 sessions[session_id]["challenge_description"] = (req.challenge_description or "").strip()
+            # honour tutor_mode flag from request or stored session
+            if tutor_mode:
+                sessions[session_id]["tutor_mode"] = True
+            tutor_mode = bool(sessions[session_id].get("tutor_mode")) or tutor_mode
 
         code = (sessions[session_id].get("code") or "").strip()
-        if not code:
-            raise HTTPException(status_code=400, detail="Le code est vide. Merci d'ajouter du code à analyser.")
+        if not code and not sessions[session_id].get("tutor_mode"):
+            raise HTTPException(status_code=400, detail="Код пустой. Добавь код для анализа.")
 
         level = (sessions[session_id].get("level") or "débutant").strip().lower()
         if level not in ALLOWED_LEVELS:
-            raise HTTPException(
-                status_code=400,
-                detail="Niveau invalide. Valeurs autorisées: débutant, intermédiaire, avancé.",
-            )
+            level = "débutant"
 
         challenge_description = (sessions[session_id].get("challenge_description") or "").strip()
         history = sessions[session_id].get("history", [])
         _save_sessions(sessions)
 
     if req.step < 0 or req.step > 50:
-        raise HTTPException(status_code=400, detail="Étape invalide. La valeur doit être entre 0 et 50.")
+        raise HTTPException(status_code=400, detail="Неверный шаг. Значение должно быть от 0 до 50.")
 
     student_answer = (req.student_answer or "").strip()
     if len(student_answer) > MAX_STUDENT_ANSWER_CHARS:
         raise HTTPException(
             status_code=400,
-            detail=f"La réponse est trop longue. Maximum autorisé: {MAX_STUDENT_ANSWER_CHARS} caractères.",
+            detail=f"Ответ слишком длинный. Максимум: {MAX_STUDENT_ANSWER_CHARS} символов.",
         )
 
     current_step = len(history)
     pedagogy_block = build_pedagogy_block(req.pedagogy_context)
     history_context = _build_history_context(history)
 
-    base_context = f"""
-{pedagogy_block}
+    code_display = (code if code and code.strip() not in ("", "# session tuteur") else "")
 
-Tu es un assistant de debug Python pour une plateforme de coding.
+    if tutor_mode:
+        # ── Tutor mode: natural Russian tutoring ──────────────────────────
+        base_context = f"""{pedagogy_block}
 
-Contexte challenge:
-{challenge_description or 'Non fourni'}
+Ты ИИ-наставник, доброжелательный тьютор для платформы изучения Python.
 
-Code étudiant actuel:
-{code}
+Курс: {course_title or "Python"}
+{("Описание: " + course_description) if course_description else ""}
+Уровень ученика: {level}
+{("Текущий код:\n```python\n" + code_display + "\n```") if code_display else "Код пока не отправлен."}
 
-Historique récent:
+История:
 {history_context}
 
-Niveau: {level}
-Étape courante: {current_step}
-
-Contraintes fortes:
-- Adapte toute la réponse au code réel et au challenge réel.
-- Interdiction de phrases génériques non liées au code actuel.
-- Interdiction de donner la solution complète.
-- Interdiction de nommer une fonction/méthode précise à utiliser (ex: capitalize, strip, split, etc.).
-- Interdiction de fournir du code ou pseudo-code.
-- Formulation orientée apprentissage: expliquer le "quoi vérifier" et "comment tester", sans donner la réponse finale.
-- Réponse très courte (4 lignes max), vocabulaire simple, actionnable, spécifique.
-- Si aucune erreur bloquante n'est détectée, le dire clairement et proposer un test utile.
-
-Format de sortie STRICT:
-Statut : Erreur détectée | Pas d'erreur bloquante
-Erreur détectée : ...
-Conseil : ...
-Prochaine action : ...
+ОБЯЗАТЕЛЬНЫЕ ПРАВИЛА (не нарушай):
+- Всегда отвечай только на русском языке (кириллица).
+- Стиль: теплый, поддерживающий, понятный.
+- Если вопрос про теорию: объясняй просто и с коротким примером.
+- Если есть код: разбирай по шагам, что делает каждая часть.
+- Если ученик запутался: объясни иначе, можно через аналогию.
+- В конце каждого ответа задай один короткий вопрос для проверки понимания.
+- Не используй формат Статус/Ошибка/Совет/Следующий шаг.
+- Длина: 3-8 предложений + 1 вопрос. Коротко и ясно.
 """
 
-    if student_answer == "":
-        prompt = f"""
-{base_context}
+        if student_answer == "":
+            prompt = f"""{base_context}
 
-Objectif de cette étape:
-- Démarrer le guidage depuis l'état actuel du code.
-- Identifier précisément le blocage principal le plus utile à corriger maintenant.
-"""
+Это начало сессии. Представься как наставник, упомяни курс "{course_title or 'Python'}" и задай вводный вопрос, чтобы понять текущий уровень ученика."""
+        else:
+            prompt = f"""{base_context}
+
+Сообщение ученика: "{student_answer}"
+
+Ответь естественно на русском языке прямо на это сообщение."""
+
     else:
-        prompt = f"""
+        # ── Debug mode: original structured format ────────────────────────
+        base_context = f"""
+{pedagogy_block}
+
+    Ты помощник по отладке Python. Пиши только на простом русском языке.
+
+    Контекст задачи:
+    {challenge_description or 'Не указан'}
+
+    Текущий код ученика:
+{code}
+
+    Недавняя история:
+{history_context}
+
+    Уровень: {level}
+    Текущий шаг: {current_step}
+
+    Правила:
+    - Ответ должен опираться на текущий код и задачу.
+    - Не пиши общие фразы без связи с кодом.
+    - Не давай полное готовое решение.
+    - Не называй конкретные функции/методы для прямого ответа.
+    - Не пиши код и псевдокод.
+    - Объясняй, что проверить и как проверить, без готового ответа.
+    - Очень коротко: максимум 4 строки, простые слова.
+    - Если критической ошибки нет, скажи это и предложи полезную проверку.
+
+    Строгий формат:
+    Статус: Ошибка найдена | Критической ошибки нет
+    Ошибка: ...
+    Совет: ...
+    Следующий шаг: ...
+"""
+
+        if student_answer == "":
+            prompt = f"""
 {base_context}
 
-Nouvelle réponse étudiant:
+Цель шага:
+- Начать разбор текущего состояния кода.
+- Найти главный блокер, который полезнее всего исправить сейчас.
+"""
+        else:
+            prompt = f"""
+{base_context}
+
+Новый ответ ученика:
 "{student_answer}"
 
-Objectif de cette étape:
-- Évaluer cette réponse dans le contexte du code et du challenge.
-- Ajuster la priorité de correction si nécessaire.
+Цель шага:
+- Оценить ответ в контексте кода и задачи.
+- При необходимости поменять приоритет исправления.
 """
 
     try:
@@ -226,13 +278,13 @@ Objectif de cette étape:
         )
         assistant_response = response.choices[0].message.content or ""
     except Exception:
-        raise HTTPException(status_code=503, detail="Service de debug IA temporairement indisponible.")
+        raise HTTPException(status_code=503, detail="Сервис ИИ-отладки временно недоступен.")
 
     try:
         with SESSIONS_LOCK:
             sessions = _load_sessions()
             if session_id not in sessions:
-                raise HTTPException(status_code=404, detail="Session expirée. Merci de redémarrer une session.")
+                raise HTTPException(status_code=404, detail="Сессия истекла. Перезапусти новую сессию.")
             _append_session_history(
                 sessions=sessions,
                 session_id=session_id,
@@ -255,4 +307,4 @@ Objectif de cette étape:
     except HTTPException:
         raise
     except Exception:
-        raise HTTPException(status_code=500, detail="Erreur interne lors de l'analyse interactive.")
+        raise HTTPException(status_code=500, detail="Внутренняя ошибка при интерактивном разборе.")

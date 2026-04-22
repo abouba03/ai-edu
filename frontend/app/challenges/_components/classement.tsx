@@ -39,14 +39,14 @@ export default function Classement() {
   return (
     <section className="border-2 border-[#1C293C] bg-[#FBFBF9] p-4 shadow-[5px_5px_0px_0px_#1C293C] space-y-3">
       <div>
-        <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7]">Classement</p>
-        <h2 className="text-xl font-black text-[#1C293C] mt-0.5">Top 30 jours</h2>
+        <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7]">Рейтинг</p>
+        <h2 className="text-xl font-black text-[#1C293C] mt-0.5">Топ за 30 дней</h2>
       </div>
 
       {loading ? (
-        <p className="text-sm font-semibold text-[#1C293C]/50">Chargement...</p>
+        <p className="text-sm font-semibold text-[#1C293C]/50">Загрузка...</p>
       ) : rows.length === 0 ? (
-        <p className="text-sm font-semibold text-[#1C293C]/50">Pas encore de classement.</p>
+        <p className="text-sm font-semibold text-[#1C293C]/50">Рейтинг пока недоступен.</p>
       ) : (
         <div className="space-y-1.5 max-h-72 overflow-auto pr-1">
           {rows.slice(0, 8).map((row, index) => (

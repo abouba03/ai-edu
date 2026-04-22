@@ -6,8 +6,8 @@ import { BarChart3, Brain, Sparkles, Target, Zap, TrendingUp, CheckCircle2, Mous
 
 const cards = [
   {
-    title: 'Génération assistée',
-    description: "Produire du code Python à partir d'un besoin.",
+    title: 'Генерация с ИИ',
+    description: 'Создание Python-кода из описания задачи.',
     href: '/generator',
     icon: Sparkles,
     bg: 'bg-[#FDC800]',
@@ -17,8 +17,8 @@ const cards = [
     border: 'border-[#1C293C]',
   },
   {
-    title: 'Debug interactif',
-    description: 'Comprendre les erreurs pas à pas avec guidance IA.',
+    title: 'Интерактивная отладка',
+    description: 'Понимание ошибок шаг за шагом с поддержкой ИИ.',
     href: '/debugger',
     icon: Brain,
     bg: 'bg-[#432DD7]',
@@ -28,8 +28,8 @@ const cards = [
     border: 'border-[#1C293C]',
   },
   {
-    title: 'Évaluation active',
-    description: 'Mesurer la progression via quiz intelligents.',
+    title: 'Активная оценка',
+    description: 'Измерение прогресса с помощью умных тестов.',
     href: '/challenges',
     icon: Target,
     bg: 'bg-white',
@@ -54,7 +54,7 @@ type MiniChallengeKpis = {
     resolveUsageRate: number | null;
   };
   topTabs?: Array<{ tab: string; opens: number; avgDurationSec: number }>;
-  exerciseInsights?: Array<{
+  exerciseАнализs?: Array<{
     exerciseId: string;
     views: number;
     completes: number;
@@ -71,7 +71,7 @@ type LearnerProgression = {
 
 const STATS = (summary: MiniChallengeKpis['summary'], avgProgress: number | undefined, loading: boolean) => [
   {
-    label: 'Challenges lancés',
+    label: 'Запущено заданий',
     value: loading ? '···' : String(summary?.started ?? 0),
     icon: Zap,
     accent: 'bg-[#432DD7]',
@@ -79,7 +79,7 @@ const STATS = (summary: MiniChallengeKpis['summary'], avgProgress: number | unde
     labelColor: 'text-white/70',
   },
   {
-    label: 'Taux de complétion',
+    label: 'Процент завершения',
     value: loading ? '···' : `${summary?.completionRate ?? 0}%`,
     icon: CheckCircle2,
     accent: 'bg-[#FDC800]',
@@ -87,7 +87,7 @@ const STATS = (summary: MiniChallengeKpis['summary'], avgProgress: number | unde
     labelColor: 'text-[#1C293C]/70',
   },
   {
-    label: 'Usage de Résoudre',
+    label: 'Использование «Решить»',
     value: loading ? '···' : `${summary?.resolveUsageRate ?? 0}%`,
     icon: MousePointerClick,
     accent: 'bg-white',
@@ -95,7 +95,7 @@ const STATS = (summary: MiniChallengeKpis['summary'], avgProgress: number | unde
     labelColor: 'text-[#1C293C]/60',
   },
   {
-    label: 'Progression cours',
+    label: 'Прогресс по курсам',
     value: loading ? '···' : `${avgProgress ?? 0}%`,
     icon: TrendingUp,
     accent: 'bg-white',
@@ -142,7 +142,7 @@ export default function DashboardPage() {
   );
 
   const summary = kpis?.summary;
-  const topExercise = kpis?.exerciseInsights?.[0];
+  const topExercise = kpis?.exerciseАнализs?.[0];
   const stats = STATS(summary, progression?.metrics?.avgProgress, loading);
 
   return (
@@ -153,13 +153,13 @@ export default function DashboardPage() {
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
           <div className="max-w-2xl">
             <p className="text-[11px] uppercase tracking-widest font-black text-[#432DD7]">
-              Dashboard pédagogique
+              Учебный дашборд
             </p>
             <h1 className="text-3xl lg:text-4xl font-black text-[#1C293C] mt-1 leading-tight">
-              Vue d&apos;ensemble<br className="hidden sm:block" /> de la plateforme
+              Общий обзор<br className="hidden sm:block" /> платформы
             </h1>
             <p className="text-[#1C293C]/60 mt-3 text-sm font-medium leading-relaxed">
-              Ton espace central pour piloter la génération, la correction et le suivi des apprentissages.
+              Твой центральный раздел для управления генерацией, исправлением и отслеживанием прогресса.
             </p>
           </div>
           <Link
@@ -167,7 +167,7 @@ export default function DashboardPage() {
             className="self-start lg:self-auto inline-flex items-center gap-2 border-2 border-[#1C293C] bg-[#FDC800] px-5 py-3 text-sm font-black text-[#1C293C] shadow-[5px_5px_0px_0px_#1C293C] hover:shadow-none hover:translate-x-[5px] hover:translate-y-[5px] transition-all duration-100 whitespace-nowrap"
           >
             <BarChart3 className="h-4 w-4" />
-            Cockpit IA apprenant
+            ИИ-аналитика обучения
           </Link>
         </div>
       </section>
@@ -198,11 +198,11 @@ export default function DashboardPage() {
       {/* ── INSIGHTS ── */}
       <section className="grid grid-cols-1 lg:grid-cols-2 gap-4">
 
-        {/* Insight principal */}
+        {/* Анализ principal */}
         <article className="border-2 border-[#1C293C] bg-white shadow-[4px_4px_0px_0px_#1C293C] p-5 space-y-4">
           <div>
-            <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7]">Insight</p>
-            <h2 className="text-lg font-black text-[#1C293C] mt-0.5">Recommandation IA</h2>
+            <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7]">Анализ</p>
+            <h2 className="text-lg font-black text-[#1C293C] mt-0.5">Рекомендация ИИ</h2>
           </div>
           <p className="text-sm font-medium text-[#1C293C]/70 leading-relaxed">
             {topRecommendation}
@@ -210,28 +210,28 @@ export default function DashboardPage() {
           {topExercise ? (
             <div className="border-2 border-[#1C293C] bg-[#FDC800] p-3">
               <p className="text-[10px] uppercase tracking-widest font-black text-[#1C293C]/70 mb-1">
-                Exercice le plus fréquent
+                Самое частое упражнение
               </p>
               <p className="text-sm font-black text-[#1C293C]">{topExercise.exerciseId}</p>
               <div className="flex gap-4 mt-1.5 text-[11px] font-semibold text-[#1C293C]/70">
                 <span>Conversion {topExercise.conversionRate}%</span>
-                <span>Meilleur : {topExercise.bestTests}</span>
+                <span>Лучший: {topExercise.bestTests}</span>
               </div>
             </div>
           ) : (
-            <p className="text-sm font-medium text-[#1C293C]/40">Aucun exercice récent détecté.</p>
+            <p className="text-sm font-medium text-[#1C293C]/40">Последние упражнения не найдены.</p>
           )}
         </article>
 
-        {/* Tabs les plus utilisées */}
+        {/* Самые используемые вкладки */}
         <article className="border-2 border-[#1C293C] bg-white shadow-[4px_4px_0px_0px_#1C293C] p-5 space-y-4">
           <div>
-            <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7]">Analytique</p>
-            <h2 className="text-lg font-black text-[#1C293C] mt-0.5">Tabs les plus utilisées</h2>
+            <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7]">Аналитика</p>
+            <h2 className="text-lg font-black text-[#1C293C] mt-0.5">Самые используемые вкладки</h2>
           </div>
           {(kpis?.topTabs?.length ?? 0) === 0 ? (
             <p className="text-sm font-medium text-[#1C293C]/40">
-              Pas assez de données pour afficher les habitudes de navigation.
+              Недостаточно данных для отображения навигационных привычек.
             </p>
           ) : (
             <ul className="space-y-2">
@@ -243,7 +243,7 @@ export default function DashboardPage() {
                 >
                   <span className="font-black text-[#1C293C] truncate">{item.tab}</span>
                   <span className="text-[11px] font-semibold text-[#1C293C]/60 shrink-0">
-                    {item.opens} ouv. · {item.avgDurationSec}s
+                    {item.opens} откр. · {item.avgDurationSec}с
                   </span>
                 </li>
               ))}
@@ -255,7 +255,7 @@ export default function DashboardPage() {
       {/* ── QUICK ACCESS ── */}
       <section>
         <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7] mb-3">
-          Accès rapide
+          Быстрый доступ
         </p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {cards.map((item) => {
@@ -287,8 +287,8 @@ export default function DashboardPage() {
           <BarChart3 className="h-4 w-4 text-white" />
         </div>
         <p className="text-sm font-medium text-[#1C293C]/70 leading-relaxed">
-          <span className="font-black text-[#1C293C]">Conseil : </span>
-          tes signaux d&apos;apprentissage sont disponibles via les endpoints analytics pour faire évoluer les prompts, défis et feedbacks de manière continue.
+          <span className="font-black text-[#1C293C]">Совет: </span>
+          твои обучающие сигналы доступны через аналитические эндпоинты для непрерывного улучшения промптов, заданий и обратной связи.
         </p>
       </section>
 

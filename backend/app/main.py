@@ -75,17 +75,17 @@ MAX_PROMPT_CHARS = 4000
 
 @app.get("/")
 async def root():
-    return {"message": "API opérationnelle avec FastAPI et OpenAI"}
+    return {"message": "API работает с FastAPI и OpenAI"}
 
 @app.post("/generate/")
 async def generate(data: CodePrompt):
     prompt = (data.prompt or "").strip()
     if not prompt:
-        raise HTTPException(status_code=400, detail="Le prompt est vide. Merci de décrire le besoin en code.")
+        raise HTTPException(status_code=400, detail="Промпт пустой. Опишите задачу для генерации кода.")
     if len(prompt) > MAX_PROMPT_CHARS:
         raise HTTPException(
             status_code=400,
-            detail=f"Le prompt est trop long. Maximum autorisé: {MAX_PROMPT_CHARS} caractères."
+            detail=f"Промпт слишком длинный. Максимум: {MAX_PROMPT_CHARS} символов."
         )
 
     try:
@@ -96,7 +96,7 @@ async def generate(data: CodePrompt):
     except Exception:
         raise HTTPException(
             status_code=502,
-            detail="Le service IA est temporairement indisponible. Vérifiez la clé API OpenAI et réessayez."
+            detail="Сервис ИИ временно недоступен. Проверьте ключ OpenAI и попробуйте снова."
         )
 
 async def generate_code(prompt: str, pedagogy_context: dict[str, Any] | None = None) -> str:
@@ -107,13 +107,13 @@ async def generate_code(prompt: str, pedagogy_context: dict[str, Any] | None = N
             {
                 "role": "system",
                 "content": (
-                    "Vous êtes un assistant expert en programmation Python. "
-                    "Rendez une réponse strictement JSON valide au format: "
+                    "Ты эксперт по Python и отвечаешь только на простом русском языке. "
+                    "Верни строго валидный JSON в формате: "
                     "{\"code\": string, \"explanation\": string, \"safety_checks\": string[]}. "
-                    "N'inventez pas de bibliothèques ou API inexistantes."
+                    "Не выдумывай несуществующие библиотеки и API."
                 ),
             },
-            {"role": "user", "content": f"{pedagogy_block}\nDemande utilisateur:\n{prompt}"}
+            {"role": "user", "content": f"{pedagogy_block}\nЗапрос пользователя:\n{prompt}"}
         ],
         temperature=0.5,
         max_tokens=500
@@ -132,11 +132,11 @@ async def generate_code(prompt: str, pedagogy_context: dict[str, Any] | None = N
 async def correct(data: CodeCorrection):
     code = (data.code or "").strip()
     if not code:
-        raise HTTPException(status_code=400, detail="Le code est vide. Merci d'ajouter du code à corriger.")
+        raise HTTPException(status_code=400, detail="Код пустой. Добавьте код для проверки.")
     if len(code) > settings.EXECUTION_MAX_CODE_CHARS:
         raise HTTPException(
             status_code=400,
-            detail=f"Le code est trop long. Maximum autorisé: {settings.EXECUTION_MAX_CODE_CHARS} caractères."
+            detail=f"Код слишком длинный. Максимум: {settings.EXECUTION_MAX_CODE_CHARS} символов."
         )
 
     try:
@@ -170,7 +170,7 @@ async def correct(data: CodeCorrection):
     except HTTPException:
         raise
     except Exception:
-        raise HTTPException(status_code=500, detail="Erreur interne lors de la correction du code.")
+        raise HTTPException(status_code=500, detail="Внутренняя ошибка при проверке кода.")
 
 
 def _extract_correction_payload(raw: str) -> dict[str, str]:
@@ -200,12 +200,12 @@ def _extract_correction_payload(raw: str) -> dict[str, str]:
 async def resolve_challenge(data: ResolveChallengeRequest):
     code = (data.code or "").strip()
     if not code:
-        raise HTTPException(status_code=400, detail="Le code est vide. Merci d'ajouter du code à corriger.")
+        raise HTTPException(status_code=400, detail="Код пустой. Добавьте код для проверки.")
 
     if len(code) > settings.EXECUTION_MAX_CODE_CHARS:
         raise HTTPException(
             status_code=400,
-            detail=f"Le code est trop long. Maximum autorisé: {settings.EXECUTION_MAX_CODE_CHARS} caractères."
+            detail=f"Код слишком длинный. Максимум: {settings.EXECUTION_MAX_CODE_CHARS} символов."
         )
 
     iterations = data.max_iterations if 1 <= data.max_iterations <= 5 else 3
@@ -301,7 +301,7 @@ async def execute_code(request: CodeRequest):
     if len(request.code) > settings.EXECUTION_MAX_CODE_CHARS:
         raise HTTPException(
             status_code=400,
-            detail=f"Code trop long. Maximum autorisé: {settings.EXECUTION_MAX_CODE_CHARS} caractères."
+            detail=f"Код слишком длинный. Максимум: {settings.EXECUTION_MAX_CODE_CHARS} символов."
         )
 
     run_code_path = Path(__file__).resolve().parents[1] / "run_code.py"
@@ -316,7 +316,7 @@ async def execute_code(request: CodeRequest):
             raise HTTPException(
                 status_code=500,
                 detail=(
-                    "EXECUTION_MODE invalide. Utilisez 'local' ou 'docker'."
+                    "Некорректный EXECUTION_MODE. Используй 'local' или 'docker'."
                 )
             )
 
@@ -333,15 +333,15 @@ async def execute_code(request: CodeRequest):
     except subprocess.TimeoutExpired:
         raise HTTPException(
             status_code=408,
-            detail=f"Temps d'exécution dépassé ({settings.EXECUTION_TIMEOUT_SECONDS}s)."
+            detail=f"Превышено время выполнения ({settings.EXECUTION_TIMEOUT_SECONDS}с)."
         )
     except FileNotFoundError:
         if mode == "docker":
             raise HTTPException(
                 status_code=500,
-                detail="Docker introuvable. Passez EXECUTION_MODE=local ou installez Docker."
+                detail="Docker не найден. Используй EXECUTION_MODE=local или установи Docker."
             )
-        raise HTTPException(status_code=500, detail="Exécutable Python introuvable.")
+        raise HTTPException(status_code=500, detail="Исполняемый файл Python не найден.")
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -350,12 +350,12 @@ async def execute_code(request: CodeRequest):
 async def execute_console_code(request: ConsoleExecutionRequest):
     code = (request.code or "").strip()
     if not code:
-        raise HTTPException(status_code=400, detail="Le code est vide. Merci d'ajouter du code à exécuter.")
+        raise HTTPException(status_code=400, detail="Код пустой. Добавьте код для запуска.")
 
     if len(code) > settings.EXECUTION_MAX_CODE_CHARS:
         raise HTTPException(
             status_code=400,
-            detail=f"Code trop long. Maximum autorisé: {settings.EXECUTION_MAX_CODE_CHARS} caractères."
+            detail=f"Код слишком длинный. Максимум: {settings.EXECUTION_MAX_CODE_CHARS} символов."
         )
 
     stdin_lines = request.stdin_lines if isinstance(request.stdin_lines, list) else []
@@ -367,7 +367,7 @@ async def execute_console_code(request: ConsoleExecutionRequest):
         try:
             return next(iterator)
         except StopIteration:
-            raise RuntimeError("Entrées insuffisantes pour input(). Ajoute plus de lignes dans Console > Entrées.")
+            raise RuntimeError("Недостаточно данных для input(). Добавь больше строк во входные данные консоли.")
 
     namespace: dict[str, Any] = {"__builtins__": __builtins__, "input": fake_input}
     output_buffer = io.StringIO()

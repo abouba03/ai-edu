@@ -1,75 +1,125 @@
 import Link from 'next/link';
-import { Brain, Code2, Bug, Trophy, ArrowRight } from 'lucide-react';
+import {
+  ArrowRight,
+  BookOpen,
+  Calendar,
+  GraduationCap,
+  ShieldCheck,
+  UserRound,
+  CheckCircle2,
+  LayoutPanelTop,
+} from 'lucide-react';
 
-const modules = [
-  {
-    title: 'Générateur IA',
-    description: 'Transforme un besoin en code Python structuré.',
-    href: '/generator',
-    icon: Code2,
-  },
-  {
-    title: 'Débogueur interactif',
-    description: 'Analyse guidée avec feedback progressif.',
-    href: '/debugger',
-    icon: Bug,
-  },
-  {
-    title: 'Quiz IA',
-    description: 'Évaluation progressive avec feedback immédiat.',
-    href: '/challenges',
-    icon: Trophy,
-  },
-];
+const vkrMeta = {
+  author: 'Kaba Aboubacar',
+  university: 'Университет',
+  year: '2025-2026',
+  supervisor: 'Моругин С.Л.',
+  program: 'Технологии проектирования информационных систем и технологий',
+  topic: 'Интеллектуальная платформа обучения Python с применением ИИ',
+};
 
 export default function Home() {
+  const contributions = [
+    'Педагогическая персонализация на основе данных обучения.',
+    'Унифицированный конвейер ИИ: генерация, оценка, коррекция и мотивация.',
+    'Практико-ориентированный интерфейс с измеряемым прогрессом и немедленной обратной связью.',
+  ];
+
+  const demoFlow = [
+    { label: 'Курсы', href: '/courses', note: 'Структурированное обучение по модулям' },
+    { label: 'Генератор ИИ', href: '/generator', note: 'Адаптивное создание тестов и упражнений' },
+    { label: 'Вызовы', href: '/challenges', note: 'Проверка навыков в реальных условиях' },
+    { label: 'Корректор', href: '/corrector', note: 'Подробная педагогическая обратная связь' },
+  ];
+
   return (
-    <div className="space-y-8">
-      <section className="rounded-2xl border bg-card p-6 lg:p-8">
-        <div className="flex items-start justify-between gap-4 flex-wrap">
-          <div className="space-y-3 max-w-3xl">
-            <p className="text-sm text-primary font-semibold">Plateforme Master — AI Edu Platform</p>
-            <h1 className="text-3xl lg:text-4xl font-bold leading-tight">
-              Un tuteur IA moderne pour apprendre Python avec confiance.
-            </h1>
-            <p className="text-muted-foreground text-base lg:text-lg">
-              Génération, correction, débogage guidé et quiz interactifs dans une expérience unifiée.
-            </p>
-            <div className="flex gap-3 flex-wrap pt-2">
-              <Link href="/generator" className="inline-flex items-center gap-2 rounded-lg bg-primary text-primary-foreground px-4 py-2 text-sm font-medium hover:bg-primary/90 transition-colors">
-                Commencer maintenant <ArrowRight className="h-4 w-4" />
-              </Link>
-              <Link href="/dashboard" className="inline-flex items-center gap-2 rounded-lg border bg-background px-4 py-2 text-sm font-medium hover:bg-accent transition-colors">
-                Ouvrir le dashboard
-              </Link>
-              <Link href="/admin/formation" className="inline-flex items-center gap-2 rounded-lg border bg-background px-4 py-2 text-sm font-medium hover:bg-accent transition-colors">
-                Panel Admin
-              </Link>
-            </div>
-          </div>
-          <div className="size-16 rounded-2xl bg-primary/10 text-primary grid place-items-center">
-            <Brain className="h-8 w-8" />
-          </div>
+    <div className="space-y-3">
+      <section className="border-2 border-[#1C293C] bg-[linear-gradient(120deg,#FBFBF9_0%,#F5F8FF_100%)] p-4 shadow-[4px_4px_0px_0px_#1C293C]">
+        <div className="space-y-2.5">
+          <p className="inline-flex items-center gap-1.5 border border-[#432DD7] bg-white px-2 py-1 text-[10px] uppercase tracking-widest font-black text-[#432DD7]">
+            <LayoutPanelTop className="h-3 w-3" /> Презентация ВКР
+          </p>
+          <h1 className="text-2xl lg:text-[2rem] font-black text-[#1C293C] leading-tight">
+            {vkrMeta.topic}
+          </h1>
+          <p className="text-sm text-[#1C293C]/65 font-medium max-w-4xl">
+            Этот магистерский проект предлагает платформу EdTech на базе искусственного интеллекта,
+            предназначенную для повышения вовлеченности учащихся в изучение Python через полный цикл:
+            обучение, оценка, коррекция и отслеживание прогресса.
+          </p>
         </div>
       </section>
 
-      <section className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {modules.map((module) => {
-          const Icon = module.icon;
-          return (
-            <Link
-              key={module.href}
-              href={module.href}
-              className="rounded-2xl border bg-card p-5 space-y-3 hover:bg-accent/40 transition-colors"
-            >
-              <div className="size-10 rounded-lg bg-primary/10 text-primary grid place-items-center">
-                <Icon className="h-5 w-5" />
+      <section className="grid grid-cols-1 lg:grid-cols-12 gap-3 items-start">
+        <article className="lg:col-span-4 border-2 border-[#1C293C] bg-white p-3 shadow-[3px_3px_0px_0px_#1C293C] space-y-2.5">
+          <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7]">Академическая информация</p>
+          <div className="space-y-1.5">
+            <div className="flex items-center gap-2 border border-[#1C293C]/20 bg-[#FBFBF9] px-2.5 py-1.5 text-xs font-semibold text-[#1C293C]">
+              <UserRound className="h-3.5 w-3.5 text-[#432DD7]" /> Автор: {vkrMeta.author}
+            </div>
+            <div className="flex items-center gap-2 border border-[#1C293C]/20 bg-[#FBFBF9] px-2.5 py-1.5 text-xs font-semibold text-[#1C293C]">
+              <Calendar className="h-3.5 w-3.5 text-[#432DD7]" /> Год: {vkrMeta.year}
+            </div>
+            <div className="flex items-center gap-2 border border-[#1C293C]/20 bg-[#FBFBF9] px-2.5 py-1.5 text-xs font-semibold text-[#1C293C]">
+              <ShieldCheck className="h-3.5 w-3.5 text-[#432DD7]" /> Руководитель: {vkrMeta.supervisor}
+            </div>
+            <div className="flex items-center gap-2 border border-[#1C293C]/20 bg-[#FBFBF9] px-2.5 py-1.5 text-xs font-semibold text-[#1C293C]">
+              <BookOpen className="h-3.5 w-3.5 text-[#432DD7]" /> Программа: {vkrMeta.program}
+            </div>
+          </div>
+        </article>
+
+        <article className="lg:col-span-5 border-2 border-[#1C293C] bg-white p-3 shadow-[3px_3px_0px_0px_#1C293C] space-y-2.5">
+          <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7]">Резюме работы</p>
+          <p className="text-xs font-medium text-[#1C293C]/75 leading-relaxed">
+            Работа рассматривает следующий вопрос: как создать среду обучения Python, которая остается простой
+            для студента, но при этом педагогически грамотна. Выбранный подход сочетает педагогическую организацию,
+            адаптацию по уровню и непрерывную обратную связь ИИ.
+          </p>
+
+          <div className="space-y-1.5">
+            {contributions.map((item) => (
+              <div
+                key={item}
+                className="flex items-start gap-2 border border-[#1C293C]/20 bg-[#FBFBF9] px-2.5 py-2 text-[11px] font-medium text-[#1C293C]/80"
+              >
+                <CheckCircle2 className="h-3.5 w-3.5 text-[#432DD7] shrink-0 mt-0.5" />
+                <span>{item}</span>
               </div>
-              <h2 className="font-semibold text-lg">{module.title}</h2>
-              <p className="text-sm text-muted-foreground">{module.description}</p>
+            ))}
+          </div>
+        </article>
+      </section>
+
+      <section className="border-2 border-[#1C293C] bg-white p-3 shadow-[3px_3px_0px_0px_#1C293C] space-y-2.5">
+        <div className="flex items-center justify-between gap-2 flex-wrap">
+          <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7]">Демонстрационный путь</p>
+          <span className="border border-[#1C293C]/25 bg-[#FBFBF9] px-2 py-1 text-[10px] font-bold text-[#1C293C]/70">
+            Демо: 4 модуля
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-2">
+          {demoFlow.map((section) => (
+            <Link
+              key={section.href}
+              href={section.href}
+              className="border-2 border-[#1C293C] bg-[#FBFBF9] px-3 py-2 shadow-[2px_2px_0px_0px_#1C293C] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-100"
+            >
+              <div className="flex items-center justify-between gap-2">
+                <p className="text-sm font-black text-[#1C293C]">{section.label}</p>
+                <ArrowRight className="h-3.5 w-3.5 text-[#432DD7]" />
+              </div>
+              <p className="mt-1 text-[11px] text-[#1C293C]/60 font-medium">{section.note}</p>
             </Link>
-          );
-        })}
+          ))}
+        </div>
+
+        <div className="border border-[#1C293C]/20 bg-[#FBFBF9] px-3 py-2 text-xs font-medium text-[#1C293C]/70">
+          Эта страница служит введением к защите: контекст работы, научное позиционирование,
+          техническая демонстрация и прямая навигация к функциональным компонентам платформы.
+        </div>
       </section>
     </div>
   );

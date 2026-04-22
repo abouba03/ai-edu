@@ -920,5 +920,406 @@
         "timestamp": "2026-03-12T11:38:58.973731+00:00"
       }
     ]
+  },
+  "02ddee83-23da-43f8-858d-f4fa6f32097d": {
+    "session_id": "02ddee83-23da-43f8-858d-f4fa6f32097d",
+    "created_at": "2026-04-13T11:47:05.528726+00:00",
+    "updated_at": "2026-04-13T11:47:10.910809+00:00",
+    "code": "def calculate_operations(a, b):\n    # Ваш код здесь\n    return",
+    "level": "débutant",
+    "challenge_description": "Énoncé: Напишите функцию, которая вычисляет сумму, разность, произведение и частное двух чисел. Ваша функция должна возвращать эти четыре значения в виде кортежа.\nContraintes:\n- Функция должна принимать только два параметра.\n- Результат должен быть возвращен в виде кортежа (tuple) с четырьмя элементами: (сумма, разность, произведение, частное).\n- Частное должно быть вычислено как деление первого числа на второе; в случае деления на ноль, функция должна возвращать 'undefined' вместо четвертого значения в кортеже.\nHints:\n- Используйте операторы +, -, * и / для вычисления суммы, разности, произведения и частного соответственно.\n- Чтобы вернуть несколько значений, поместите их в круглые скобки, разделенные запятыми, например, (value1, value2, ...).\nExemple: Если функция вызывается с параметрами (6, 3), она должна вернуть (9, 3, 18, 2.0).",
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Statut : Erreur détectée\nErreur détectée : La fonction est incomplète et ne retourne aucune valeur.\nConseil : Commencez par ajouter les opérations arithmétiques de base pour calculer la somme, la différence et le produit des paramètres a et b.\nProchaine action : Ajoutez des calculs pour la somme, la différence et le produit dans votre fonction et observez les résultats.",
+        "timestamp": "2026-04-13T11:47:10.910786+00:00"
+      }
+    ]
+  },
+  "f216ce48-fad6-4d88-a5b4-cc156983edaf": {
+    "session_id": "f216ce48-fad6-4d88-a5b4-cc156983edaf",
+    "created_at": "2026-04-14T10:27:06.641329+00:00",
+    "updated_at": "2026-04-14T10:31:38.996427+00:00",
+    "code": "# Exemple 2: Utilisation d'une boucle for pour itérer sur une liste\nnombres = [1, 2, 3, 4, 5]\nfor nombre in nombres:\n    print(nombre)",
+    "level": "débutant",
+    "challenge_description": "",
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "Разбери этот код:\n```python\n# Exemple 2: Utilisation d'une boucle for pour itérer sur une liste\nnombres = [1, 2, 3, 4, 5]\nfor nombre in nombres:\n    print(nombre)\n```",
+        "assistant_response": "Statut : Pas d'erreur bloquante\nErreur détectée : Aucune\nConseil : Assurez-vous de comprendre comment chaque élément de la liste est traité individuellement dans la boucle.\nProchaine action : Essayez d'ajouter un autre type de données dans la liste, comme une chaîne de caractères ou un nombre flottant, pour voir comment la boucle gère différents types de données.",
+        "timestamp": "2026-04-14T10:27:13.764930+00:00"
+      },
+      {
+        "step": 1,
+        "student_answer": "je comprend pas comment je peux regler ca",
+        "assistant_response": "Statut : Pas d'erreur bloquante\nErreur détectée : Aucune\nConseil : Il est important de comprendre comment la boucle `for` parcourt chaque élément de la liste `nombres` et exécute le bloc de code à l'intérieur de la boucle pour chaque élément.\nProchaine action : Pour mieux comprendre, vous pourriez modifier le message dans la fonction `print` pour inclure une phrase qui montre clairement quel nombre est en train d'être imprimé à chaque itération.",
+        "timestamp": "2026-04-14T10:29:23.136873+00:00"
+      },
+      {
+        "step": 2,
+        "student_answer": "donne moi les meilleure consiller de comment resoudre ce genre de task",
+        "assistant_response": "Statut : Pas d'erreur bloquante\nErreur détectée : Aucune\nConseil : Pour comprendre comment la boucle `for` interagit avec différents types de données, observez comment chaque élément est traité lorsqu'il passe par la boucle.\nProchaine action : Ajoutez différentes sortes de données (comme un texte ou un nombre décimal) à votre liste et observez les résultats affichés pour chaque type. Cela vous aidera à voir comment Python gère ces variations dans une boucle.",
+        "timestamp": "2026-04-14T10:30:36.277033+00:00"
+      },
+      {
+        "step": 3,
+        "student_answer": "dit moi quel est le but de cettte dialogue",
+        "assistant_response": "Statut : Pas d'erreur bloquante\nErreur détectée : Aucune\nConseil : Le but de cette interaction est de vous aider à comprendre comment fonctionne une boucle `for` en Python et comment elle traite différents types de données dans une liste.\nProchaine action : Essayez d'ajouter un élément de type différent, comme un texte ou un nombre décimal, à la liste `nombres` et observez comment le comportement de la boucle `for` change avec cet ajout.",
+        "timestamp": "2026-04-14T10:31:38.996399+00:00"
+      }
+    ]
+  },
+  "a26cd5c2-43dc-4810-b8e7-1705736a8ba0": {
+    "session_id": "a26cd5c2-43dc-4810-b8e7-1705736a8ba0",
+    "created_at": "2026-04-14T10:56:01.880238+00:00",
+    "updated_at": "2026-04-14T10:59:31.391192+00:00",
+    "code": "# Напиши свой Python-код здесь",
+    "level": "débutant",
+    "challenge_description": "",
+    "tutor_mode": true,
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "Я не понял",
+        "assistant_response": "Здравствуйте! Не волнуйтесь, я здесь, чтобы помочь вам. Давайте начнем с основ. В Python, условные операторы if и else используются для выполнения различных действий в зависимости от того, верно ли условие или нет. Например, если мы хотим проверить, больше ли число 5, чем число 3, мы можем написать:\n\n```python\nif 5 > 3:\n    print(\"5 больше 3\")\nelse:\n    print(\"5 не больше 3\")\n```\n\nВ этом примере, поскольку 5 действительно больше 3, программа выведет \"5 больше 3\". Какие еще вопросы у вас есть по этой теме или есть ли что-то конкретное, что вызывает затруднения?",
+        "timestamp": "2026-04-14T10:56:37.113735+00:00"
+      },
+      {
+        "step": 1,
+        "student_answer": "Объясни подробнее",
+        "assistant_response": "Конечно, давайте разберем подробнее! Условные операторы `if` и `else` в Python позволяют вашей программе выполнять различные действия в зависимости от того, истинно ли условие или нет. Например, вы можете проверить, является ли число четным или нечетным:\n\n```python\nчисло = 4\nif число % 2 == 0:\n    print(\"Число четное\")\nelse:\n    print(\"Число нечетное\")\n```\n\nВ этом коде `%` - это оператор модуля, который возвращает остаток от деления `число` на 2. Если остаток равен 0, это значит, что число четное, и выполняется код в блоке `if`. Если остаток не равен 0, выполняется код в блоке `else`. Это базовый пример того, как можно использовать условные операторы для ветвления логики программы.\n\nКак вам такой пример, все ли понятно?",
+        "timestamp": "2026-04-14T10:58:04.087786+00:00"
+      },
+      {
+        "step": 2,
+        "student_answer": "Дай мне задание",
+        "assistant_response": "Замечательно, что вы готовы к практике! Давайте проверим ваше понимание условных операторов. Вот ваше задание:\n\nНапишите программу на Python, которая проверяет, является ли число, введенное пользователем, положительным, отрицательным или равным нулю. Вот примерный алгоритм программы:\n\n1. Запросите у пользователя ввести число.\n2. Используйте условный оператор `if` для проверки, больше ли число нуля. Если да, выведите сообщение, что число положительное.\n3. Используйте `elif` для проверки, меньше ли число нуля. Если да, выведите сообщение, что число отрицательное.\n4. Используйте `else` для вывода сообщения, что число равно нулю.\n\nПопробуйте написать код, и я помогу вам, если возникнут вопросы. Какие у вас есть идеи по реализации этого задания?",
+        "timestamp": "2026-04-14T10:59:31.391168+00:00"
+      }
+    ]
+  },
+  "62dd698f-d58a-4c02-be30-a5a9f8236ed1": {
+    "session_id": "62dd698f-d58a-4c02-be30-a5a9f8236ed1",
+    "created_at": "2026-04-15T07:38:27.515891+00:00",
+    "updated_at": "2026-04-15T07:38:27.515939+00:00",
+    "code": "# session tuteur",
+    "level": "débutant",
+    "challenge_description": "",
+    "tutor_mode": true,
+    "history": []
+  },
+  "758cf82a-720e-4e6f-89e6-a36bc07fe99d": {
+    "session_id": "758cf82a-720e-4e6f-89e6-a36bc07fe99d",
+    "created_at": "2026-04-15T07:40:54.046209+00:00",
+    "updated_at": "2026-04-15T07:40:54.046232+00:00",
+    "code": "# session tuteur",
+    "level": "débutant",
+    "challenge_description": "",
+    "tutor_mode": true,
+    "history": []
+  },
+  "88fc9eb8-c8d4-40fb-9323-a94adbc3421b": {
+    "session_id": "88fc9eb8-c8d4-40fb-9323-a94adbc3421b",
+    "created_at": "2026-04-15T07:49:46.161392+00:00",
+    "updated_at": "2026-04-15T07:49:55.000224+00:00",
+    "code": "# session tuteur",
+    "level": "débutant",
+    "challenge_description": "",
+    "tutor_mode": true,
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Здравствуйте! Я ваш ИИ-Наставник, и я здесь, чтобы помочь вам научиться основам программирования на Python. Сегодня мы начнем с курса \"Переменные и Операции\", где вы узнаете, как работать с числами, текстом и переменными. Это будет основа вашего кода, и я уверен, что вы быстро освоите эти знания!\n\nДля начала, давайте я узнаю немного о вашем текущем уровне. Какие языки программирования вы уже изучали, если таковые имеются? Или это ваш первый опыт программирования?",
+        "timestamp": "2026-04-15T07:49:55.000199+00:00"
+      }
+    ]
+  },
+  "1fc9f5a1-f51e-4545-b0a2-7f6d7d45987e": {
+    "session_id": "1fc9f5a1-f51e-4545-b0a2-7f6d7d45987e",
+    "created_at": "2026-04-15T07:49:55.078739+00:00",
+    "updated_at": "2026-04-15T07:50:32.633977+00:00",
+    "code": "# Напиши свой Python-код здесь",
+    "level": "débutant",
+    "challenge_description": "",
+    "tutor_mode": true,
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Здравствуйте! Меня зовут ИИ-Наставник, и я буду вашим помощником в изучении языка программирования Python. Сегодня мы начнем с курса \"Переменные и Операции\", который является основой для понимания того, как работать с числами, текстом и переменными в Python. Это поможет вам легко управлять данными и создавать полезные программы.\n\nДавайте начнем с небольшого вопроса, чтобы я мог лучше понять ваш текущий уровень. Как вы думаете, что такое переменная в контексте программирования?",
+        "timestamp": "2026-04-15T07:50:02.437216+00:00"
+      },
+      {
+        "step": 1,
+        "student_answer": "Объясни этот пример:\n```python\n# Пример 1: Создание переменных и вывод их значений\nx = 10  # Создаем переменную x и присваиваем ей значение 10\ny = 20  # Создаем переменную y и присваиваем ей значение 20\nprint(x, y)  # Выводим значения переменных x и y\n```",
+        "assistant_response": "Здравствуйте! Отличный пример для начала. Давайте разберем его построчно.\n\n1. `x = 10` - здесь мы создаем переменную с именем `x` и присваиваем ей значение 10. Переменная — это как ящик, в который мы можем положить значение, чтобы использовать его позже в программе.\n\n2. `y = 20` - аналогично первой строке, только теперь у нас есть новая переменная `y`, которой мы присваиваем значение 20.\n\n3. `print(x, y)` - функция `print()` используется для вывода значений на экран. В данном случае мы выводим значения переменных `x` и `y`. После выполнения этой строки на экране появится \"10 20\".\n\nЭтот пример показывает, как можно создавать переменные и выводить их значения. Это основа для работы с данными в Python. Как вы думаете, почему важно уметь создавать переменные и работать с ними?",
+        "timestamp": "2026-04-15T07:50:32.633949+00:00"
+      }
+    ]
+  },
+  "ca4cb526-31c3-47de-b6a5-7190e8a28103": {
+    "session_id": "ca4cb526-31c3-47de-b6a5-7190e8a28103",
+    "created_at": "2026-04-15T07:51:16.089857+00:00",
+    "updated_at": "2026-04-15T07:51:22.205662+00:00",
+    "code": "# session tuteur",
+    "level": "débutant",
+    "challenge_description": "",
+    "tutor_mode": true,
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Здравствуйте! Меня зовут ИИ-Наставник, и я буду вашим помощником в изучении Python на курсе \"Переменные и Операции\". Мы с вами научимся работать с основными типами данных, такими как числа и текст, и узнаем, как использовать переменные для хранения информации. Это очень важный этап в освоении программирования. \n\nДавайте начнем с небольшого вопроса, чтобы я мог лучше понять ваш текущий уровень: Как вы думаете, что такое переменная в контексте программирования и для чего она нужна?",
+        "timestamp": "2026-04-15T07:51:22.205637+00:00"
+      }
+    ]
+  },
+  "5b19f77c-7cd2-47da-9e29-cb8ae840fe4d": {
+    "session_id": "5b19f77c-7cd2-47da-9e29-cb8ae840fe4d",
+    "created_at": "2026-04-15T07:51:22.236938+00:00",
+    "updated_at": "2026-04-15T07:51:28.019378+00:00",
+    "code": "# session tuteur",
+    "level": "débutant",
+    "challenge_description": "",
+    "tutor_mode": true,
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Здравствуйте! Я ваш ИИ-Наставник, и я здесь, чтобы помочь вам научиться программировать на Python. Сегодня мы начнем курс \"Переменные и Операции\", который является основой для понимания того, как работать с различными типами данных в Python, такими как числа и текст. Это очень важный этап в изучении программирования, и я уверен, что это будет интересно!\n\nДавайте начнем с небольшого вопроса, чтобы я мог лучше понять ваш текущий уровень. Как вы думаете, что такое переменная в контексте программирования?",
+        "timestamp": "2026-04-15T07:51:28.019348+00:00"
+      }
+    ]
+  },
+  "25cfe6d8-b4aa-4833-a4c4-08c818896b94": {
+    "session_id": "25cfe6d8-b4aa-4833-a4c4-08c818896b94",
+    "created_at": "2026-04-15T07:51:28.059946+00:00",
+    "updated_at": "2026-04-15T07:51:33.593271+00:00",
+    "code": "# session tuteur",
+    "level": "débutant",
+    "challenge_description": "",
+    "tutor_mode": true,
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Здравствуйте! Меня зовут ИИ-Наставник, и я буду вашим помощником в изучении Python на курсе \"Переменные и Операции\". Этот курс поможет вам освоить основы работы с числами, текстами и переменными, что является фундаментом для написания кода. Давайте начнем с небольшого вопроса, чтобы я мог лучше понять ваш текущий уровень. Какие типы данных в Python вы уже знаете?",
+        "timestamp": "2026-04-15T07:51:33.593246+00:00"
+      }
+    ]
+  },
+  "e84e3504-a86d-4ffc-b9ed-b42f08ca7c65": {
+    "session_id": "e84e3504-a86d-4ffc-b9ed-b42f08ca7c65",
+    "created_at": "2026-04-15T07:51:33.616428+00:00",
+    "updated_at": "2026-04-15T07:51:39.320979+00:00",
+    "code": "# session tuteur",
+    "level": "débutant",
+    "challenge_description": "",
+    "tutor_mode": true,
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Здравствуйте! Я ваш ИИ-Наставник по программированию на Python. Сегодня мы начнем наш курс \"Переменные и Операции\", который поможет вам освоить основы работы с числами, текстом и переменными. Это важный шаг в изучении программирования. Давайте сначала узнаем, с чем вы уже знакомы. Какие типы данных в Python вы уже знаете?",
+        "timestamp": "2026-04-15T07:51:39.320950+00:00"
+      }
+    ]
+  },
+  "53c3e8ae-4d40-405b-bf5b-120402df697c": {
+    "session_id": "53c3e8ae-4d40-405b-bf5b-120402df697c",
+    "created_at": "2026-04-15T07:51:39.345063+00:00",
+    "updated_at": "2026-04-15T07:51:45.517255+00:00",
+    "code": "# session tuteur",
+    "level": "débutant",
+    "challenge_description": "",
+    "tutor_mode": true,
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Здравствуйте! Меня зовут ИИ-Наставник, и я буду вашим помощником в изучении Python на курсе \"Переменные и Операции\". Мы начнем с основ и постепенно перейдем к более сложным темам. Сегодня мы поговорим о переменных, числах и тексте, а также о том, как с этим всем работать. Это будет захватывающее путешествие в мир программирования!\n\nДавайте начнем с небольшого вопроса, чтобы я мог лучше понять ваш текущий уровень. Как вы думаете, что такое переменная в контексте программирования?",
+        "timestamp": "2026-04-15T07:51:45.517228+00:00"
+      }
+    ]
+  },
+  "2cd6e44c-a7e2-4a95-a1bc-7400e51c511d": {
+    "session_id": "2cd6e44c-a7e2-4a95-a1bc-7400e51c511d",
+    "created_at": "2026-04-15T07:51:45.548096+00:00",
+    "updated_at": "2026-04-15T07:51:50.894102+00:00",
+    "code": "# session tuteur",
+    "level": "débutant",
+    "challenge_description": "",
+    "tutor_mode": true,
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Здравствуйте! Я ваш ИИ-Наставник, и я здесь, чтобы помочь вам изучить основы программирования на Python. Сегодня мы начнем с курса \"Переменные и Операции\", где вы узнаете, как работать с числами, текстом и переменными. Это очень важный фундамент для вашего кода. Давайте сначала узнаем, какой у вас уже есть опыт в программировании. Вы уже знакомы с какими-либо другими языками программирования или это ваш первый опыт?",
+        "timestamp": "2026-04-15T07:51:50.894076+00:00"
+      }
+    ]
+  },
+  "cc3bb429-38a4-48cc-af33-a31373fd4df1": {
+    "session_id": "cc3bb429-38a4-48cc-af33-a31373fd4df1",
+    "created_at": "2026-04-15T11:58:29.102179+00:00",
+    "updated_at": "2026-04-15T11:59:06.109104+00:00",
+    "code": "def calculer_moyenne(nombres):\n    int moyenne = 4;\n    return moyenne",
+    "level": "débutant",
+    "challenge_description": "Énoncé: Crée une fonction 'calculer_moyenne' qui prend une liste de nombres et retourne leur moyenne. La liste ne doit pas être vide et tous les éléments doivent être des nombres positifs.\nContraintes:\n- La liste d'entrée ne doit pas être vide.\n- Tous les éléments de la liste doivent être des nombres positifs (y compris zéro).\n- La fonction doit retourner un nombre flottant arrondi à deux décimales.\nHints:\n- Utilise la fonction 'sum()' pour calculer la somme des éléments de la liste.\n- Divise cette somme par la longueur de la liste pour obtenir la moyenne.\nExemple: Entrée: [10, 20, 30] / Sortie: 20.00",
+    "tutor_mode": false,
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Statut : Erreur détectée\nErreur détectée : Syntaxe incorrecte pour la déclaration de la variable 'moyenne'.\nConseil : En Python, les types de variables ne sont pas déclarés de cette manière. \nProchaine action : Vérifie la syntaxe utilisée pour déclarer et initialiser des variables en Python.",
+        "timestamp": "2026-04-15T11:58:33.833157+00:00"
+      },
+      {
+        "step": 1,
+        "student_answer": "explique comment corriger",
+        "assistant_response": "Statut : Erreur détectée\nErreur détectée : La syntaxe pour déclarer et utiliser des variables est incorrecte.\nConseil : En Python, la déclaration de type explicite n'est pas nécessaire.\nProchaine action : Revoir la manière de déclarer et d'assigner une valeur à une variable en Python.",
+        "timestamp": "2026-04-15T11:59:06.108780+00:00"
+      }
+    ]
+  },
+  "dd1991f9-90c4-4d2e-a116-939782c29f54": {
+    "session_id": "dd1991f9-90c4-4d2e-a116-939782c29f54",
+    "created_at": "2026-04-15T12:01:54.188253+00:00",
+    "updated_at": "2026-04-15T12:02:00.862676+00:00",
+    "code": "def calculer_moyenne(nombres):\n    # Votre code ici\n    return moyenne",
+    "level": "débutant",
+    "challenge_description": "Énoncé: Crée une fonction 'calculer_moyenne' qui prend une liste de nombres et retourne leur moyenne. La liste ne doit pas être vide et tous les éléments doivent être des nombres positifs.\nContraintes:\n- La liste d'entrée ne doit pas être vide.\n- Tous les éléments de la liste doivent être des nombres positifs (y compris zéro).\n- La fonction doit retourner un nombre flottant arrondi à deux décimales.\nHints:\n- Utilise la fonction 'sum()' pour calculer la somme des éléments de la liste.\n- Divise cette somme par la longueur de la liste pour obtenir la moyenne.\nExemple: Entrée: [10, 20, 30] / Sortie: 20.00",
+    "tutor_mode": false,
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Statut : Erreur détectée\nErreur détectée : La fonction 'calculer_moyenne' ne contient pas de logique pour calculer la moyenne.\nConseil : Réfléchissez à comment vous pouvez utiliser les éléments de la liste pour obtenir la somme et la longueur de cette liste.\nProchaine action : Ajoutez les étapes nécessaires dans la fonction pour calculer la moyenne à partir de la liste donnée.",
+        "timestamp": "2026-04-15T12:02:00.862614+00:00"
+      }
+    ]
+  },
+  "a9c872ab-0a63-4986-8b91-3d18d6dde73f": {
+    "session_id": "a9c872ab-0a63-4986-8b91-3d18d6dde73f",
+    "created_at": "2026-04-15T12:44:26.102225+00:00",
+    "updated_at": "2026-04-15T12:45:13.303512+00:00",
+    "code": "def filter_even_numbers(numbers):\n    result = []\n    for number in numbers:\n        if number % 2 == 0:\n            result.append(number)\n    return result",
+    "level": "débutant",
+    "challenge_description": "Задание: Напишите функцию на Python, которая принимает список целых чисел и возвращает новый список, содержащий только четные числа из исходного списка.\nПравила:\n- Функция должна обрабатывать список, даже если он пустой.\n- Не использовать готовые функции фильтрации из библиотеки, например, filter().\n- Цикл должен быть написан с использованием for.\nПодсказки:\n- Используйте цикл for для перебора элементов списка.\n- Для проверки четности числа используйте оператор % (остаток от деления). Число четное, если 'число % 2 == 0'.\nПример: Входной список: [1, 2, 3, 4, 5, 6] -> Выходной список: [2, 4, 6]",
+    "tutor_mode": false,
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Статус: Критической ошибки нет\n\nСовет: Проверь, правильно ли работает функция с разными списками чисел, например, с пустым списком, списком только с нечетными числами и списком с четными числами.\n\nСледующий шаг: Попробуй запустить функцию с разными входными данными и посмотри на результаты.",
+        "timestamp": "2026-04-15T12:44:37.712283+00:00"
+      },
+      {
+        "step": 1,
+        "student_answer": "mon code est correct?",
+        "assistant_response": "Статус: Критической ошибки нет\n\nСовет: Твой код выглядит правильно для поставленной задачи. Он должен корректно фильтровать четные числа из списка.\n\nСледующий шаг: Попробуй запустить функцию с разными входными данными, чтобы убедиться, что она работает корректно в разных ситуациях, например, с пустым списком или списком, где все числа нечетные.",
+        "timestamp": "2026-04-15T12:45:13.303487+00:00"
+      }
+    ]
+  },
+  "848410b4-972b-4377-97bb-d7f09df12656": {
+    "session_id": "848410b4-972b-4377-97bb-d7f09df12656",
+    "created_at": "2026-04-15T13:22:53.019413+00:00",
+    "updated_at": "2026-04-15T13:22:58.094298+00:00",
+    "code": "# session tuteur",
+    "level": "débutant",
+    "challenge_description": "",
+    "tutor_mode": true,
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Здравствуйте! Меня зовут AI-наставник, и я буду вашим помощником в изучении Python на курсе \"Переменные и Операции\". Мы начнем с основ и постепенно перейдем к более сложным темам. Для начала, расскажите, пожалуйста, имеете ли вы опыт программирования или это ваше первое знакомство с Python?",
+        "timestamp": "2026-04-15T13:22:58.094279+00:00"
+      }
+    ]
+  },
+  "e651c529-1e7a-4879-83c8-2f09d7ff32f1": {
+    "session_id": "e651c529-1e7a-4879-83c8-2f09d7ff32f1",
+    "created_at": "2026-04-15T13:22:58.190453+00:00",
+    "updated_at": "2026-04-15T13:24:37.130241+00:00",
+    "code": "# Напиши свой Python-код здесь",
+    "level": "débutant",
+    "challenge_description": "",
+    "tutor_mode": true,
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Здравствуйте! Я ваш наставник по курсу \"Переменные и Операции\". В этом курсе мы углубимся в основы работы с числами, текстом и переменными в Python. Это поможет вам лучше понять, как строить программы и управлять данными. Давайте начнем с небольшого вопроса, чтобы я мог лучше понять ваш текущий уровень: что вы уже знаете о переменных в программировании?",
+        "timestamp": "2026-04-15T13:23:05.299804+00:00"
+      },
+      {
+        "step": 1,
+        "student_answer": "Объясни подробнее",
+        "assistant_response": "Конечно, давайте разберемся подробнее! В программировании переменная — это способ хранения информации, которую ваша программа может использовать позже. Вы можете представить переменную как коробку, в которую вы кладете что-то важное (например, число или текст), и на эту коробку вы клеите ярлык с именем, чтобы вы могли легко найти нужную информацию, когда она вам понадобится. В Python создать переменную очень просто, вот пример:\n\n```python\nимя = \"Алексей\"\nвозраст = 30\n```\n\nЗдесь `имя` и `возраст` — это переменные, которые хранят текст и число соответственно. Понятно ли, как работают переменные на этом примере?",
+        "timestamp": "2026-04-15T13:24:37.130215+00:00"
+      }
+    ]
+  },
+  "24a0c4ab-df51-4af9-ab7a-b1a887781ce0": {
+    "session_id": "24a0c4ab-df51-4af9-ab7a-b1a887781ce0",
+    "created_at": "2026-04-15T13:27:31.042282+00:00",
+    "updated_at": "2026-04-15T13:28:29.403706+00:00",
+    "code": "# Напиши свой Python-код здесь",
+    "level": "débutant",
+    "challenge_description": "",
+    "tutor_mode": true,
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Здравствуйте! Я ваш наставник по курсу \"Переменные и Операции\". Мы будем изучать основы работы с числами, текстом и переменными в языке программирования Python. Это очень важный этап, который поможет вам легче понять и освоить более сложные темы в будущем. Давайте начнем с небольшого вопроса, чтобы я мог понять ваш текущий уровень: что вы уже знаете о переменных в программировании?",
+        "timestamp": "2026-04-15T13:27:36.334227+00:00"
+      },
+      {
+        "step": 1,
+        "student_answer": "Объясни этот пример:\n```python\n# Пример 2: Работа с текстовыми переменными\nname = 'Алиса'  # Создаем текстовую переменную name и присваиваем ей значение 'Алиса'\ngreeting = 'Привет, ' + name + '!'  # Соединяем строки для создания приветствия\nprint(greeting)  # Выводим приветствие на экран\n```",
+        "assistant_response": "Привет! В этом примере мы работаем с текстовыми переменными в Python. Давайте разберем каждую строчку:\n\n1. `name = 'Алиса'` - здесь мы создаем переменную с именем `name` и присваиваем ей текстовое значение `'Алиса'`. Переменная `name` теперь содержит строку `'Алиса'`.\n\n2. `greeting = 'Привет, ' + name + '!'` - в этой строке мы создаем новую переменную `greeting`. Для этого мы соединяем строку `'Привет, '` с содержимым переменной `name` (то есть с `'Алиса'`), и добавляем в конец строку `'!'`. В итоге переменная `greeting` будет содержать строку `'Привет, Алиса!'`.\n\n3. `print(greeting)` - команда `print()` используется для вывода значения переменной `greeting` на экран. В результате на экране появится текст: `Привет, Алиса!`.\n\nЭто пример того, как можно работать с текстовыми данными и переменными в Python, соединяя их для формирования нужных нам сообщений.\n\nА теперь вопрос к тебе: что будет выведено на экран, если мы изменим первую строку на `name = 'Боб'`?",
+        "timestamp": "2026-04-15T13:28:29.403683+00:00"
+      }
+    ]
+  },
+  "3bf94143-b9b7-4b7b-ad31-35689bc3f172": {
+    "session_id": "3bf94143-b9b7-4b7b-ad31-35689bc3f172",
+    "created_at": "2026-04-15T15:31:41.332881+00:00",
+    "updated_at": "2026-04-15T15:31:49.009547+00:00",
+    "code": "# session tuteur",
+    "level": "débutant",
+    "challenge_description": "",
+    "tutor_mode": true,
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Здравствуйте! Рад вас видеть на нашем курсе \"Переменные и Операции\". Я ваш наставник, и вместе мы научимся основам работы с числами, текстом и переменными в Python. Это поможет вам легко начать программировать и понять, как строится код. Давайте начнем с небольшого вопроса: что вы уже знаете о переменных в Python? Это поможет мне понять, с чего начать наше обучение.",
+        "timestamp": "2026-04-15T15:31:49.009529+00:00"
+      }
+    ]
+  },
+  "72e24106-363a-4df3-964b-1de9d9189189": {
+    "session_id": "72e24106-363a-4df3-964b-1de9d9189189",
+    "created_at": "2026-04-15T15:31:49.037066+00:00",
+    "updated_at": "2026-04-15T15:31:54.926876+00:00",
+    "code": "# session tuteur",
+    "level": "débutant",
+    "challenge_description": "",
+    "tutor_mode": true,
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Здравствуйте! Меня зовут ИИ-наставник, и я буду вашим помощником в изучении Python на курсе \"Переменные и Операции\". Мы начнем с основ и постепенно перейдем к более сложным темам. Давайте сначала узнаем, насколько хорошо вы знакомы с программированием. Вы уже работали с какими-либо языками программирования или Python станет вашим первым опытом?",
+        "timestamp": "2026-04-15T15:31:54.926857+00:00"
+      }
+    ]
   }
 }

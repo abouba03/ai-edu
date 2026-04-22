@@ -25,6 +25,8 @@ export type Course = {
   objectives: string[];
   prerequisites: string[];
   modules: CourseModule[];
+  formationName?: string;
+  courseIndex?: number;
 };
 
 const PYTHON_PLAYLIST_URL = 'https://www.youtube.com/playlist?list=PLDyJYA6aTY1lPWXBPk0gw6gR8fEtPDGKa';
@@ -32,57 +34,21 @@ const PYTHON_PLAYLIST_ID = 'PLDyJYA6aTY1lPWXBPk0gw6gR8fEtPDGKa';
 
 export const courseCatalog: Course[] = [
   {
-    slug: 'python-fondamentaux',
-    title: 'Python с нуля — Partie 1: Introduction & Environnement',
-    level: 'Débutant',
-    duration: '16m',
-    description: 'Découvrir Python et configurer un environnement de travail prêt pour les exercices.',
-    playlistUrl: PYTHON_PLAYLIST_URL,
-    playlistId: PYTHON_PLAYLIST_ID,
-    objectives: [
-      'Comprendre le parcours global de la formation',
-      'Installer un IDE/environnement Python',
-      'Exécuter un premier script local',
-    ],
-    prerequisites: ['Aucun prérequis technique'],
-    modules: [
-      {
-        id: 'm1',
-        title: 'Démarrage rapide',
-        description: 'Premiers pas et setup complet.',
-        lessons: [
-          {
-            id: 'l1',
-            title: 'Урок #1 – Программирование на Питон для начинающих',
-            type: 'video',
-            durationMin: 6,
-            summary: 'Vue d’ensemble du cours Python pour débutants (5:29).',
-          },
-          {
-            id: 'l2',
-            title: 'Урок #2 – Установка среды разработки',
-            type: 'video',
-            durationMin: 12,
-            summary: 'Installation de l’environnement de développement (11:06).',
-          },
-        ],
-      },
-    ],
-  },
-  {
     slug: 'operations-et-variables-python',
-    title: 'Python с нуля — Partie 2: Opérations & Variables',
+    title: 'Переменные и Операции',
     level: 'Débutant',
     duration: '42m',
-    description: 'Acquérir les bases calculatoires et les types de données en Python.',
+    description: 'Научитесь работать с числами, текстом и переменными. Узнайте все основные типы данных и как с ними работать. Это фундамент вашего кода.',
     playlistUrl: PYTHON_PLAYLIST_URL,
     playlistId: PYTHON_PLAYLIST_ID,
     objectives: [
-      'Manipuler les opérations fondamentales',
-      'Comprendre les variables et types Python',
-      'Écrire des expressions correctes',
+      'Использовать основные математические операции',
+      'Создавать и работать с переменными',
+      'Понимать типы данных в Python',
     ],
     prerequisites: ['Partie 1 terminée'],
+    formationName: 'Formation Python Russe',
+    courseIndex: 1,
     modules: [
       {
         id: 'm1',
@@ -109,18 +75,20 @@ export const courseCatalog: Course[] = [
   },
   {
     slug: 'conditions-et-boucles-python',
-    title: 'Python с нуля — Partie 3: Conditions & Boucles',
+    title: 'Условия и Циклы',
     level: 'Débutant',
     duration: '39m',
-    description: 'Contrôler le flux d’exécution avec if/else, for et while.',
+    description: 'Управляйте логикой программы с условиями if/else и циклами for/while. Научитесь принимать решения в коде и повторять действия.',
     playlistUrl: PYTHON_PLAYLIST_URL,
     playlistId: PYTHON_PLAYLIST_ID,
     objectives: [
-      'Écrire des décisions conditionnelles claires',
-      'Maîtriser les boucles principales',
-      'Éviter les erreurs de contrôle de flux',
+      'Писать условные блоки if/else',
+      'Использовать циклы for и while правильно',
+      'Контролировать поток выполнения программы',
     ],
     prerequisites: ['Parties 1 et 2'],
+    formationName: 'Formation Python Russe',
+    courseIndex: 2,
     modules: [
       {
         id: 'm1',
@@ -147,18 +115,20 @@ export const courseCatalog: Course[] = [
   },
   {
     slug: 'listes-strings-slices',
-    title: 'Python с нуля — Partie 4: Listes & Chaînes',
+    title: 'Списки и Строки',
     level: 'Débutant',
     duration: '50m',
-    description: 'Manipuler les listes et chaînes avec indexation et slicing.',
+    description: 'Работайте со списками и текстом. Научитесь нумеровать элементы, вырезать части данных и обрабатывать последовательности как профессионал.',
     playlistUrl: PYTHON_PLAYLIST_URL,
     playlistId: PYTHON_PLAYLIST_ID,
     objectives: [
-      'Utiliser les méthodes de liste',
-      'Maîtriser indices et tranches',
-      'Écrire des manipulations de texte robustes',
+      'Создавать и изменять списки',
+      'Использовать индексы и срезы (slicing)',
+      'Выполнять операции со строками текста',
     ],
     prerequisites: ['Parties 1 à 3'],
+    formationName: 'Formation Python Russe',
+    courseIndex: 3,
     modules: [
       {
         id: 'm1',
@@ -185,18 +155,20 @@ export const courseCatalog: Course[] = [
   },
   {
     slug: 'tuples-dictionnaires-sets',
-    title: 'Python с нуля — Partie 5: Tuple, Dict & Set',
+    title: 'Кортежи, Словари и Множества',
     level: 'Intermédiaire',
     duration: '35m',
-    description: 'Étudier les structures de données Python au-delà des listes.',
+    description: 'Откройте новые типы данных! Словари для хранения ключей и значений, множества для уникальных элементов, кортежи для неизменяемых данных.',
     playlistUrl: PYTHON_PLAYLIST_URL,
     playlistId: PYTHON_PLAYLIST_ID,
     objectives: [
-      'Différencier tuple/list selon le besoin',
-      'Utiliser les dictionnaires pour mapper des données',
-      'Manipuler ensembles et opérations de set',
+      'Использовать кортежи и понимать их особенности',
+      'Работать со словарями и ключами',
+      'Применять множества и операции между ними',
     ],
     prerequisites: ['Parties 1 à 4'],
+    formationName: 'Formation Python Russe',
+    courseIndex: 4,
     modules: [
       {
         id: 'm1',
@@ -212,18 +184,20 @@ export const courseCatalog: Course[] = [
   },
   {
     slug: 'fonctions-fichiers-python',
-    title: 'Python с нуля — Partie 6: Fonctions & Fichiers',
+    title: 'Функции и Файлы',
     level: 'Intermédiaire',
     duration: '36m',
-    description: 'Créer des fonctions et commencer la manipulation de fichiers.',
+    description: 'Пишите переиспользуемый код с функциями. Научитесь читать и писать файлы. Создавайте профессиональные программы, которые можно переиспользовать.',
     playlistUrl: PYTHON_PLAYLIST_URL,
     playlistId: PYTHON_PLAYLIST_ID,
     objectives: [
-      'Définir fonctions classiques et lambda',
-      'Lire/écrire des fichiers',
-      'Préparer des scripts modulaires',
+      'Определять и вызывать функции',
+      'Использовать лямбда-функции где нужно',
+      'Читать и писать файлы правильно',
     ],
     prerequisites: ['Parties 1 à 5'],
+    formationName: 'Formation Python Russe',
+    courseIndex: 5,
     modules: [
       {
         id: 'm1',
@@ -238,18 +212,20 @@ export const courseCatalog: Course[] = [
   },
   {
     slug: 'exceptions-with-modules',
-    title: 'Python с нуля — Partie 7: Exceptions, With & Modules',
+    title: 'Исключения и Модули',
     level: 'Intermédiaire',
     duration: '38m',
-    description: 'Rendre les scripts robustes et modulaires.',
+    description: 'Создавайте надежный код, который правильно обрабатывает ошибки. Организуйте код в модули и работайте с ресурсами безопасно.',
     playlistUrl: PYTHON_PLAYLIST_URL,
     playlistId: PYTHON_PLAYLIST_ID,
     objectives: [
-      'Gérer les erreurs avec try/except',
-      'Utiliser with ... as pour les ressources',
-      'Créer et importer des modules Python',
+      'Обрабатывать ошибки с try/except',
+      'Использовать менеджер контекста with',
+      'Создавать и импортировать модули',
     ],
     prerequisites: ['Parties 1 à 6'],
+    formationName: 'Formation Python Russe',
+    courseIndex: 6,
     modules: [
       {
         id: 'm1',
@@ -265,18 +241,20 @@ export const courseCatalog: Course[] = [
   },
   {
     slug: 'oop-bases-python',
-    title: 'Python с нуля — Partie 8: OOP Fondamentaux',
+    title: 'ООП: Классы и Объекты',
     level: 'Avancé',
     duration: '24m',
-    description: 'Découvrir les classes, objets et constructeurs en Python.',
+    description: 'Переходите на новый уровень! Создавайте классы и объекты. Узнайте о конструкторах и инкапсуляции. Начните писать более сложный код.',
     playlistUrl: PYTHON_PLAYLIST_URL,
     playlistId: PYTHON_PLAYLIST_ID,
     objectives: [
-      'Créer une classe et instancier des objets',
-      'Comprendre constructeur et surcharge',
-      'Structurer un modèle orienté objet simple',
+      'Создавать классы и объекты',
+      'Понимать конструктор __init__',
+      'Структурировать данные в классы',
     ],
     prerequisites: ['Parties 1 à 7'],
+    formationName: 'Formation Python Russe',
+    courseIndex: 7,
     modules: [
       {
         id: 'm1',
@@ -291,18 +269,20 @@ export const courseCatalog: Course[] = [
   },
   {
     slug: 'oop-avance-et-decorateurs',
-    title: 'Python с нуля — Partie 9: OOP Avancé & Décorateurs',
+    title: 'ООП: Наследование и Декораторы',
     level: 'Avancé',
     duration: '27m',
-    description: 'Approfondir héritage, encapsulation, polymorphisme et décorateurs.',
+    description: 'Углубитесь в ООП! Изучите наследование, полиморфизм, инкапсуляцию и декораторы. Пишите расширяемый и профессиональный код.',
     playlistUrl: PYTHON_PLAYLIST_URL,
     playlistId: PYTHON_PLAYLIST_ID,
     objectives: [
-      'Appliquer les 3 piliers OOP',
-      'Comprendre les décorateurs de fonctions',
-      'Écrire un code OOP plus extensible',
+      'Использовать наследование между классами',
+      'Применять полиморфизм и инкапсуляцию',
+      'Создавать и использовать декораторы функций',
     ],
     prerequisites: ['Parties 1 à 8'],
+    formationName: 'Formation Python Russe',
+    courseIndex: 8,
     modules: [
       {
         id: 'm1',
@@ -317,18 +297,20 @@ export const courseCatalog: Course[] = [
   },
   {
     slug: 'python-capstone-et-revision',
-    title: 'Python с нуля — Partie 10: Révision Finale & Capstone',
+    title: 'Финальный Проект',
     level: 'Avancé',
     duration: '20m',
-    description: 'Clore la formation avec une synthèse et un mini projet d’application.',
+    description: 'Завершите всё обучение! Повторите все ключевые концепции и создайте финальный проект, который объединит все ваши знания из 10 курсов.',
     playlistUrl: PYTHON_PLAYLIST_URL,
     playlistId: PYTHON_PLAYLIST_ID,
     objectives: [
-      'Synthétiser les apprentissages des 20 leçons',
-      'Construire un mini projet personnel',
-      'Préparer la transition vers le niveau suivant',
+      'Повторить все главные темы Python',
+      'Создать собственный проект',
+      'Подготовиться к следующему уровню программирования',
     ],
     prerequisites: ['Parties 1 à 9'],
+    formationName: 'Formation Python Russe',
+    courseIndex: 9,
     modules: [
       {
         id: 'm1',

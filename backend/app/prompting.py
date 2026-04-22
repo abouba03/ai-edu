@@ -9,11 +9,11 @@ PROMPT_VERSION = "v2.1"
 def build_pedagogy_block(context: dict[str, Any] | None) -> str:
     context = context or {}
 
-    level = str(context.get("level") or "débutant")
+    level = str(context.get("level") or "начинающий")
     progress_percent = context.get("progressPercent")
-    ai_tone = str(context.get("aiTone") or "Coach motivant et précis")
-    pedagogical_style = str(context.get("pedagogicalStyle") or "Apprentissage actif")
-    target_audience = str(context.get("targetAudience") or "Étudiant en progression")
+    ai_tone = str(context.get("aiTone") or "Доброжелательный и точный наставник")
+    pedagogical_style = str(context.get("pedagogicalStyle") or "Пошаговое активное обучение")
+    target_audience = str(context.get("targetAudience") or "Ученик")
     pass_threshold = context.get("passThreshold")
     weekly_goal_hours = context.get("weeklyGoalHours")
 
@@ -23,13 +23,14 @@ def build_pedagogy_block(context: dict[str, Any] | None) -> str:
 
     return (
         f"Prompt-Version: {PROMPT_VERSION}\n"
-        f"Niveau: {level}\n"
-        f"Progression (%): {progress_text}\n"
-        f"Ton IA attendu: {ai_tone}\n"
-        f"Style pédagogique: {pedagogical_style}\n"
-        f"Audience cible: {target_audience}\n"
-        f"Seuil de validation (%): {pass_threshold_text}\n"
-        f"Objectif hebdo (heures): {weekly_goal_text}\n"
+        f"Язык ответа: русский (простой).\n"
+        f"Уровень: {level}\n"
+        f"Прогресс (%): {progress_text}\n"
+        f"Тон ИИ: {ai_tone}\n"
+        f"Стиль обучения: {pedagogical_style}\n"
+        f"Целевая аудитория: {target_audience}\n"
+        f"Порог успеха (%): {pass_threshold_text}\n"
+        f"Цель на неделю (часы): {weekly_goal_text}\n"
     )
 
 

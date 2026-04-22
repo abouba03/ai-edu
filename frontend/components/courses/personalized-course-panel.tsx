@@ -5,9 +5,7 @@ import Link from 'next/link';
 import axios from 'axios';
 import { trackEvent } from '@/lib/event-tracker';
 import { useAuth } from '@clerk/nextjs';
-import CourseHero from '@/components/courses/_components/course-hero';
-import CheckpointDialog from '@/components/courses/_components/checkpoint-dialog';
-import VideoStudioSection from '@/components/courses/_components/video-studio-section';
+import CheckpointDialog from '@/components/courses/_components/checkpoint-dialog';import VideoStudioSection from '@/components/courses/_components/video-studio-section';
 import CourseSidebar from '@/components/courses/_components/course-sidebar';
 import { AdaptiveLevel, Question } from '@/components/courses/_components/personalized-types';
 import { Brain, ListChecks, Target } from 'lucide-react';
@@ -74,16 +72,13 @@ export default function PersonalizedCoursePanel({
 
   const objectives = useMemo(
     () => [
-      'Comprendre le concept clé du cours et l\'expliquer avec ses propres mots.',
-      'Réaliser 2 exercices pratiques sans erreur de syntaxe bloquante.',
-      'Valider au moins 2/3 au checkpoint IA pour confirmer la compréhension immédiate.',
+      'Понять ключевую тему урока и объяснить ее своими словами.',
+      'Сделать 2 практических упражнения без критических синтаксических ошибок.',
+      'Пройти минимум 2/3 в ИИ-квизе, чтобы подтвердить понимание темы.',
     ],
     []
   );
 
-  const helperPrompt = encodeURIComponent(
-    `Explique le cours "${courseTitle}" simplement pour un étudiant ${courseLevel}. Contexte: ${courseDescription}`
-  );
   const challengeCompletedKey = `course:${courseSlug}:challengeCompleted`;
   const challengeAttemptsKey = `course:${courseSlug}:challengeAttempts`;
   const videoBlocksKey = `course:${courseSlug}:videoBlocksCompleted`;
@@ -156,8 +151,8 @@ export default function PersonalizedCoursePanel({
     attempts: number
   ) {
     setIsLoadingMotivation(true);
-    const mood = !passed || attempts >= 3 ? 'frustré' : passed && durationSec <= 900 ? 'heureux' : 'neutre';
-    const recentResult = `Checkpoint ${score}/${total}, durée ${Math.max(1, Math.round(durationSec / 60))} min, tentative ${attempts}`;
+    const mood = !passed || attempts >= 3 ? 'разочарован' : passed && durationSec <= 900 ? 'доволен' : 'нейтрально';
+    const recentResult = `Квиз ${score}/${total}, длительность ${Math.max(1, Math.round(durationSec / 60))} мин, попытка ${attempts}`;
 
     try {
       const res = await axios.post(`${apiBaseUrl}/motivational-feedback/`, {
@@ -165,12 +160,12 @@ export default function PersonalizedCoursePanel({
         recent_result: recentResult,
         mood,
       });
-      setMotivationalMessage(res.data?.message || 'Continue, chaque itération améliore ta maîtrise.');
+      setMotivationalMessage(res.data?.message || 'Продолжай: каждая попытка улучшает твой навык.');
     } catch {
       setMotivationalMessage(
         passed
-          ? 'Excellent rythme. Passe maintenant au mini challenge pour valider durablement.'
-          : 'Tu progresses: corrige une erreur ciblée puis relance un nouveau checkpoint.'
+          ? 'Отличный темп. Теперь переходи к мини-заданию для закрепления.'
+          : 'Ты продвигаешься: исправь одну конкретную ошибку и запусти новый квиз.'
       );
     } finally {
       setIsLoadingMotivation(false);
@@ -211,8 +206,8 @@ export default function PersonalizedCoursePanel({
         pedagogy_context: {
           level: adaptiveLevel,
           progressPercent,
-          aiTone: 'Coach motivant et précis',
-          pedagogicalStyle: 'Micro-évaluation active en slide horizontal, questions Vrai/Faux et QCM',
+          aiTone: 'Поддерживающий и точный наставник',
+          pedagogicalStyle: 'Короткая активная проверка по одному вопросу: Верно/Неверно и тесты с вариантами',
           targetAudience: formationName,
           passThreshold: 70,
           weeklyGoalHours: 5,
@@ -301,7 +296,6 @@ export default function PersonalizedCoursePanel({
 
   useEffect(() => {
     refreshOrchestrationPlan();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [courseSlug]);
 
   const answeredQuestions = userAnswers.filter((answer) => answer.trim().length > 0).length;
@@ -321,63 +315,19 @@ export default function PersonalizedCoursePanel({
   const canAdvanceCurrentQuiz =
     quizCompleted || Boolean(userAnswers[currentQuizIndex] && userAnswers[currentQuizIndex].trim());
 
-  function getQuestionTypeLabel(question: Question): 'Vrai/Faux' | 'QCM' {
+  function getQuestionTypeLabel(question: Question): 'Верно/Неверно' | 'Тест' {
     if (question.choices.length === 2) {
       const normalized = question.choices.map((choice) => choice.trim().toLowerCase());
       const trueFalseSet = new Set(['vrai', 'faux', 'true', 'false']);
       if (normalized.every((choice) => trueFalseSet.has(choice))) {
-        return 'Vrai/Faux';
+        return 'Верно/Неверно';
       }
     }
-    return 'QCM';
+    return 'Тест';
   }
 
   return (
     <div className="mx-auto w-full max-w-[1240px] space-y-3 lg:space-y-4 pb-4">
-      <CourseHero
-        formationName={formationName}
-        courseNumber={courseNumber}
-        totalCourses={totalCourses}
-        courseLevel={courseLevel}
-        progressPercent={progressPercent}
-      />
-
-      {/* ── STATUS BAR ── */}
-      <section className="border-2 border-[#1C293C] bg-white p-3 shadow-[2px_2px_0px_0px_#1C293C]">
-        <div className="flex items-center justify-between gap-2 flex-wrap">
-          <div className="inline-flex items-center gap-2 text-xs flex-wrap">
-            <span className="text-[10px] uppercase tracking-widest font-black text-[#1C293C]/50">Niveau</span>
-            <span className="border border-[#1C293C] px-2 py-0.5 text-xs font-black text-[#1C293C]">
-              {adaptiveLevel}
-            </span>
-            <span className={`border px-2 py-0.5 text-xs font-black ${
-              strictValidatedFromServer
-                ? 'border-[#16A34A] text-[#16A34A]'
-                : 'border-[#1C293C]/20 text-[#1C293C]/40'
-            }`}>
-              {strictValidatedFromServer ? 'Validé' : 'En cours'}
-            </span>
-          </div>
-          <div className="flex items-center gap-1.5 flex-wrap">
-            <span className="border border-[#1C293C]/20 bg-[#FBFBF9] px-2 py-0.5 text-[11px] font-semibold text-[#1C293C]/60">
-              Quiz {quizCompleted ? `${quizScorePercent}%` : '—'}
-            </span>
-            <span className="border border-[#1C293C]/20 bg-[#FBFBF9] px-2 py-0.5 text-[11px] font-semibold text-[#1C293C]/60">
-              Retries {challengeRetries}
-            </span>
-            {checkpointDurationMin && (
-              <span className="border border-[#1C293C]/20 bg-[#FBFBF9] px-2 py-0.5 text-[11px] font-semibold text-[#1C293C]/60">
-                {checkpointDurationMin} min
-              </span>
-            )}
-          </div>
-        </div>
-        {(motivationalMessage || isLoadingMotivation) && (
-          <p className="mt-2 text-xs font-medium text-[#1C293C]/60 border-t border-[#1C293C]/10 pt-2">
-            {isLoadingMotivation ? 'Génération du message motivant...' : motivationalMessage}
-          </p>
-        )}
-      </section>
 
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-3 items-start">
         <aside className="order-1 xl:order-2 xl:col-span-4 space-y-3 xl:sticky xl:top-3">
@@ -385,23 +335,23 @@ export default function PersonalizedCoursePanel({
           {/* ── ACTIONS ── */}
           <section className="border-2 border-[#1C293C] bg-[#FBFBF9] p-4 shadow-[4px_4px_0px_0px_#1C293C] space-y-3">
             <div>
-              <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7]">Actions pédagogiques</p>
-              <h3 className="font-black text-sm text-[#1C293C] mt-0.5">3 actions clés</h3>
+              <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7]">Учебные действия</p>
+              <h3 className="font-black text-sm text-[#1C293C] mt-0.5">3 ключевых действия</h3>
             </div>
 
             <div className="space-y-2">
-              {/* Checkpoint IA */}
+              {/* Quiz IA */}
               <div className="border-2 border-[#1C293C] bg-white p-3 space-y-2.5 shadow-[2px_2px_0px_0px_#1C293C]">
                 <div>
                   <p className="text-xs font-black text-[#1C293C] inline-flex items-center gap-1.5">
-                    <Target className="h-3.5 w-3.5 text-[#432DD7]" /> Checkpoint IA
+                    <Target className="h-3.5 w-3.5 text-[#432DD7]" /> Квиз ИИ
                   </p>
-                  <p className="text-[11px] font-medium text-[#1C293C]/55 mt-0.5">Quiz adaptatif 8-12 questions.</p>
+                  <p className="text-[11px] font-medium text-[#1C293C]/55 mt-0.5">Адаптивный квиз: 8-12 вопросов.</p>
                 </div>
                 <CheckpointDialog
                   open={quizDialogOpen}
                   onOpenChange={setQuizDialogOpen}
-                  triggerLabel="Lancer le checkpoint"
+                  triggerLabel="Запустить квиз"
                   triggerClassName="h-8 w-full text-[11px] font-black border-2 border-[#1C293C] bg-[#FDC800] text-[#1C293C] rounded-none shadow-[2px_2px_0px_0px_#1C293C] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-100"
                   questions={questions}
                   currentQuizQuestion={currentQuizQuestion}
@@ -437,15 +387,15 @@ export default function PersonalizedCoursePanel({
               <div className="border-2 border-[#1C293C] bg-white p-3 space-y-2.5 shadow-[2px_2px_0px_0px_#1C293C]">
                 <div>
                   <p className="text-xs font-black text-[#1C293C] inline-flex items-center gap-1.5">
-                    <Brain className="h-3.5 w-3.5 text-[#432DD7]" /> Mini challenge
+                    <Brain className="h-3.5 w-3.5 text-[#432DD7]" /> Мини-задание
                   </p>
-                  <p className="text-[11px] font-medium text-[#1C293C]/55 mt-0.5">Pratique immédiate sur la leçon.</p>
+                  <p className="text-[11px] font-medium text-[#1C293C]/55 mt-0.5">Сразу практикуйся по текущему уроку.</p>
                 </div>
                 <Link
                   href={`/courses/${courseSlug}/mini-challenge?title=${encodeURIComponent(courseTitle)}&level=${encodeURIComponent(adaptiveLevel)}&formation=${encodeURIComponent(formationName)}&progress=${progressPercent}`}
                   className="inline-flex w-full items-center justify-center border-2 border-[#1C293C] bg-white px-3 py-1.5 text-[11px] font-black text-[#1C293C] shadow-[2px_2px_0px_0px_#1C293C] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-100"
                 >
-                  Ouvrir
+                  Открыть
                 </Link>
               </div>
 
@@ -453,16 +403,16 @@ export default function PersonalizedCoursePanel({
               <div className="border-2 border-[#1C293C] bg-white p-3 space-y-2.5 shadow-[2px_2px_0px_0px_#1C293C]">
                 <div>
                   <p className="text-xs font-black text-[#1C293C] inline-flex items-center gap-1.5">
-                    <Brain className="h-3.5 w-3.5 text-[#432DD7]" /> Assistant IA
+                    <Brain className="h-3.5 w-3.5 text-[#432DD7]" /> ИИ-помощник
                   </p>
-                  <p className="text-[11px] font-medium text-[#1C293C]/55 mt-0.5">Aide contextuelle instantanée.</p>
+                  <p className="text-[11px] font-medium text-[#1C293C]/55 mt-0.5">Быстрая помощь по контексту урока.</p>
                 </div>
                 <Link
-                  href={`/generator?prompt=${helperPrompt}`}
+                  href={`/tuteur?slug=${encodeURIComponent(courseSlug)}&title=${encodeURIComponent(courseTitle)}&level=${encodeURIComponent(adaptiveLevel)}&description=${encodeURIComponent(courseDescription)}&formation=${encodeURIComponent(formationName)}&progress=${progressPercent}`}
                   onClick={askForHelp}
                   className="inline-flex w-full items-center justify-center border-2 border-[#1C293C] bg-[#FDC800] px-3 py-1.5 text-[11px] font-black text-[#1C293C] shadow-[2px_2px_0px_0px_#1C293C] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-100"
                 >
-                  Ouvrir
+                  Открыть
                 </Link>
               </div>
             </div>
@@ -489,7 +439,7 @@ export default function PersonalizedCoursePanel({
       <section className="border-2 border-[#1C293C] bg-white p-3 flex items-center gap-2.5 shadow-[2px_2px_0px_0px_#1C293C]">
         <ListChecks className="h-4 w-4 text-[#432DD7] shrink-0" />
         <p className="text-[11px] font-medium text-[#1C293C]/60">
-          Les signaux d&apos;apprentissage adaptent automatiquement les prochaines activités.
+          Сигналы обучения автоматически подстраивают следующие активности.
         </p>
       </section>
     </div>

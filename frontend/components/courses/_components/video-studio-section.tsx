@@ -30,7 +30,7 @@ export default function VideoStudioSection({
       {/* Header */}
       <div className="flex items-center justify-between gap-3 flex-wrap">
         <h3 className="font-black text-base text-[#1C293C] inline-flex items-center gap-2">
-          <Film className="h-4 w-4" /> Studio Vidéo
+          <Film className="h-4 w-4" /> Видеостудия
         </h3>
         {nextCourseSlug && (
           <Link
@@ -38,14 +38,14 @@ export default function VideoStudioSection({
             className="inline-flex items-center gap-2 border-2 border-[#1C293C] bg-white px-3 py-1.5 text-xs font-black text-[#1C293C] shadow-[2px_2px_0px_0px_#1C293C] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-100"
           >
             <Rocket className="h-3.5 w-3.5" />
-            Suivant : {nextCourseTitle}
+            Далее: {nextCourseTitle}
           </Link>
         )}
       </div>
 
       {videoResources.length === 0 ? (
         <div className="border-2 border-dashed border-[#1C293C]/30 bg-white p-8 text-center">
-          <p className="text-sm font-semibold text-[#1C293C]/40">Aucune vidéo disponible pour ce cours.</p>
+          <p className="text-sm font-semibold text-[#1C293C]/40">Для этого урока видео пока недоступно.</p>
         </div>
       ) : (
         <div className="space-y-4">
@@ -59,11 +59,11 @@ export default function VideoStudioSection({
                 {/* Sequence label */}
                 <div className="flex items-center justify-between gap-2">
                   <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7]">
-                    Séquence {index + 1}
+                    Блок {index + 1}
                   </p>
                   {isDone && (
                     <span className="inline-flex items-center gap-1 text-[10px] font-black text-[#16A34A]">
-                      <CheckCircle2 className="h-3 w-3" /> Bloc validé
+                      <CheckCircle2 className="h-3 w-3" /> Блок пройден
                     </span>
                   )}
                 </div>
@@ -95,7 +95,7 @@ export default function VideoStudioSection({
                     onClick={() => onVideoStarted(resource.sourceUrl)}
                     className="inline-flex items-center gap-1.5 border-2 border-[#1C293C] bg-white px-3 py-1.5 text-xs font-black text-[#1C293C] shadow-[2px_2px_0px_0px_#1C293C] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-100"
                   >
-                    <PlayCircle className="h-3 w-3" /> J&apos;ai lancé
+                    <PlayCircle className="h-3 w-3" /> Я запустил
                   </button>
 
                   <button
@@ -105,7 +105,7 @@ export default function VideoStudioSection({
                     }}
                     className="inline-flex items-center gap-1.5 border-2 border-[#1C293C] bg-[#FDC800] px-3 py-1.5 text-xs font-black text-[#1C293C] shadow-[3px_3px_0px_0px_#1C293C] hover:shadow-none hover:translate-x-[3px] hover:translate-y-[3px] transition-all duration-100"
                   >
-                    Bloc {index + 1} terminé → Checkpoint
+                    Блок {index + 1} завершен → Квиз
                   </button>
                 </div>
               </article>

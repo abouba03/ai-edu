@@ -69,23 +69,23 @@ def _generate_dynamic_test_suite(challenge_description: str, pedagogy_context: d
     prompt = f"""
 {pedagogy_block}
 
-Tu es un moteur de génération de tests Python pour un exercice de programmation.
-Énoncé de l'exercice:
+Ты генератор тестов Python для учебной задачи.
+Условие задачи:
 {challenge_description}
 
-Objectif:
-- Déduire la fonction attendue (nom de fonction + signature).
-- Proposer 3 à 5 tests unitaires pertinents.
-- Chaque test doit être exécutable sans ambiguïté.
+Цель:
+- Определи ожидаемую функцию (имя и сигнатура).
+- Предложи 3-5 уместных unit-тестов.
+- Каждый тест должен быть однозначным и исполняемым.
 
-Contraintes strictes:
-- Retourne uniquement du JSON valide.
-- `function_name` doit être un identifiant Python.
-- `args_literal` doit être une LISTE Python sérialisée (ex: "[-3]", "[[1,2,3]]", "[\"abc\"]").
-- `expected_literal` doit être une valeur Python sérialisée (ex: "'ok'", "3", "[1,2]").
-- Ne pas inclure de code exécutable complet de solution.
+Строгие правила:
+- Верни только валидный JSON.
+- `function_name` должен быть корректным идентификатором Python.
+- `args_literal` должен быть сериализованным списком Python.
+- `expected_literal` должен быть сериализованным ожидаемым значением.
+- Не добавляй полное решение задачи.
 
-Format JSON attendu:
+Ожидаемый JSON:
 {{
   "prompt_version": "v3.1-tests-gen",
   "function_name": "nom_fonction",
@@ -158,21 +158,21 @@ def _generate_dynamic_stdio_test_suite(challenge_description: str, pedagogy_cont
     prompt = f"""
 {pedagogy_block}
 
-Tu es un moteur de génération de tests pour script Python interactif (input/print).
-Énoncé de l'exercice:
+Ты генератор тестов для интерактивного Python-скрипта (input/print).
+Условие задачи:
 {challenge_description}
 
-Objectif:
-- Proposer 3 à 5 cas de test d'entrée/sortie pour valider un script exécuté tel quel.
-- Chaque cas doit définir les entrées utilisateur et la sortie attendue finale.
+Цель:
+- Предложи 3-5 тестов вход/выход для проверки скрипта.
+- Каждый тест должен задавать входные данные и ожидаемый итоговый вывод.
 
-Contraintes strictes:
-- Retourne uniquement du JSON valide.
-- `stdin_lines` est une liste de chaînes (valeurs fournies à input dans l'ordre).
-- `expected_stdout` est la sortie finale attendue (chaîne).
-- Ne pas inclure de solution complète.
+Строгие правила:
+- Верни только валидный JSON.
+- `stdin_lines` — список строк для input по порядку.
+- `expected_stdout` — ожидаемый итоговый вывод.
+- Не добавляй полное решение.
 
-Format JSON attendu:
+Ожидаемый JSON:
 {{
   "prompt_version": "v3.1-stdio-tests-gen",
   "tests": [
@@ -260,7 +260,7 @@ def _run_test_suite(student_code: str, suite: dict[str, Any]) -> dict[str, Any]:
                 try:
                     return next(iterator)
                 except StopIteration:
-                    raise RuntimeError("Entrées insuffisantes pour ce test")
+                    raise RuntimeError("Недостаточно входных данных для этого теста")
 
             output_buffer = io.StringIO()
             namespace: dict[str, Any] = {"__builtins__": __builtins__}
@@ -316,7 +316,7 @@ def _run_test_suite(student_code: str, suite: dict[str, Any]) -> dict[str, Any]:
             "passed": 0,
             "failed": len(suite["tests"]),
             "all_passed": False,
-            "runtime_error": f"Erreur d'exécution: {exc}",
+            "runtime_error": f"Ошибка выполнения: {exc}",
             "results": [],
             "trace": traceback.format_exc(limit=1),
         }
@@ -331,7 +331,7 @@ def _run_test_suite(student_code: str, suite: dict[str, Any]) -> dict[str, Any]:
             "passed": 0,
             "failed": len(suite["tests"]),
             "all_passed": False,
-            "runtime_error": f"Fonction `{suite['function_name']}` introuvable.",
+            "runtime_error": f"Функция `{suite['function_name']}` не найдена.",
             "results": [],
         }
 
@@ -406,30 +406,30 @@ def _fallback_submission_feedback(student_code: str, challenge_description: str 
 
         if code_len < 20:
             note = "2/10"
-            commentaire = "Code trop court pour valider l’exercice. Ajoute une solution exécutable puis resoumets."
-            consignes = ["Écris au moins une fonction complète correspondant à l’énoncé."]
-            idees = ["Commence par une version minimale qui couvre un cas simple."]
-            prochaines = ["Soumets une version fonctionnelle, même basique."]
+            commentaire = "Код слишком короткий для проверки. Добавь рабочее решение и отправь снова."
+            consignes = ["Напиши хотя бы одну полную функцию по условию."]
+            idees = ["Начни с минимальной версии для простого случая."]
+            prochaines = ["Отправь рабочую версию, даже базовую."]
         elif not has_function:
             note = "4/10"
-            commentaire = "Le code contient de la logique, mais la fonction attendue n’est pas clairement définie."
-            consignes = ["Définis explicitement la fonction demandée dans l’énoncé."]
-            idees = ["Vérifie le nom de fonction et ses paramètres."]
-            prochaines = ["Resoumets après avoir structuré la fonction principale."]
+            commentaire = "Логика есть, но требуемая функция не определена явно."
+            consignes = ["Явно объяви функцию, которая нужна по условию."]
+            idees = ["Проверь имя функции и параметры."]
+            prochaines = ["Отправь снова после правки структуры функции."]
         elif not has_return:
             note = "4/10"
-            commentaire = "La structure existe, mais la sortie attendue n’est pas retournée correctement."
-            consignes = ["Ajoute des retours explicites alignés avec le résultat attendu."]
-            idees = ["Teste la fonction avec une entrée simple pour vérifier la sortie."]
-            prochaines = ["Corrige la valeur retournée puis resoumets."]
+            commentaire = "Структура есть, но ожидаемое значение не возвращается корректно."
+            consignes = ["Добавь явный return с ожидаемым результатом."]
+            idees = ["Проверь функцию на простом входе и сравни вывод."]
+            prochaines = ["Исправь return и отправь снова."]
         else:
             note = "6/10"
-            commentaire = "Bonne base structurelle. Affine la logique métier pour coller exactement aux critères de l’énoncé."
-            consignes = ["Vérifie chaque contrainte et chaque sortie attendue de l’exercice."]
-            idees = ["Teste plusieurs cas représentatifs pour identifier les écarts."]
-            prochaines = ["Corrige un écart précis puis resoumets."]
+            commentaire = "Хорошая база. Уточни логику, чтобы точно выполнить критерии задачи."
+            consignes = ["Проверь каждое условие и каждый ожидаемый результат."]
+            idees = ["Прогони несколько типичных случаев и найди расхождения."]
+            prochaines = ["Исправь один конкретный сбой и отправь снова."]
 
-        formatted = f"Note: {note}\nCommentaire: {commentaire}\nConsignes:\n- {consignes[0]}\nIdées:\n- {idees[0]}\nProchaines étapes:\n- {prochaines[0]}"
+        formatted = f"Оценка: {note}\nКомментарий: {commentaire}\nЧто сделать:\n- {consignes[0]}\nИдея:\n- {idees[0]}\nДальше:\n- {prochaines[0]}"
         return {
                 "evaluation": formatted,
                 "evaluation_json": {
@@ -550,10 +550,10 @@ def _test_feedback_from_suite(student_code: str, suite: dict[str, Any], prompt_v
 
     if runtime_error:
         note = "1/10"
-        commentaire = "Le code ne peut pas être validé car l'exécution échoue avant les tests. Corrige d'abord l'erreur d'exécution."
-        consignes = ["Corrige l'erreur d'exécution avant de resoumettre."]
-        idees = ["Relis la syntaxe et vérifie que le comportement attendu est bien produit."]
-        prochaines = ["Relance les tests après correction."]
+        commentaire = "Код нельзя проверить: выполнение падает до тестов. Сначала исправь ошибку запуска."
+        consignes = ["Исправь ошибку выполнения перед повторной отправкой."]
+        idees = ["Проверь синтаксис и сравни поведение с ожидаемым."]
+        prochaines = ["Запусти тесты снова после исправления."]
     else:
         score = 0 if total == 0 else round((passed / total) * 10)
         if score < 1 and total > 0:
@@ -561,30 +561,30 @@ def _test_feedback_from_suite(student_code: str, suite: dict[str, Any], prompt_v
         note = f"{score}/10"
 
         if total > 0 and passed == total:
-            commentaire = "Tous les tests de validation sont réussis. La solution respecte les critères attendus."
-            consignes = ["Conserve cette logique et ce niveau de clarté."]
-            idees = ["Ajoute éventuellement des tests supplémentaires pour consolider."]
-            prochaines = ["Passe au challenge suivant."]
+            commentaire = "Все тесты пройдены. Решение соответствует условиям задачи."
+            consignes = ["Сохрани эту логику и ясность решения."]
+            idees = ["Можно добавить дополнительные тесты для надежности."]
+            prochaines = ["Переходи к следующей задаче."]
         else:
-            commentaire = f"{passed}/{total} tests validés. La solution progresse, mais certains critères restent à corriger."
-            consignes = ["Corrige d'abord le premier test non validé."]
-            idees = ["Compare la sortie obtenue avec la sortie attendue test par test."]
-            prochaines = ["Resoumets après correction ciblée."]
+            commentaire = f"Пройдено {passed}/{total} тестов. Есть прогресс, но часть условий еще не выполнена."
+            consignes = ["Сначала исправь первый непройденный тест."]
+            idees = ["Сравни фактический и ожидаемый вывод по каждому тесту."]
+            prochaines = ["После точечной правки отправь решение снова."]
 
     failed_test_names = [item.get("name") for item in results if isinstance(item, dict) and item.get("status") in {"failed", "error"}]
     failed_test_names = [str(name) for name in failed_test_names if isinstance(name, str)]
 
-    summary_line = f"Tests: {passed}/{total} validés"
+    summary_line = f"Тесты: {passed}/{total}"
     if failed_test_names:
-        summary_line += f" | À corriger: {', '.join(failed_test_names[:2])}"
+        summary_line += f" | Исправить: {', '.join(failed_test_names[:2])}"
 
     formatted = (
-        f"Note: {note}\n"
-        f"Commentaire: {commentaire}\n"
+        f"Оценка: {note}\n"
+        f"Комментарий: {commentaire}\n"
         f"{summary_line}\n"
-        f"Consignes:\n- {consignes[0]}\n"
-        f"Idées:\n- {idees[0]}\n"
-        f"Prochaines étapes:\n- {prochaines[0]}"
+        f"Что сделать:\n- {consignes[0]}\n"
+        f"Идея:\n- {idees[0]}\n"
+        f"Дальше:\n- {prochaines[0]}"
     )
 
     return {
@@ -615,22 +615,22 @@ async def submit_challenge(req: SubmissionRequest):
     if not req.student_code.strip() or len(req.student_code.strip()) < 6:
         return {
             "evaluation": (
-                "Note: 0/10\n"
-                "Commentaire: Aucun code détecté. Colle une solution minimale exécutable puis resoumets.\n"
-                "Consignes:\n"
-                "- Ajoute au moins une fonction ou un bloc logique complet\n"
-                "Idées:\n"
-                "- Commence par une version simple qui passe un cas test\n"
-                "Prochaines étapes:\n"
-                "- Soumets une première version, même incomplète"
+                "Оценка: 0/10\n"
+                "Комментарий: Код не найден. Добавь минимально рабочее решение и отправь снова.\n"
+                "Что сделать:\n"
+                "- Добавь хотя бы одну функцию или полный логический блок\n"
+                "Идея:\n"
+                "- Начни с простой версии, которая проходит один тест\n"
+                "Дальше:\n"
+                "- Отправь первую версию, даже если она неполная"
             ),
             "evaluation_json": {
                 "prompt_version": "v2.3",
                 "note": "0/10",
-                "commentaire": "Aucun code détecté. Colle une solution minimale exécutable puis resoumets.",
-                "consignes": ["Ajoute au moins une fonction ou un bloc logique complet"],
-                "idees": ["Commence par une version simple qui passe un cas test"],
-                "prochaines_etapes": ["Soumets une première version, même incomplète"],
+                "commentaire": "Код не найден. Добавь минимально рабочее решение и отправь снова.",
+                "consignes": ["Добавь хотя бы одну функцию или полный логический блок"],
+                "idees": ["Начни с простой версии, которая проходит один тест"],
+                "prochaines_etapes": ["Отправь первую версию, даже если она неполная"],
             },
         }
 
@@ -646,35 +646,36 @@ async def submit_challenge(req: SubmissionRequest):
     prompt = f"""
 {pedagogy_block}
 
-Voici un défi de code :
+Вот условие задачи:
 
 {req.challenge_description}
 
-Et voici la solution proposée par un étudiant :
+Вот решение студента:
 
 {req.student_code}
 
-1. Analyse la solution et vérifie si elle est correcte.
-2. Attribue une note sur 10.
-3. Donne un commentaire bref et actionnable (max 2 phrases).
-4. Donne uniquement des consignes, idées, et prochaines étapes courtes.
+1. Проанализируй решение и проверь корректность.
+2. Поставь оценку по шкале 10.
+3. Дай короткий практичный комментарий (до 2 фраз).
+4. Дай только короткие пункты: что сделать, идея, дальше.
 
-RÈGLES IMPORTANTES :
-- Interdiction de fournir une solution complète.
-- Interdiction de fournir du code exécutable complet.
-- Interdiction de fournir une réponse directe à l'exercice.
-- Tu peux donner des pistes algorithmiques courtes et générales.
-- Si du code est présent, ne dis jamais "je ne peux pas évaluer car la solution est absente".
-- Sortie concise obligatoire.
+ВАЖНЫЕ ПРАВИЛА:
+- Не давай полное готовое решение.
+- Не давай полный исполняемый код ответа.
+- Не давай прямой окончательный ответ задачи.
+- Можно давать короткие общие алгоритмические подсказки.
+- Если код есть, не пиши, что решение отсутствует.
+- Ответ должен быть коротким.
 
-Réponds strictement en JSON :
+Пиши только на простом русском языке.
+Верни строго JSON:
 {{
     "prompt_version": "v2.3",
     "note": ".../10",
-    "commentaire": "max 280 caractères",
-    "consignes": ["1 à 2 items max"],
-    "idees": ["1 à 2 items max"],
-    "prochaines_etapes": ["1 à 2 items max"]
+    "commentaire": "до 280 символов",
+    "consignes": ["максимум 1-2 пункта"],
+    "idees": ["максимум 1-2 пункта"],
+    "prochaines_etapes": ["максимум 1-2 пункта"]
 }}
 """
 
@@ -706,13 +707,13 @@ Réponds strictement en JSON :
         idees_text = "\n".join([f"- {item}" for item in idees if isinstance(item, str)])
         prochaines_etapes_text = "\n".join([f"- {item}" for item in prochaines_etapes if isinstance(item, str)])
 
-        formatted = f"Note: {note}\nCommentaire: {commentaire}"
+        formatted = f"Оценка: {note}\nКомментарий: {commentaire}"
         if consignes_text:
-            formatted += f"\nConsignes:\n{consignes_text}"
+            formatted += f"\nЧто сделать:\n{consignes_text}"
         if idees_text:
-            formatted += f"\nIdées:\n{idees_text}"
+            formatted += f"\nИдея:\n{idees_text}"
         if prochaines_etapes_text:
-            formatted += f"\nProchaines étapes:\n{prochaines_etapes_text}"
+            formatted += f"\nДальше:\n{prochaines_etapes_text}"
 
         return {
             "evaluation": formatted,
@@ -732,27 +733,28 @@ async def generate_challenge(req: ChallengeRequest):
     prompt = f"""
 {pedagogy_block}
 
-Tu es un professeur de programmation. Crée un défi de code pour un étudiant de niveau {req.level} en {req.language}.
-Contexte de cours (titre + description): {topic or 'non spécifié'}
-Le défi doit contenir :
+Ты преподаватель программирования. Создай задачу для ученика уровня {req.level} на {req.language}.
+Контекст курса (название + описание): {topic or 'не указан'}
+Задача должна содержать:
 
-1. Un énoncé clair
-2. Deux à trois contraintes concrètes
-3. Un à deux hints pédagogiques (sans donner la solution)
-4. Un exemple d’entrée/sortie
-5. Un template de départ (starter code) à coller dans l'éditeur
+1. Ясное условие
+2. Два-три конкретных ограничения
+3. Одна-две обучающие подсказки (без готового решения)
+4. Пример входа/выхода
+5. Стартовый шаблон кода (starter code)
 
-Qualité attendue:
-- Défi réaliste et centré sur le thème du cours.
-- Texte concis, actionnable, adapté au niveau.
-- Pas de solution complète.
-- Le défi doit explicitement refléter le sujet du cours et ne pas être un exercice générique hors contexte.
-- Exercice créatif mais standard d'apprentissage (objectif clair, progression logique, difficulté adaptée).
-- Par défaut, NE PAS imposer input()/print() interactifs.
-- Préférer une fonction pure testable (paramètres -> valeur de retour).
-- Ne demander input()/print() que si le contexte du cours l'exige explicitement.
+Требования к качеству:
+- Реалистичная задача по теме курса.
+- Короткий и понятный текст по уровню ученика.
+- Без полного готового решения.
+- Задача должна явно соответствовать теме курса.
+- Логичная учебная сложность и понятная цель.
+- По умолчанию НЕ требовать интерактивный input()/print().
+- Предпочитать чистую тестируемую функцию (параметры -> результат).
+- Требовать input()/print() только если это явно нужно по контексту курса.
 
-Réponds strictement en JSON :
+Пиши только на простом русском языке.
+Верни строго JSON:
 {{
     "prompt_version": "v2.5",
     "enonce": "...",
@@ -809,22 +811,22 @@ Réponds strictement en JSON :
                                 "name": str(item.get("name") or "test"),
                                 "args_literal": repr(item.get("args", [])),
                                 "expected_literal": repr(item.get("expected")),
-                                "constraint": "Vérifie le comportement attendu",
+                                "constraint": "Проверь ожидаемое поведение",
                             }
                             for item in (fallback_suite.get("tests") or [])
                             if isinstance(item, dict)
                         ],
                         "quality_checks": [
-                            "Respecte la signature demandée.",
-                            "Gère les cas limites présents dans les tests.",
+                            "Соблюдай требуемую сигнатуру функции.",
+                            "Обработай граничные случаи из тестов.",
                         ],
                     }
 
             if not enonce.strip():
-                raise HTTPException(status_code=502, detail="Génération IA incomplète: énoncé manquant.")
+                raise HTTPException(status_code=502, detail="Неполный ответ ИИ: отсутствует условие задачи.")
 
             if not contraintes_text.strip():
-                raise HTTPException(status_code=502, detail="Génération IA incomplète: contraintes manquantes.")
+                raise HTTPException(status_code=502, detail="Неполный ответ ИИ: отсутствуют ограничения.")
 
             if not hints_text.strip():
                 hints_text = "- Commence par une version minimale qui fonctionne sur un cas simple.\n- Ajoute ensuite un cas limite avant de soumettre."
@@ -833,12 +835,11 @@ Réponds strictement en JSON :
                 starter_code = (
                     "def solution(*args):\n"
                     "    \"\"\"\n"
-                    "    TODO: implémente la logique demandée par l'énoncé.\n"
+                    "    TODO: реализуй логику по условию задачи.\n"
                     "    \"\"\"\n"
                     "    pass\n"
                 )
-
-            formatted = f"Énoncé: {enonce}\nContraintes:\n{contraintes_text}\nHints:\n{hints_text}\nExemple: {exemple}"
+            formatted = f"Задание: {enonce}\nПравила:\n{contraintes_text}\nПодсказки:\n{hints_text}\nПример: {exemple}"
             return {
                 "challenge": formatted,
                 "challenge_json": parsed,
@@ -851,7 +852,7 @@ Réponds strictement en JSON :
         except Exception:
             if raw.strip():
                 return {"challenge": raw, "source": "openai-raw"}
-            raise HTTPException(status_code=502, detail="Réponse IA non exploitable pour ce challenge.")
+                raise HTTPException(status_code=502, detail="Ответ ИИ не удалось использовать для этой задачи.")
     except HTTPException:
         raise
     except Exception as e:
@@ -860,4 +861,4 @@ Réponds strictement en JSON :
         tb = traceback.format_exc()
         print(f"[ERROR] OpenAI Error: {error_msg}")
         print(f"[ERROR] Traceback: {tb}")
-        raise HTTPException(status_code=503, detail=f"Service de génération IA temporairement indisponible: {error_msg}")
+        raise HTTPException(status_code=503, detail=f"Сервис генерации ИИ временно недоступен: {error_msg}")

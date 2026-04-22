@@ -41,8 +41,8 @@ type LearnerProgression = {
 };
 
 export default function ProfilePage() {
-  const [name, setName] = useState('Étudiant');
-  const [level, setLevel] = useState('débutant');
+  const [name, setName] = useState('Ученик');
+  const [level, setLevel] = useState('начинающий');
   const [progression, setProgression] = useState<LearnerProgression | null>(null);
   const [progressionMessage, setProgressionMessage] = useState('');
 
@@ -50,8 +50,8 @@ export default function ProfilePage() {
     fetch('/api/me')
       .then((res) => res.json())
       .then((data) => {
-        setName(data?.name ?? 'Étudiant');
-        setLevel(data?.level ?? 'débutant');
+        setName(data?.name ?? 'Ученик');
+        setLevel(data?.level ?? 'начинающий');
       })
       .catch(() => undefined);
 
@@ -68,16 +68,16 @@ export default function ProfilePage() {
         setProgressionMessage('');
       })
       .catch(() => {
-        setProgressionMessage('Progression avancée indisponible pour le moment.');
+        setProgressionMessage('Расширенный прогресс временно недоступен.');
       });
   }, []);
 
   return (
     <div className="space-y-6">
       <section className="rounded-2xl border bg-card p-6">
-        <p className="text-sm text-primary font-semibold">Profil apprenant</p>
-        <h1 className="text-2xl lg:text-3xl font-bold mt-2">Mon espace</h1>
-        <p className="text-muted-foreground mt-2">Consulte ton identité pédagogique et ton niveau actuel.</p>
+        <p className="text-sm text-primary font-semibold">Профиль ученика</p>
+        <h1 className="text-2xl lg:text-3xl font-bold mt-2">Мой профиль</h1>
+        <p className="text-muted-foreground mt-2">Просмотри свой учебный профиль и текущий уровень.</p>
       </section>
 
       <section className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -85,7 +85,7 @@ export default function ProfilePage() {
           <div className="size-10 rounded-lg bg-primary/10 text-primary grid place-items-center">
             <UserCircle2 className="h-5 w-5" />
           </div>
-          <p className="text-sm text-muted-foreground">Nom</p>
+          <p className="text-sm text-muted-foreground">Имя</p>
           <p className="font-semibold">{name}</p>
         </div>
 
@@ -93,7 +93,7 @@ export default function ProfilePage() {
           <div className="size-10 rounded-lg bg-primary/10 text-primary grid place-items-center">
             <GraduationCap className="h-5 w-5" />
           </div>
-          <p className="text-sm text-muted-foreground">Niveau</p>
+          <p className="text-sm text-muted-foreground">Уровень</p>
           <p className="font-semibold">{level}</p>
         </div>
 
@@ -101,8 +101,8 @@ export default function ProfilePage() {
           <div className="size-10 rounded-lg bg-primary/10 text-primary grid place-items-center">
             <Activity className="h-5 w-5" />
           </div>
-          <p className="text-sm text-muted-foreground">Statut</p>
-          <p className="font-semibold">Actif</p>
+          <p className="text-sm text-muted-foreground">Статус</p>
+          <p className="font-semibold">Активен</p>
         </div>
       </section>
 
@@ -110,7 +110,7 @@ export default function ProfilePage() {
         <>
           <section className="rounded-2xl border bg-card p-5 space-y-3">
             <h2 className="font-semibold inline-flex items-center gap-2">
-              <Award className="h-4 w-4 text-primary" /> Badges ({progression.metrics.unlockedBadges}/{progression.metrics.totalBadges})
+              <Award className="h-4 w-4 text-primary" /> Бейджи ({progression.metrics.unlockedBadges}/{progression.metrics.totalBadges})
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {progression.badges.map((badge) => (
@@ -124,7 +124,7 @@ export default function ProfilePage() {
 
           <section className="rounded-2xl border bg-card p-5 space-y-3">
             <h2 className="font-semibold inline-flex items-center gap-2">
-              <Target className="h-4 w-4 text-primary" /> Objectifs & progression
+              <Target className="h-4 w-4 text-primary" /> Цели и прогресс
             </h2>
             <div className="space-y-3">
               {progression.objectives.map((objective) => (
@@ -141,11 +141,11 @@ export default function ProfilePage() {
 
           <section className="rounded-2xl border bg-card p-5 space-y-3">
             <h2 className="font-semibold inline-flex items-center gap-2">
-              <Lightbulb className="h-4 w-4 text-primary" /> Recommandations intelligentes
+              <Lightbulb className="h-4 w-4 text-primary" /> Умные рекомендации
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <div className="rounded-lg border bg-background p-3">
-                <p className="text-sm font-semibold">Next best lesson</p>
+                <p className="text-sm font-semibold">Следующий урок</p>
                 <p className="text-sm mt-1">{progression.recommendation.title}</p>
                 {progression.recommendation.formationName && (
                   <p className="text-xs text-muted-foreground mt-1">{progression.recommendation.formationName}</p>
@@ -154,10 +154,10 @@ export default function ProfilePage() {
               </div>
 
               <div className="rounded-lg border bg-background p-3">
-                <p className="text-sm font-semibold">Reprise intelligente</p>
+                <p className="text-sm font-semibold">Умное продолжение</p>
                 <p className="text-sm mt-1">{progression.resume.title}</p>
                 {typeof progression.resume.lastProgress === 'number' && (
-                  <p className="text-xs text-muted-foreground mt-1">Progression précédente: {progression.resume.lastProgress}%</p>
+                  <p className="text-xs text-muted-foreground mt-1">Предыдущий прогресс: {progression.resume.lastProgress}%</p>
                 )}
                 <p className="text-xs text-muted-foreground mt-2">{progression.resume.suggestion}</p>
               </div>
