@@ -1321,5 +1321,876 @@
         "timestamp": "2026-04-15T15:31:54.926857+00:00"
       }
     ]
+  },
+  "12c65d5d-6c18-488a-956f-927262c014f3": {
+    "session_id": "12c65d5d-6c18-488a-956f-927262c014f3",
+    "created_at": "2026-04-16T11:27:54.943613+00:00",
+    "updated_at": "2026-04-16T11:27:54.943635+00:00",
+    "code": "print('x')",
+    "level": "débutant",
+    "challenge_description": "",
+    "tutor_mode": false,
+    "history": []
+  },
+  "9be40448-fb2a-4062-b4d1-a0e9ffdcbe22": {
+    "session_id": "9be40448-fb2a-4062-b4d1-a0e9ffdcbe22",
+    "created_at": "2026-04-17T14:29:39.090116+00:00",
+    "updated_at": "2026-04-17T14:29:57.130766+00:00",
+    "code": "# session tuteur",
+    "level": "débutant",
+    "challenge_description": "",
+    "tutor_mode": true,
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Здравствуйте! Я ваш наставник по курсу \"Условия и Циклы\" на платформе изучения Python. Этот курс поможет вам научиться управлять логикой программы с помощью условных операторов и циклов. Давайте начнем с небольшого вопроса, чтобы я мог лучше понять ваш текущий уровень: какие основные конструкции языка Python вы уже знаете?",
+        "timestamp": "2026-04-17T14:29:57.130748+00:00"
+      }
+    ]
+  },
+  "5506f1cf-613f-4c4c-86dc-e5aa51ba89b3": {
+    "session_id": "5506f1cf-613f-4c4c-86dc-e5aa51ba89b3",
+    "created_at": "2026-04-17T14:29:57.172703+00:00",
+    "updated_at": "2026-04-17T14:30:02.330020+00:00",
+    "code": "# session tuteur",
+    "level": "débutant",
+    "challenge_description": "",
+    "tutor_mode": true,
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Здравствуйте! Меня зовут AI-наставник, и я здесь, чтобы помочь вам освоить курс \"Условия и Циклы\" на Python. На этом курсе мы научимся управлять логикой программ с помощью условных операторов if/else и циклов for/while. Давайте начнем с того, что вы расскажете мне, какой у вас уже есть опыт программирования на Python? Вы уже работали с условными операторами или циклами?",
+        "timestamp": "2026-04-17T14:30:02.329995+00:00"
+      }
+    ]
+  },
+  "05de42f4-4ef3-4d1c-a92b-d76199165e1b": {
+    "session_id": "05de42f4-4ef3-4d1c-a92b-d76199165e1b",
+    "created_at": "2026-04-21T10:38:59.697068+00:00",
+    "updated_at": "2026-04-21T10:39:10.195109+00:00",
+    "code": "# session tuteur",
+    "level": "débutant",
+    "challenge_description": "",
+    "tutor_mode": true,
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Здравствуйте! Меня зовут Алексей, и я буду вашим наставником по курсу \"Переменные и Операции\" на платформе изучения Python. Мы будем изучать основы работы с числами, текстом и переменными. Давайте начнем с того, что я хочу узнать ваш текущий уровень. Вы уже знакомы с какими-либо программными языками? Какой у вас опыт в программировании?",
+        "timestamp": "2026-04-21T10:39:10.195087+00:00"
+      }
+    ]
+  },
+  "1422e131-5645-48d2-98f1-d9e95f34e4a4": {
+    "session_id": "1422e131-5645-48d2-98f1-d9e95f34e4a4",
+    "created_at": "2026-04-21T10:39:10.224738+00:00",
+    "updated_at": "2026-04-21T10:39:25.154041+00:00",
+    "code": "# session tuteur",
+    "level": "débutant",
+    "challenge_description": "",
+    "tutor_mode": true,
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Здравствуйте! Я ваш наставник по курсу \"Переменные и Операции\" на платформе изучения Python. Мы будем изучать основы работы с различными типами данных, такими как числа и текст, а также научимся создавать и использовать переменные. Это поможет вам легко начать программировать и понять структуру кода. Давайте начнем с простого вопроса: что вы уже знаете о переменных в программировании? Это поможет мне лучше понять ваш текущий уровень и подстроить наш учебный план.",
+        "timestamp": "2026-04-21T10:39:25.154022+00:00"
+      }
+    ]
+  },
+  "70806d15-d675-4787-b1a8-8e9f853983ee": {
+    "session_id": "70806d15-d675-4787-b1a8-8e9f853983ee",
+    "created_at": "2026-04-21T11:07:45.283679+00:00",
+    "updated_at": "2026-04-21T11:07:50.763075+00:00",
+    "code": "def calculer_moyenne(notes):\n    if not notes:  # Vérifie si la liste des notes est vide\n        return 0\n    return sum(notes) / len(notes)\n\ndef filtrer_et_trier_etudiants(etudiants):\n    resultats = []\n    for nom, notes in etudiants:\n        moyenne = calculer_moyenne(notes)\n        if moyenne >= 12:  # Filtre les étudiants avec une moyenne supérieure ou égale à 12\n            resultats.append((nom, moyenne))\n    # Trie les étudiants par leur moyenne en ordre décroissant\n    resultats.sort(key=lambda etudiant: etudiant[1], reverse=True)\n    return resultats",
+    "level": "intermédiaire",
+    "challenge_description": "Exercice: Tu dois créer une fonction qui accepte une liste d'étudiants. Chaque étudiant est représenté par un tuple contenant son nom et une liste de ses notes. La fonction doit calculer la moyenne des notes de chaque étudiant, éliminer ceux dont la moyenne est inférieure à 12, trier les étudiants restants par leur moyenne en ordre décroissant et retourner une liste de tuples, chaque tuple contenant le nom de l'étudiant et sa moyenne. Nom attendu de la fonction: filtrer_et_trier_etudiants.\nContraintes:\n- La fonction doit retourner une liste de tuples (nom, moyenne).\n- Utilise une fonction pour calculer la moyenne des étudiants.\n- Les étudiants avec une moyenne inférieure à 12 ne doivent pas apparaître dans le résultat final.\nIndices:\n- Utilise la fonction `sum()` pour calculer la somme des notes et `len()` pour obtenir le nombre de notes afin de calculer la moyenne.\n- Après avoir calculé toutes les moyennes, utilise une boucle pour filtrer et une autre pour trier les résultats.\nExemple: Entrée: [('Alice', [14, 15, 13]), ('Bob', [8, 9, 7]), ('Charlie', [16, 18, 20])]\nSortie: [('Charlie', 18.0), ('Alice', 14.0)]",
+    "tutor_mode": true,
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Bonjour ! Je suis ton tuteur IA ici pour t'aider à apprendre Python dans le cadre du cours \"Assistant exercice\". Avant de commencer, pourrais-tu me dire quel est ton niveau actuel en programmation Python et quel aspect particulier tu aimerais améliorer ou comprendre aujourd'hui ?",
+        "timestamp": "2026-04-21T11:07:50.763056+00:00"
+      }
+    ]
+  },
+  "36f83307-4dda-4b74-8c12-4f80127bd1a4": {
+    "session_id": "36f83307-4dda-4b74-8c12-4f80127bd1a4",
+    "created_at": "2026-04-21T11:10:38.427798+00:00",
+    "updated_at": "2026-04-21T11:10:44.073489+00:00",
+    "code": "def calculer_moyenne(notes):\n    if not notes:  # Vérifie si la liste des notes est vide\n        return 0\n    return sum(notes) / len(notes)\n\ndef filtrer_et_trier_etudiants(etudiants):\n    resultats = []\n    for nom, notes in etudiants:\n        moyenne = calculer_moyenne(notes)\n        if moyenne >= 12:  # Filtre les étudiants avec une moyenne supérieure ou égale à 12\n            resultats.append((nom, moyenne))\n    # Trie les étudiants par leur moyenne en ordre décroissant\n    resultats.sort(key=lambda etudiant: etudiant[1], reverse=True)\n    return resultats",
+    "level": "intermédiaire",
+    "challenge_description": "Exercice: Tu dois créer une fonction qui accepte une liste d'étudiants. Chaque étudiant est représenté par un tuple contenant son nom et une liste de ses notes. La fonction doit calculer la moyenne des notes de chaque étudiant, éliminer ceux dont la moyenne est inférieure à 12, trier les étudiants restants par leur moyenne en ordre décroissant et retourner une liste de tuples, chaque tuple contenant le nom de l'étudiant et sa moyenne. Nom attendu de la fonction: filtrer_et_trier_etudiants.\nContraintes:\n- La fonction doit retourner une liste de tuples (nom, moyenne).\n- Utilise une fonction pour calculer la moyenne des étudiants.\n- Les étudiants avec une moyenne inférieure à 12 ne doivent pas apparaître dans le résultat final.\nIndices:\n- Utilise la fonction `sum()` pour calculer la somme des notes et `len()` pour obtenir le nombre de notes afin de calculer la moyenne.\n- Après avoir calculé toutes les moyennes, utilise une boucle pour filtrer et une autre pour trier les résultats.\nExemple: Entrée: [('Alice', [14, 15, 13]), ('Bob', [8, 9, 7]), ('Charlie', [16, 18, 20])]\nSortie: [('Charlie', 18.0), ('Alice', 14.0)]",
+    "tutor_mode": true,
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Bonjour et bienvenue dans le cours \"Assistant exercice\" où nous allons travailler ensemble sur l'apprentissage de Python, spécialement en créant et manipulant des fonctions. Je suis ici pour t'aider à comprendre et à pratiquer le code Python de manière claire et patiente. Pour mieux adapter notre session, pourrais-tu me dire ce que tu as déjà appris en Python et ce que tu trouves le plus difficile jusqu'à maintenant ?",
+        "timestamp": "2026-04-21T11:10:44.073463+00:00"
+      }
+    ]
+  },
+  "60e68410-d44b-4c77-b5a3-e11fa63ba76b": {
+    "session_id": "60e68410-d44b-4c77-b5a3-e11fa63ba76b",
+    "created_at": "2026-04-21T11:19:34.810119+00:00",
+    "updated_at": "2026-04-21T11:19:39.392660+00:00",
+    "code": "print(1)",
+    "level": "débutant",
+    "challenge_description": "test",
+    "tutor_mode": true,
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Bonjour ! Je suis ton tuteur IA ici pour t'aider à apprendre Python. Nous allons travailler ensemble dans ce cours intitulé \"Test\". Avant de commencer, pourrais-tu me dire ce que tu connais déjà en Python et ce que tu aimerais apprendre spécifiquement dans ce cours ? Cela me permettra de mieux adapter nos sessions à tes besoins.",
+        "timestamp": "2026-04-21T11:19:39.392638+00:00"
+      }
+    ]
+  },
+  "c23fe378-6f8a-4b3c-b583-1c17af557549": {
+    "session_id": "c23fe378-6f8a-4b3c-b583-1c17af557549",
+    "created_at": "2026-04-21T11:20:10.581573+00:00",
+    "updated_at": "2026-04-21T11:21:47.683054+00:00",
+    "code": "def calculer_moyenne(notes):\n    if not notes:  # Vérifie si la liste des notes est vide\n        return 0\n    return sum(notes) / len(notes)\n\ndef filtrer_et_trier_etudiants(etudiants):\n    resultats = []\n    for nom, notes in etudiants:\n        moyenne = calculer_moyenne(notes)\n        if moyenne >= 12:  # Filtre les étudiants avec une moyenne supérieure ou égale à 12\n            resultats.append((nom, moyenne))\n    # Trie les étudiants par leur moyenne en ordre décroissant\n    resultats.sort(key=lambda etudiant: etudiant[1], reverse=True)\n    return resultats",
+    "level": "intermédiaire",
+    "challenge_description": "Exercice: Tu dois créer une fonction qui accepte une liste d'étudiants. Chaque étudiant est représenté par un tuple contenant son nom et une liste de ses notes. La fonction doit calculer la moyenne des notes de chaque étudiant, éliminer ceux dont la moyenne est inférieure à 12, trier les étudiants restants par leur moyenne en ordre décroissant et retourner une liste de tuples, chaque tuple contenant le nom de l'étudiant et sa moyenne. Nom attendu de la fonction: filtrer_et_trier_etudiants.\nContraintes:\n- La fonction doit retourner une liste de tuples (nom, moyenne).\n- Utilise une fonction pour calculer la moyenne des étudiants.\n- Les étudiants avec une moyenne inférieure à 12 ne doivent pas apparaître dans le résultat final.\nIndices:\n- Utilise la fonction `sum()` pour calculer la somme des notes et `len()` pour obtenir le nombre de notes afin de calculer la moyenne.\n- Après avoir calculé toutes les moyennes, utilise une boucle pour filtrer et une autre pour trier les résultats.\nExemple: Entrée: [('Alice', [14, 15, 13]), ('Bob', [8, 9, 7]), ('Charlie', [16, 18, 20])]\nSortie: [('Charlie', 18.0), ('Alice', 14.0)]",
+    "tutor_mode": true,
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Bonjour ! Je suis ton tuteur IA pour t'aider à apprendre et à pratiquer le Python dans le cadre du cours \"Assistant exercice\". Je suis ici pour t'accompagner pas à pas dans la compréhension et la résolution des exercices de programmation. Avant de commencer, pourrais-tu me dire un peu plus sur ce que tu as déjà appris en Python ? Cela me permettra de mieux adapter nos sessions à ton niveau.",
+        "timestamp": "2026-04-21T11:20:15.752157+00:00"
+      },
+      {
+        "step": 1,
+        "student_answer": "Qu est-ce qu il faut retenir ?",
+        "assistant_response": "Bonjour ! Pour bien comprendre l'exercice et le code que nous avons ici, il y a quelques points clés à retenir :\n\n1. **Fonction `calculer_moyenne`** : Cette fonction prend une liste de notes et calcule la moyenne. Si la liste est vide, elle retourne 0. Cela évite une division par zéro qui causerait une erreur.\n\n2. **Fonction `filtrer_et_trier_etudiants`** : Cette fonction est le cœur de notre exercice. Elle prend une liste d'étudiants, où chaque étudiant est représenté par un tuple contenant son nom et ses notes. Pour chaque étudiant, elle calcule la moyenne de ses notes. Si cette moyenne est de 12 ou plus, l'étudiant est gardé dans la liste des résultats.\n\n3. **Tri des résultats** : Après avoir filtré les étudiants, la fonction trie ceux qui restent par leur moyenne en ordre décroissant. Cela signifie que les étudiants avec les meilleures moyennes apparaissent en premier dans la liste finale.\n\n4. **Retour de la liste triée** : Finalement, la fonction retourne la liste des étudiants qui ont passé le filtre, avec leur nom et leur moyenne.\n\nL'objectif de cet exercice est de pratiquer le filtrage et le tri de données en utilisant des fonctions, des boucles, et des expressions lambda en Python. Est-ce que le rôle de chaque partie du code te semble plus clair maintenant ?",
+        "timestamp": "2026-04-21T11:21:47.683034+00:00"
+      }
+    ]
+  },
+  "5bf3ad22-2cca-4937-82d9-a45cc3ce2a28": {
+    "session_id": "5bf3ad22-2cca-4937-82d9-a45cc3ce2a28",
+    "created_at": "2026-04-21T11:24:28.746560+00:00",
+    "updated_at": "2026-04-21T11:31:00.118310+00:00",
+    "code": "def calculer_moyenne(notes):\n    if not notes:  # Vérifie si la liste des notes est vide\n        return 0\n    return sum(notes) / len(notes)\n\ndef filtrer_et_trier_etudiants(etudiants):\n    resultats = []\n    for nom, notes in etudiants:\n        moyenne = calculer_moyenne(notes)\n        if moyenne >= 12:  # Filtre les étudiants avec une moyenne supérieure ou égale à 12\n            resultats.append((nom, moyenne))\n    # Trie les étudiants par leur moyenne en ordre décroissant\n    resultats.sort(key=lambda etudiant: etudiant[1], reverse=True)\n    return resultats",
+    "level": "intermédiaire",
+    "challenge_description": "Exercice: Tu dois créer une fonction qui accepte une liste d'étudiants. Chaque étudiant est représenté par un tuple contenant son nom et une liste de ses notes. La fonction doit calculer la moyenne des notes de chaque étudiant, éliminer ceux dont la moyenne est inférieure à 12, trier les étudiants restants par leur moyenne en ordre décroissant et retourner une liste de tuples, chaque tuple contenant le nom de l'étudiant et sa moyenne. Nom attendu de la fonction: filtrer_et_trier_etudiants.\nContraintes:\n- La fonction doit retourner une liste de tuples (nom, moyenne).\n- Utilise une fonction pour calculer la moyenne des étudiants.\n- Les étudiants avec une moyenne inférieure à 12 ne doivent pas apparaître dans le résultat final.\nIndices:\n- Utilise la fonction `sum()` pour calculer la somme des notes et `len()` pour obtenir le nombre de notes afin de calculer la moyenne.\n- Après avoir calculé toutes les moyennes, utilise une boucle pour filtrer et une autre pour trier les résultats.\nExemple: Entrée: [('Alice', [14, 15, 13]), ('Bob', [8, 9, 7]), ('Charlie', [16, 18, 20])]\nSortie: [('Charlie', 18.0), ('Alice', 14.0)]",
+    "tutor_mode": true,
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Bonjour ! Je suis ton tuteur IA pour t'aider à apprendre Python dans le cadre du cours \"Assistant exercice\". Avant de commencer, pourrais-tu me dire ce que tu as déjà appris en Python et ce que tu trouves le plus difficile jusqu'à présent ? Cela me permettra de mieux adapter notre session à tes besoins.",
+        "timestamp": "2026-04-21T11:24:34.208166+00:00"
+      },
+      {
+        "step": 1,
+        "student_answer": "commennt faire si je veux tester un voir le resulter dans le terminal?",
+        "assistant_response": "Bonjour ! Pour tester et voir le résultat de ta fonction dans le terminal, tu peux utiliser des instructions `print()` pour afficher les informations que tu souhaites. Voici comment tu pourrais faire pour tester la fonction `filtrer_et_trier_etudiants` que nous avons discutée.\n\nTout d'abord, tu dois définir quelques données pour simuler une liste d'étudiants avec leurs notes. Ensuite, tu appelles la fonction avec ces données et tu utilises `print()` pour afficher le résultat. Voici un exemple :\n\n```python\n# Exemple de liste d'étudiants\netudiants = [\n    (\"Alice\", [12, 15, 18]),\n    (\"Bob\", [8, 9, 12]),\n    (\"Charlie\", [14, 19, 20]),\n    (\"David\", [11, 10, 12])\n]\n\n# Appel de la fonction et affichage du résultat\nresultats_filtrés = filtrer_et_trier_etudiants(etudiants)\nprint(resultats_filtrés)\n```\n\nDans cet exemple, tu définis une liste `etudiants` où chaque élément est un tuple avec le nom de l'étudiant et une liste de ses notes. Après avoir appelé la fonction `filtrer_et_trier_etudiants` avec cette liste, le résultat est stocké dans `resultats_filtrés`, que tu affiches ensuite avec `print()`.\n\nAs-tu compris comment préparer les données et tester la fonction dans le terminal ? Puis-je t'aider avec autre chose sur cet exemple ?",
+        "timestamp": "2026-04-21T11:25:34.893766+00:00"
+      },
+      {
+        "step": 2,
+        "student_answer": "Donne-moi 3 tests concrets a essayer",
+        "assistant_response": "Bien sûr, tester ta fonction avec différents cas peut t'aider à mieux comprendre comment elle fonctionne et à vérifier qu'elle répond bien aux attentes. Voici trois tests concrets que tu peux essayer :\n\n1. **Test avec des étudiants ayant tous une moyenne supérieure à 12** :\n   ```python\n   etudiants1 = [\n       (\"Emma\", [13, 14, 15]),\n       (\"Lucas\", [12, 18, 14])\n   ]\n   print(filtrer_et_trier_etudiants(etudiants1))\n   ```\n   Ici, tu t'attends à voir tous les étudiants listés, car leurs moyennes sont toutes supérieures à 12.\n\n2. **Test avec des étudiants ayant des moyennes inférieures à 12** :\n   ```python\n   etudiants2 = [\n       (\"Mia\", [10, 11, 9]),\n       (\"Noah\", [8, 9, 10])\n   ]\n   print(filtrer_et_trier_etudiants(etudiants2))\n   ```\n   Dans ce cas, aucun étudiant ne devrait apparaître dans le résultat final, car leurs moyennes sont toutes inférieures à 12.\n\n3. **Test mixte avec des étudiants ayant des moyennes au-dessus et en dessous de 12** :\n   ```python\n   etudiants3 = [\n       (\"Olivia\", [16, 17, 18]),\n       (\"Ethan\", [7, 8, 9]),\n       (\"Sophia\", [12, 13, 14])\n   ]\n   print(filtrer_et_trier_etudiants(etudiants3))\n   ```\n   Ce test te permettra de voir si la fonction filtre correctement et ne retourne que les étudiants avec une moyenne de 12 ou plus, et les trie par ordre décroissant de leur moyenne.\n\nChacun de ces tests te donnera une meilleure idée de comment la fonction se comporte avec différents types de données d'entrée. As-tu d'autres questions sur ces tests ou sur quelque chose d'autre ?",
+        "timestamp": "2026-04-21T11:29:30.773290+00:00"
+      },
+      {
+        "step": 2,
+        "student_answer": "Donne-moi 3 tests concrets a essayer",
+        "assistant_response": "Bien sûr, voici trois tests concrets que tu peux essayer pour voir comment la fonction `filtrer_et_trier_etudiants` fonctionne avec différents types de données :\n\n1. **Test avec des étudiants ayant tous une moyenne supérieure à 12** :\n   ```python\n   etudiants1 = [\n       (\"Emma\", [13, 14, 15]),\n       (\"Lucas\", [16, 17, 18])\n   ]\n   print(filtrer_et_trier_etudiants(etudiants1))\n   ```\n   Ici, tu devrais voir tous les étudiants listés car ils ont tous des moyennes supérieures à 12, et ils seront triés par leur moyenne en ordre décroissant.\n\n2. **Test avec des étudiants ayant des moyennes inférieures à 12** :\n   ```python\n   etudiants2 = [\n       (\"Mia\", [10, 11, 9]),\n       (\"Noah\", [8, 7, 9])\n   ]\n   print(filtrer_et_trier_etudiants(etudiants2))\n   ```\n   Dans ce cas, la liste retournée devrait être vide, car aucun étudiant n'a une moyenne de 12 ou plus.\n\n3. **Test mixte avec certains étudiants au-dessus et d'autres en dessous de 12** :\n   ```python\n   etudiants3 = [\n       (\"Sophie\", [12, 13, 14]),\n       (\"Ethan\", [10, 10, 11]),\n       (\"Olivia\", [20, 19, 18])\n   ]\n   print(filtrer_et_trier_etudiants(etudiants3))\n   ```\n   Ce test montrera comment la fonction filtre et trie les étudiants. Seuls Sophie et Olivia devraient apparaître dans les résultats, avec Olivia en premier car elle a une moyenne plus élevée.\n\nChaque test te permet de voir comment la fonction gère différentes situations. Après avoir exécuté ces tests, tu pourras mieux comprendre le comportement de la fonction selon les données qu'elle reçoit. As-tu d'autres questions sur ces tests ou quelque chose d'autre à clarifier ?",
+        "timestamp": "2026-04-21T11:30:03.246436+00:00"
+      },
+      {
+        "step": 4,
+        "student_answer": "Donne-moi 3 tests concrets a essayer",
+        "assistant_response": "Bien sûr, tester ta fonction avec différents cas peut t'aider à mieux comprendre comment elle fonctionne et à vérifier qu'elle répond bien aux attentes. Voici trois tests concrets que tu peux essayer :\n\n1. **Test avec des étudiants ayant tous une moyenne supérieure à 12** :\n   ```python\n   etudiants1 = [\n       (\"Emma\", [13, 14, 15]),\n       (\"Lucas\", [12, 18, 14])\n   ]\n   print(filtrer_et_trier_etudiants(etudiants1))\n   ```\n   Ici, tu t'attends à voir tous les étudiants listés, car leurs moyennes sont toutes supérieures à 12.\n\n2. **Test avec des étudiants ayant des moyennes inférieures à 12** :\n   ```python\n   etudiants2 = [\n       (\"Mia\", [10, 11, 9]),\n       (\"Noah\", [8, 9, 10])\n   ]\n   print(filtrer_et_trier_etudiants(etudiants2))\n   ```\n   Dans ce cas, aucun étudiant ne devrait apparaître dans le résultat final, car leurs moyennes sont toutes inférieures à 12.\n\n3. **Test mixte avec des étudiants ayant des moyennes au-dessus et en dessous de 12** :\n   ```python\n   etudiants3 = [\n       (\"Olivia\", [16, 17, 18]),\n       (\"Ethan\", [7, 8, 9]),\n       (\"Sophia\", [12, 13, 14])\n   ]\n   print(filtrer_et_trier_etudiants(etudiants3))\n   ```\n   Ce test te permettra de voir si la fonction filtre correctement et ne retourne que les étudiants avec une moyenne de 12 ou plus, et les trie par ordre décroissant de leur moyenne.\n\nChacun de ces tests te donnera une meilleure idée de comment la fonction se comporte avec différents types de données d'entrée. As-tu d'autres questions sur ces tests ou sur quelque chose d'autre ?",
+        "timestamp": "2026-04-21T11:30:29.872361+00:00"
+      },
+      {
+        "step": 5,
+        "student_answer": "ajoute ca a l'editeur",
+        "assistant_response": "D'accord, je vais t'expliquer comment ajouter et utiliser le code dans un éditeur Python pour réaliser les tests.\n\n1. **Ouvre ton éditeur de code** : Cela peut être un éditeur simple comme Notepad++ ou un environnement de développement intégré (IDE) comme PyCharm ou VSCode.\n\n2. **Crée un nouveau fichier Python** : Sauvegarde-le avec l'extension `.py`, par exemple `test_etudiants.py`.\n\n3. **Copie et colle le code de la fonction** `filtrer_et_trier_etudiants` dans ce fichier. N'oublie pas d'inclure aussi la fonction `calculer_moyenne` qui est utilisée par la première.\n\n4. **Ajoute les tests** : Sous les définitions des fonctions, tu peux ajouter les blocs de test que nous avons discutés. Par exemple, tu peux commencer par copier et coller le test avec des étudiants ayant tous une moyenne supérieure à 12.\n\n5. **Exécute le fichier** : Tu peux le faire directement depuis ton IDE ou en ouvrant un terminal, en naviguant jusqu'au dossier contenant ton fichier, et en tapant `python test_etudiants.py`.\n\nVoilà ! Tu devrais voir les résultats des tests s'afficher dans la console de ton éditeur ou dans ton terminal. Est-ce que cela répond à ta demande pour ajouter le code à l'éditeur et le tester ? As-tu besoin d'autres détails sur une partie du processus ?",
+        "timestamp": "2026-04-21T11:31:00.118290+00:00"
+      }
+    ]
+  },
+  "fc2365af-75ec-4ad5-9863-d698bb96d67f": {
+    "session_id": "fc2365af-75ec-4ad5-9863-d698bb96d67f",
+    "created_at": "2026-04-21T11:33:02.689790+00:00",
+    "updated_at": "2026-04-21T11:37:55.193292+00:00",
+    "code": "def calculer_moyenne(notes):\n    if not notes:  # Vérifie si la liste des notes est vide\n        return 0\n    return sum(notes) / len(notes)\n\ndef filtrer_et_trier_etudiants(etudiants):\n    resultats = []\n    for nom, notes in etudiants:\n        moyenne = calculer_moyenne(notes)\n        if moyenne >= 12:  # Filtre les étudiants avec une moyenne supérieure ou égale à 12\n            resultats.append((nom, moyenne))\n    # Trie les étudiants par leur moyenne en ordre décroissant\n    resultats.sort(key=lambda etudiant: etudiant[1], reverse=True)\n    return resultats",
+    "level": "intermédiaire",
+    "challenge_description": "Exercice: Tu dois créer une fonction qui accepte une liste d'étudiants. Chaque étudiant est représenté par un tuple contenant son nom et une liste de ses notes. La fonction doit calculer la moyenne des notes de chaque étudiant, éliminer ceux dont la moyenne est inférieure à 12, trier les étudiants restants par leur moyenne en ordre décroissant et retourner une liste de tuples, chaque tuple contenant le nom de l'étudiant et sa moyenne. Nom attendu de la fonction: filtrer_et_trier_etudiants.\nContraintes:\n- La fonction doit retourner une liste de tuples (nom, moyenne).\n- Utilise une fonction pour calculer la moyenne des étudiants.\n- Les étudiants avec une moyenne inférieure à 12 ne doivent pas apparaître dans le résultat final.\nIndices:\n- Utilise la fonction `sum()` pour calculer la somme des notes et `len()` pour obtenir le nombre de notes afin de calculer la moyenne.\n- Après avoir calculé toutes les moyennes, utilise une boucle pour filtrer et une autre pour trier les résultats.\nExemple: Entrée: [('Alice', [14, 15, 13]), ('Bob', [8, 9, 7]), ('Charlie', [16, 18, 20])]\nSortie: [('Charlie', 18.0), ('Alice', 14.0)]",
+    "tutor_mode": true,
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Bonjour ! Je suis ton tuteur IA, et je suis ici pour t'aider à apprendre et à pratiquer le Python dans le cadre du cours \"Assistant exercice\". Avant de commencer, pourrais-tu me dire ce que tu connais déjà en Python et ce que tu espères apprendre aujourd'hui ? Cela me permettra de mieux adapter notre session à tes besoins.",
+        "timestamp": "2026-04-21T11:33:06.298542+00:00"
+      },
+      {
+        "step": 1,
+        "student_answer": "Explique l idee generale en 3 points",
+        "assistant_response": "Bonjour ! Je suis ravi de t'expliquer l'idée générale de cet exercice en trois points principaux :\n\n1. **Calcul de la moyenne des notes :** Pour chaque étudiant, nous prenons la liste de ses notes, et nous calculons la moyenne. Si la liste des notes est vide, la moyenne sera de 0. Cela se fait dans la fonction `calculer_moyenne`.\n\n2. **Filtrage des étudiants :** Après avoir calculé la moyenne de chaque étudiant, nous vérifions si cette moyenne est supérieure ou égale à 12. Seuls les étudiants qui ont une moyenne de 12 ou plus sont conservés pour la suite. Cela permet de ne garder que les étudiants qui ont des performances relativement bonnes.\n\n3. **Tri des étudiants par leur moyenne :** Les étudiants qui ont passé le filtre sont ensuite triés par leur moyenne, en ordre décroissant. Cela signifie que les étudiants avec les meilleures moyennes apparaîtront en premier dans la liste finale.\n\nCes trois étapes nous permettent de transformer une liste d'étudiants avec leurs notes en une liste plus restreinte et ordonnée d'étudiants performants selon leur moyenne.\n\nEst-ce que cette explication clarifie bien les étapes que nous allons suivre dans notre code ?",
+        "timestamp": "2026-04-21T11:36:33.884524+00:00"
+      },
+      {
+        "step": 2,
+        "student_answer": "change cette partie if moyenne >= 12 pour 14",
+        "assistant_response": "D'accord, tu souhaites modifier le seuil de filtrage des étudiants pour qu'ils soient conservés seulement si leur moyenne est de 14 ou plus, plutôt que 12. C'est une modification simple dans le code. Voici comment tu peux le faire :\n\nDans la fonction `filtrer_et_trier_etudiants`, tu trouveras la ligne suivante :\n\n```python\nif moyenne >= 12:\n```\n\nTu dois remplacer le `12` par `14` pour changer le critère de sélection. La ligne modifiée ressemblera à cela :\n\n```python\nif moyenne >= 14:\n```\n\nEn faisant ce changement, la fonction ne gardera que les étudiants dont la moyenne est égale ou supérieure à 14. Les étudiants avec une moyenne de 12 ou 13, qui étaient précédemment inclus, seront désormais exclus de la liste finale.\n\nEst-ce que cette modification est claire pour toi ?",
+        "timestamp": "2026-04-21T11:37:55.193269+00:00"
+      }
+    ]
+  },
+  "dd7a9c91-9794-4157-a157-cf0b917c9033": {
+    "session_id": "dd7a9c91-9794-4157-a157-cf0b917c9033",
+    "created_at": "2026-04-21T11:38:07.669698+00:00",
+    "updated_at": "2026-04-21T11:38:17.178296+00:00",
+    "code": "if moyenne >= 14:",
+    "level": "intermédiaire",
+    "challenge_description": "Exercice: Tu dois créer une fonction qui accepte une liste d'étudiants. Chaque étudiant est représenté par un tuple contenant son nom et une liste de ses notes. La fonction doit calculer la moyenne des notes de chaque étudiant, éliminer ceux dont la moyenne est inférieure à 12, trier les étudiants restants par leur moyenne en ordre décroissant et retourner une liste de tuples, chaque tuple contenant le nom de l'étudiant et sa moyenne. Nom attendu de la fonction: filtrer_et_trier_etudiants.\nContraintes:\n- La fonction doit retourner une liste de tuples (nom, moyenne).\n- Utilise une fonction pour calculer la moyenne des étudiants.\n- Les étudiants avec une moyenne inférieure à 12 ne doivent pas apparaître dans le résultat final.\nIndices:\n- Utilise la fonction `sum()` pour calculer la somme des notes et `len()` pour obtenir le nombre de notes afin de calculer la moyenne.\n- Après avoir calculé toutes les moyennes, utilise une boucle pour filtrer et une autre pour trier les résultats.\nExemple: Entrée: [('Alice', [14, 15, 13]), ('Bob', [8, 9, 7]), ('Charlie', [16, 18, 20])]\nSortie: [('Charlie', 18.0), ('Alice', 14.0)]",
+    "tutor_mode": true,
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Bonjour ! Je suis ton assistant IA pour t'aider à apprendre et à pratiquer le Python. Dans ce cours \"Assistant exercice\", nous allons travailler ensemble pour créer une fonction en Python qui traite des données d'étudiants. Avant de commencer, pourrais-tu me dire quel est ton niveau actuel en Python et ce que tu as déjà appris jusqu'à présent ? Cela me permettra de mieux adapter nos séances à tes besoins.",
+        "timestamp": "2026-04-21T11:38:17.178271+00:00"
+      }
+    ]
+  },
+  "f8976528-9ac1-4ee8-a778-ba0a9c1a5e02": {
+    "session_id": "f8976528-9ac1-4ee8-a778-ba0a9c1a5e02",
+    "created_at": "2026-04-21T11:38:30.075226+00:00",
+    "updated_at": "2026-04-21T11:38:35.512895+00:00",
+    "code": "if moyenne >= 14:",
+    "level": "intermédiaire",
+    "challenge_description": "Exercice: Tu dois créer une fonction qui accepte une liste d'étudiants. Chaque étudiant est représenté par un tuple contenant son nom et une liste de ses notes. La fonction doit calculer la moyenne des notes de chaque étudiant, éliminer ceux dont la moyenne est inférieure à 12, trier les étudiants restants par leur moyenne en ordre décroissant et retourner une liste de tuples, chaque tuple contenant le nom de l'étudiant et sa moyenne. Nom attendu de la fonction: filtrer_et_trier_etudiants.\nContraintes:\n- La fonction doit retourner une liste de tuples (nom, moyenne).\n- Utilise une fonction pour calculer la moyenne des étudiants.\n- Les étudiants avec une moyenne inférieure à 12 ne doivent pas apparaître dans le résultat final.\nIndices:\n- Utilise la fonction `sum()` pour calculer la somme des notes et `len()` pour obtenir le nombre de notes afin de calculer la moyenne.\n- Après avoir calculé toutes les moyennes, utilise une boucle pour filtrer et une autre pour trier les résultats.\nExemple: Entrée: [('Alice', [14, 15, 13]), ('Bob', [8, 9, 7]), ('Charlie', [16, 18, 20])]\nSortie: [('Charlie', 18.0), ('Alice', 14.0)]",
+    "tutor_mode": true,
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Bonjour ! Je suis ton assistant IA pour t'aider à apprendre et à pratiquer le Python dans ce cours intitulé \"Assistant exercice\". Je suis ici pour te guider pas à pas à travers les concepts et les exercices. Pour bien commencer, pourrais-tu me dire ce que tu as déjà appris en Python et ce que tu trouves le plus difficile jusqu'à présent ? Cela me permettra de mieux adapter notre session à tes besoins.",
+        "timestamp": "2026-04-21T11:38:35.512872+00:00"
+      }
+    ]
+  },
+  "1d8c2afb-995e-4df9-bede-28330ada2353": {
+    "session_id": "1d8c2afb-995e-4df9-bede-28330ada2353",
+    "created_at": "2026-04-21T11:38:35.536125+00:00",
+    "updated_at": "2026-04-21T11:42:14.261250+00:00",
+    "code": "if moyenne >= 14:",
+    "level": "intermédiaire",
+    "challenge_description": "Exercice: Tu dois créer une fonction qui accepte une liste d'étudiants. Chaque étudiant est représenté par un tuple contenant son nom et une liste de ses notes. La fonction doit calculer la moyenne des notes de chaque étudiant, éliminer ceux dont la moyenne est inférieure à 12, trier les étudiants restants par leur moyenne en ordre décroissant et retourner une liste de tuples, chaque tuple contenant le nom de l'étudiant et sa moyenne. Nom attendu de la fonction: filtrer_et_trier_etudiants.\nContraintes:\n- La fonction doit retourner une liste de tuples (nom, moyenne).\n- Utilise une fonction pour calculer la moyenne des étudiants.\n- Les étudiants avec une moyenne inférieure à 12 ne doivent pas apparaître dans le résultat final.\nIndices:\n- Utilise la fonction `sum()` pour calculer la somme des notes et `len()` pour obtenir le nombre de notes afin de calculer la moyenne.\n- Après avoir calculé toutes les moyennes, utilise une boucle pour filtrer et une autre pour trier les résultats.\nExemple: Entrée: [('Alice', [14, 15, 13]), ('Bob', [8, 9, 7]), ('Charlie', [16, 18, 20])]\nSortie: [('Charlie', 18.0), ('Alice', 14.0)]",
+    "tutor_mode": true,
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Bonjour ! Je suis ton tuteur IA, et je suis ici pour t'aider à apprendre et à pratiquer le Python dans le cadre du cours \"Assistant exercice\". Avant de commencer, pourrais-tu me dire quel est ton niveau actuel en programmation Python et ce que tu espères apprendre aujourd'hui ? Cela me permettra de mieux adapter notre session à tes besoins.",
+        "timestamp": "2026-04-21T11:38:39.480029+00:00"
+      },
+      {
+        "step": 1,
+        "student_answer": "Tu dois créer une fonction qui accepte une liste d'étudiants. Chaque étudiant est représenté par un tuple contenant son nom et une liste de ses notes. La fonction doit calculer la moyenne des notes de chaque étudiant, éliminer ceux dont la moyenne est inférieure à 12, trier les étudiants restants par leur moyenne en ordre décroissant et retourner une liste de tuples, chaque tuple contenant le nom de l'étudiant et sa moyenne. Nom attendu de la fonction: filtrer_et_trier_etudiants. donne la resolution",
+        "assistant_response": "D'accord, commençons par créer la fonction `filtrer_et_trier_etudiants` qui va traiter la liste des étudiants comme tu l'as décrit. Je vais te guider pas à pas.\n\n1. **Définition de la fonction**: On commence par définir la fonction avec le bon nom et elle va accepter un paramètre qui est la liste des étudiants.\n\n2. **Calcul de la moyenne pour chaque étudiant**: Pour chaque étudiant, on va calculer la moyenne de ses notes. Chaque étudiant est représenté par un tuple où le premier élément est le nom et le second est la liste des notes.\n\n3. **Filtrer les étudiants**: Après avoir calculé la moyenne, on ne garde que les étudiants dont la moyenne est supérieure ou égale à 12.\n\n4. **Trier les étudiants**: Les étudiants qui restent seront triés par leur moyenne en ordre décroissant.\n\n5. **Retourner le résultat**: La fonction retourne une nouvelle liste de tuples, chaque tuple contenant le nom de l'étudiant et sa moyenne.\n\nVoici le code pour cela :\n\n```python\ndef filtrer_et_trier_etudiants(liste_etudiants):\n    # Création d'une liste pour stocker les étudiants filtrés\n    etudiants_filtrés = []\n    \n    # Calcul de la moyenne et filtrage\n    for nom, notes in liste_etudiants:\n        moyenne = sum(notes) / len(notes)\n        if moyenne >= 12:\n            etudiants_filtrés.append((nom, moyenne))\n    \n    # Trier les étudiants par moyenne décroissante\n    etudiants_filtrés.sort(key=lambda etudiant: etudiant[1], reverse=True)\n    \n    return etudiants_filtrés\n\n# Exemple d'utilisation\netudiants = [\n    (\"Alice\", [12, 13, 14]),\n    (\"Bob\", [11, 10, 9]),\n    (\"Charlie\", [15, 16, 17])\n]\nresultat = filtrer_et_trier_etudiants(etudiants)\nprint(resultat)\n```\n\nDans cet exemple, `etudiants` est une liste de tuples où chaque tuple contient un nom et une liste de notes. La fonction calcule d'abord la moyenne des notes, filtre ceux qui ont une moyenne inférieure à 12, puis trie les étudiants restants par leur moyenne dans un ordre décroissant.\n\nEst-ce que la manière dont nous avons construit cette fonction te semble claire ? As-tu des questions sur un des points ?",
+        "timestamp": "2026-04-21T11:39:18.403919+00:00"
+      },
+      {
+        "step": 1,
+        "student_answer": "Tu dois créer une fonction qui accepte une liste d'étudiants. Chaque étudiant est représenté par un tuple contenant son nom et une liste de ses notes. La fonction doit calculer la moyenne des notes de chaque étudiant, éliminer ceux dont la moyenne est inférieure à 12, trier les étudiants restants par leur moyenne en ordre décroissant et retourner une liste de tuples, chaque tuple contenant le nom de l'étudiant et sa moyenne. Nom attendu de la fonction: filtrer_et_trier_etudiants. donne la resolution",
+        "assistant_response": "Bonjour ! Pour créer la fonction `filtrer_et_trier_etudiants`, nous allons suivre plusieurs étapes. Commençons par la structure de base de la fonction :\n\n1. **Calcul de la moyenne des notes pour chaque étudiant** : Pour chaque tuple dans la liste, tu calcules la moyenne des notes qui sont dans le deuxième élément du tuple (c'est une liste).\n\n2. **Filtrer les étudiants** : Après avoir calculé la moyenne, tu vérifies si cette moyenne est supérieure ou égale à 12. Si c'est le cas, tu gardes cet étudiant pour l'étape suivante.\n\n3. **Trier les étudiants** : Les étudiants qui restent doivent être triés par leur moyenne, en ordre décroissant.\n\n4. **Retourner la liste** : Enfin, tu retournes une liste de tuples, où chaque tuple contient le nom de l'étudiant et sa moyenne.\n\nVoici le code qui implémente ces étapes :\n\n```python\ndef filtrer_et_trier_etudiants(liste_etudiants):\n    etudiants_filtrés = []\n    \n    # Calcul de la moyenne et filtrage\n    for nom, notes in liste_etudiants:\n        moyenne = sum(notes) / len(notes)\n        if moyenne >= 12:\n            etudiants_filtrés.append((nom, moyenne))\n    \n    # Tri des étudiants par moyenne décroissante\n    etudiants_filtrés.sort(key=lambda etudiant: etudiant[1], reverse=True)\n    \n    return etudiants_filtrés\n```\n\nDans ce code :\n- `sum(notes) / len(notes)` calcule la moyenne.\n- `if moyenne >= 12:` vérifie si l'étudiant doit être gardé.\n- `.sort(key=lambda etudiant: etudiant[1], reverse=True)` trie la liste par la moyenne en ordre décroissant.\n\nEst-ce que ces explications te semblent claires ? As-tu des questions sur un des points ?",
+        "timestamp": "2026-04-21T11:39:38.575823+00:00"
+      },
+      {
+        "step": 3,
+        "student_answer": "Tu dois créer une fonction qui accepte une liste d'étudiants. Chaque étudiant est représenté par un tuple contenant son nom et une liste de ses notes. La fonction doit calculer la moyenne des notes de chaque étudiant, éliminer ceux dont la moyenne est inférieure à 12, trier les étudiants restants par leur moyenne en ordre décroissant et retourner une liste de tuples, chaque tuple contenant le nom de l'étudiant et sa moyenne. Nom attendu de la fonction: filtrer_et_trier_etudiants. donne la resolution",
+        "assistant_response": "Très bien, nous allons donc créer ensemble la fonction `filtrer_et_trier_etudiants` selon les instructions que tu as données. Voici comment nous allons procéder :\n\n1. **Définir la fonction** : Nous commençons par définir la fonction avec le paramètre `liste_etudiants`, qui est une liste de tuples. Chaque tuple contient un nom d'étudiant et une liste de ses notes.\n\n2. **Calculer la moyenne des notes pour chaque étudiant** : Pour chaque étudiant (chaque tuple dans la liste), nous calculons la moyenne de ses notes. La moyenne se calcule en divisant la somme des notes par le nombre de notes.\n\n3. **Filtrer les étudiants** : Nous créons une nouvelle liste pour stocker uniquement les étudiants dont la moyenne est supérieure ou égale à 12.\n\n4. **Trier les étudiants** : Nous trions cette liste d'étudiants filtrés par leur moyenne en ordre décroissant.\n\n5. **Retourner la liste des étudiants filtrés et triés** : La fonction retourne finalement cette liste.\n\nVoici le code qui met en œuvre ces étapes :\n\n```python\ndef filtrer_et_trier_etudiants(liste_etudiants):\n    etudiants_filtrés = []\n    \n    for nom, notes in liste_etudiants:\n        moyenne = sum(notes) / len(notes)  # Calcul de la moyenne\n        if moyenne >= 12:  # Filtrage des étudiants avec moyenne >= 12\n            etudiants_filtrés.append((nom, moyenne))\n    \n    # Tri des étudiants par moyenne décroissante\n    etudiants_filtrés.sort(key=lambda etudiant: etudiant[1], reverse=True)\n    \n    return etudiants_filtrés\n\n# Exemple d'utilisation\netudiants = [\n    (\"Alice\", [12, 13, 14]),\n    (\"Bob\", [11, 10, 9]),\n    (\"Charlie\", [15, 16, 17])\n]\nresultat = filtrer_et_trier_etudiants(etudiants)\nprint(resultat)\n```\n\nDans cet exemple, tu peux voir que Bob est éliminé car sa moyenne est inférieure à 12, tandis qu'Alice et Charlie sont gardés et triés par leur moyenne.\n\nEst-ce que cette explication te semble claire ? As-tu des questions sur une partie spécifique du code ou sur la démarche en général ?",
+        "timestamp": "2026-04-21T11:40:35.702431+00:00"
+      },
+      {
+        "step": 3,
+        "student_answer": "Tu dois créer une fonction qui accepte une liste d'étudiants. Chaque étudiant est représenté par un tuple contenant son nom et une liste de ses notes. La fonction doit calculer la moyenne des notes de chaque étudiant, éliminer ceux dont la moyenne est inférieure à 12, trier les étudiants restants par leur moyenne en ordre décroissant et retourner une liste de tuples, chaque tuple contenant le nom de l'étudiant et sa moyenne. Nom attendu de la fonction: filtrer_et_trier_etudiants. donne la resolution",
+        "assistant_response": "Bonjour ! Pour créer la fonction `filtrer_et_trier_etudiants`, nous allons suivre ces étapes :\n\n1. **Calcul de la moyenne des notes pour chaque étudiant** : Nous parcourons chaque tuple (chaque étudiant avec ses notes) dans la liste donnée. Pour chaque étudiant, nous calculons la moyenne de ses notes.\n\n2. **Filtrer les étudiants** : Après avoir calculé la moyenne, nous vérifions si cette moyenne est supérieure ou égale à 12. Si c'est le cas, nous gardons cet étudiant pour l'étape suivante.\n\n3. **Trier les étudiants** : Les étudiants qui restent, c'est-à-dire ceux dont la moyenne est au moins 12, sont ensuite triés par leur moyenne en ordre décroissant.\n\n4. **Retourner la liste** : Finalement, la fonction retourne une nouvelle liste de tuples. Chaque tuple contient le nom de l'étudiant et sa moyenne.\n\nVoici comment nous pouvons écrire cette fonction en Python :\n\n```python\ndef filtrer_et_trier_etudiants(liste_etudiants):\n    etudiants_filtrés = []\n    \n    # Calcul de la moyenne et filtrage\n    for nom, notes in liste_etudiants:\n        moyenne = sum(notes) / len(notes)\n        if moyenne >= 12:\n            etudiants_filtrés.append((nom, moyenne))\n    \n    # Tri des étudiants par moyenne décroissante\n    etudiants_filtrés.sort(key=lambda etudiant: etudiant[1], reverse=True)\n    \n    return etudiants_filtrés\n```\n\nDans ce code :\n- `sum(notes) / len(notes)` calcule la moyenne des notes de chaque étudiant.\n- `if moyenne >= 12:` garde seulement les étudiants avec une moyenne de 12 ou plus.\n- `.sort(key=lambda etudiant: etudiant[1], reverse=True)` trie les étudiants par leur moyenne en ordre décroissant.\n\nEst-ce que cette explication clarifie comment la fonction fonctionne ? As-tu des questions sur un point spécifique ?",
+        "timestamp": "2026-04-21T11:40:54.128606+00:00"
+      },
+      {
+        "step": 5,
+        "student_answer": "Tu dois créer une fonction qui accepte une liste d'étudiants. Chaque étudiant est représenté par un tuple contenant son nom et une liste de ses notes. La fonction doit calculer la moyenne des notes de chaque étudiant, éliminer ceux dont la moyenne est inférieure à 12, trier les étudiants restants par leur moyenne en ordre décroissant et retourner une liste de tuples, chaque tuple contenant le nom de l'étudiant et sa moyenne. Nom attendu de la fonction: filtrer_et_trier_etudiants. donne la resolution",
+        "assistant_response": "Très bien, nous allons construire ensemble la fonction `filtrer_et_trier_etudiants` étape par étape. \n\n1. **Définir la fonction** : Nous commençons par définir la fonction avec le paramètre `liste_etudiants`, qui est une liste de tuples. Chaque tuple contient un nom d'étudiant et une liste de ses notes.\n\n2. **Calculer la moyenne des notes pour chaque étudiant** : Pour chaque étudiant (chaque tuple dans la liste), nous allons calculer la moyenne de ses notes. La moyenne se calcule en divisant la somme des notes par le nombre de notes.\n\n3. **Filtrer les étudiants** : Nous créons une nouvelle liste pour stocker uniquement les étudiants dont la moyenne est supérieure ou égale à 12.\n\n4. **Trier les étudiants** : Nous trions cette liste d'étudiants filtrés par leur moyenne en ordre décroissant.\n\n5. **Retourner la liste des étudiants filtrés et triés** : La fonction retourne finalement cette liste.\n\nVoici le code qui met en œuvre ces étapes :\n\n```python\ndef filtrer_et_trier_etudiants(liste_etudiants):\n    etudiants_filtrés = []\n    \n    for nom, notes in liste_etudiants:\n        moyenne = sum(notes) / len(notes)  # Calcul de la moyenne\n        if moyenne >= 12:  # Filtrage des étudiants avec moyenne >= 12\n            etudiants_filtrés.append((nom, moyenne))\n    \n    # Tri des étudiants par moyenne décroissante\n    etudiants_filtrés.sort(key=lambda etudiant: etudiant[1], reverse=True)\n    \n    return etudiants_filtrés\n\n# Exemple d'utilisation\netudiants = [\n    (\"Alice\", [12, 13, 14]),\n    (\"Bob\", [11, 10, 9]),\n    (\"Charlie\", [15, 16, 17])\n]\nresultat = filtrer_et_trier_etudiants(etudiants)\nprint(resultat)\n```\n\nDans cet exemple, tu peux voir que Bob est éliminé car sa moyenne est inférieure à 12, tandis qu'Alice et Charlie sont gardés et triés par leur moyenne.\n\nEst-ce que cette explication te semble claire ? As-tu des questions sur une partie spécifique du code ou sur la démarche en général ?",
+        "timestamp": "2026-04-21T11:41:54.316439+00:00"
+      },
+      {
+        "step": 6,
+        "student_answer": "Tu dois créer une fonction qui accepte une liste d'étudiants. Chaque étudiant est représenté par un tuple contenant son nom et une liste de ses notes. La fonction doit calculer la moyenne des notes de chaque étudiant, éliminer ceux dont la moyenne est inférieure à 12, trier les étudiants restants par leur moyenne en ordre décroissant et retourner une liste de tuples, chaque tuple contenant le nom de l'étudiant et sa moyenne. Nom attendu de la fonction: filtrer_et_trier_etudiants. donne la resolution",
+        "assistant_response": "Bonjour ! Allons-y étape par étape pour construire la fonction `filtrer_et_trier_etudiants` qui répond à ta demande.\n\n1. **Définition de la fonction** : La fonction prend en paramètre `liste_etudiants`, qui est une liste de tuples. Chaque tuple contient un nom d'étudiant et une liste de ses notes.\n\n2. **Calcul de la moyenne des notes** : Pour chaque étudiant, nous calculons la moyenne de ses notes en utilisant `sum(notes) / len(notes)`. Cela nous donne la moyenne des notes pour cet étudiant.\n\n3. **Filtrage des étudiants** : Nous ajoutons à une nouvelle liste les étudiants dont la moyenne est supérieure ou égale à 12. Cela élimine les étudiants avec une moyenne inférieure à 12.\n\n4. **Tri des étudiants** : Nous trions ensuite cette liste d'étudiants filtrés par leur moyenne en ordre décroissant, en utilisant la fonction `sort()` avec un argument `key` qui indique de trier par la moyenne.\n\n5. **Retour de la liste** : Finalement, la fonction retourne la liste triée des étudiants avec leur nom et leur moyenne.\n\nVoici le code correspondant :\n\n```python\ndef filtrer_et_trier_etudiants(liste_etudiants):\n    etudiants_filtrés = []\n    \n    for nom, notes in liste_etudiants:\n        moyenne = sum(notes) / len(notes)\n        if moyenne >= 12:\n            etudiants_filtrés.append((nom, moyenne))\n    \n    etudiants_filtrés.sort(key=lambda etudiant: etudiant[1], reverse=True)\n    \n    return etudiants_filtrés\n```\n\nDans cet exemple, `sum(notes) / len(notes)` calcule la moyenne, `if moyenne >= 12:` filtre les étudiants, et `.sort(key=lambda etudiant: etudiant[1], reverse=True)` trie les étudiants par moyenne décroissante.\n\nEst-ce que cette explication t'aide à comprendre chaque partie du code ? As-tu des questions sur un point spécifique ?",
+        "timestamp": "2026-04-21T11:42:14.261229+00:00"
+      }
+    ]
+  },
+  "4b7d9538-9341-4128-9b58-4c4ba3be65bc": {
+    "session_id": "4b7d9538-9341-4128-9b58-4c4ba3be65bc",
+    "created_at": "2026-04-21T11:42:23.721871+00:00",
+    "updated_at": "2026-04-21T11:46:20.429227+00:00",
+    "code": "if moyenne >= 14:\n\ndef filtrer_et_trier_etudiants(liste_etudiants):\n    etudiants_filtrés = []\n    \n    for nom, notes in liste_etudiants:\n        moyenne = sum(notes) / len(notes)\n        if moyenne >= 12:\n            etudiants_filtrés.append((nom, moyenne))\n    \n    etudiants_filtrés.sort(key=lambda etudiant: etudiant[1], reverse=True)\n    \n    return etudiants_filtrés",
+    "level": "intermédiaire",
+    "challenge_description": "Exercice: Tu dois créer une fonction qui accepte une liste d'étudiants. Chaque étudiant est représenté par un tuple contenant son nom et une liste de ses notes. La fonction doit calculer la moyenne des notes de chaque étudiant, éliminer ceux dont la moyenne est inférieure à 12, trier les étudiants restants par leur moyenne en ordre décroissant et retourner une liste de tuples, chaque tuple contenant le nom de l'étudiant et sa moyenne. Nom attendu de la fonction: filtrer_et_trier_etudiants.\nContraintes:\n- La fonction doit retourner une liste de tuples (nom, moyenne).\n- Utilise une fonction pour calculer la moyenne des étudiants.\n- Les étudiants avec une moyenne inférieure à 12 ne doivent pas apparaître dans le résultat final.\nIndices:\n- Utilise la fonction `sum()` pour calculer la somme des notes et `len()` pour obtenir le nombre de notes afin de calculer la moyenne.\n- Après avoir calculé toutes les moyennes, utilise une boucle pour filtrer et une autre pour trier les résultats.\nExemple: Entrée: [('Alice', [14, 15, 13]), ('Bob', [8, 9, 7]), ('Charlie', [16, 18, 20])]\nSortie: [('Charlie', 18.0), ('Alice', 14.0)]",
+    "tutor_mode": true,
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Bonjour ! Je suis ton assistant IA pour t'aider à apprendre Python dans ce cours intitulé \"Assistant exercice\". Avant de commencer à travailler sur notre exercice, pourrais-tu me dire un peu plus sur ton expérience avec la programmation en Python ? As-tu déjà travaillé avec des listes et des tuples, ou est-ce quelque chose de nouveau pour toi ? Cela me permettra de mieux adapter mes explications à ton niveau.",
+        "timestamp": "2026-04-21T11:42:27.552834+00:00"
+      },
+      {
+        "step": 1,
+        "student_answer": "Explique l idee generale en 3 points",
+        "assistant_response": "Bonjour ! Je vais t'expliquer l'idée générale de notre exercice en trois points principaux :\n\n1. **Calculer la moyenne des notes pour chaque étudiant** : Pour chaque étudiant, qui est représenté par un tuple contenant son nom et une liste de ses notes, nous calculons la moyenne de ses notes. Cela se fait en additionnant toutes les notes et en divisant le total par le nombre de notes.\n\n2. **Filtrer les étudiants** : Après avoir calculé la moyenne, nous vérifions si cette moyenne est supérieure ou égale à 12. Si c'est le cas, l'étudiant est ajouté à une nouvelle liste. Cela permet d'éliminer les étudiants dont la performance est en dessous de ce seuil.\n\n3. **Trier les étudiants restants** : Les étudiants qui ont passé le filtre sont ensuite triés par leur moyenne, du plus haut au plus bas. Cela nous aide à voir qui a les meilleures performances parmi ceux qui restent.\n\nEst-ce que ces trois points te semblent clairs ou y a-t-il un aspect que tu voudrais que je détaille davantage ?",
+        "timestamp": "2026-04-21T11:42:48.875052+00:00"
+      },
+      {
+        "step": 2,
+        "student_answer": "je veux le code qui a qui a des output et input",
+        "assistant_response": "Bonjour ! Je vois que tu souhaites comprendre comment intégrer des entrées (input) et des sorties (output) dans notre fonction. Pour cet exercice, nous allons simuler un petit scénario où tu pourras entrer les données des étudiants et voir le résultat après le filtrage et le tri.\n\nVoici comment nous pouvons procéder :\n\n1. **Input** : Nous allons demander à l'utilisateur (toi, dans ce cas) d'entrer les informations des étudiants. Pour simplifier, tu pourras entrer les noms et les notes directement dans le code pour le moment.\n\n2. **Traitement** : La fonction `filtrer_et_trier_etudiants` prendra cette liste d'entrée, calculera les moyennes, filtrera et triera les étudiants comme expliqué précédemment.\n\n3. **Output** : Enfin, la fonction affichera les résultats filtrés et triés pour que tu puisses les voir.\n\nJe vais t'ajouter un exemple de code qui inclut ces entrées et sorties :\n\n```python\ndef filtrer_et_trier_etudiants(liste_etudiants):\n    etudiants_filtrés = []\n    \n    for nom, notes in liste_etudiants:\n        moyenne = sum(notes) / len(notes)\n        if moyenne >= 12:\n            etudiants_filtrés.append((nom, moyenne))\n    \n    etudiants_filtrés.sort(key=lambda etudiant: etudiant[1], reverse=True)\n    \n    return etudiants_filtrés\n\n# Exemple d'entrée\nliste_etudiants = [\n    (\"Alice\", [14, 16, 13]),\n    (\"Bob\", [11, 9, 10]),\n    (\"Clara\", [15, 18, 17])\n]\n\n# Appel de la fonction et affichage des résultats\nresultats = filtrer_et_trier_etudiants(liste_etudiants)\nprint(\"Étudiants filtrés et triés :\")\nfor etudiant in resultats:\n    print(f\"{etudiant[0]}: Moyenne = {etudiant[1]:.2f}\")\n\n```\n\nDans cet exemple, `liste_etudiants` est une liste d'entrée que tu pourrais modifier pour tester différents cas. Après avoir exécuté le programme, il affichera les étudiants dont la moyenne est supérieure ou égale à 12, triés par leur moyenne en ordre décroissant.\n\nEst-ce que cette explication te aide à comprendre comment intégrer les entrées et les sorties dans notre fonction ?",
+        "timestamp": "2026-04-21T11:45:14.995612+00:00"
+      },
+      {
+        "step": 2,
+        "student_answer": "je veux le code qui a qui a des output et input",
+        "assistant_response": "D'accord, je vais t'expliquer comment ajouter des entrées (`input`) et des sorties (`output`) dans notre fonction `filtrer_et_trier_etudiants` pour que tu puisses voir comment elle fonctionne avec de vraies données.\n\n1. **Entrée (`input`)** : Nous allons demander à l'utilisateur de saisir les informations des étudiants. Pour simplifier, nous pouvons imaginer que l'utilisateur entre les noms et les notes directement dans le code pour l'instant.\n\n2. **Fonctionnement de la fonction** : La fonction prend la liste des étudiants, calcule les moyennes, filtre ceux qui ont une moyenne inférieure à 12, et trie les autres par ordre décroissant de leur moyenne.\n\n3. **Sortie (`output`)** : À la fin, la fonction affiche la liste des étudiants filtrés et triés avec leurs moyennes.\n\nVoici un exemple de code qui intègre ces éléments :\n\n```python\ndef filtrer_et_trier_etudiants(liste_etudiants):\n    etudiants_filtrés = []\n    \n    for nom, notes in liste_etudiants:\n        moyenne = sum(notes) / len(notes)\n        if moyenne >= 12:\n            etudiants_filtrés.append((nom, moyenne))\n    \n    etudiants_filtrés.sort(key=lambda etudiant: etudiant[1], reverse=True)\n    \n    return etudiants_filtrés\n\n# Exemple d'entrée\nliste_etudiants = [\n    (\"Alice\", [14, 15, 13]),\n    (\"Bob\", [10, 11, 9]),\n    (\"Clara\", [16, 14, 15])\n]\n\n# Appel de la fonction et affichage du résultat\nresultat = filtrer_et_trier_etudiants(liste_etudiants)\nprint(resultat)\n```\n\nDans cet exemple, la liste `liste_etudiants` est directement écrite dans le code. Tu peux la modifier pour tester avec d'autres valeurs. Le `print(resultat)` à la fin affiche la liste des étudiants qui ont une moyenne supérieure ou égale à 12, triés par leur moyenne en ordre décroissant.\n\nEst-ce que cet exemple t'aide à comprendre comment intégrer les entrées et les sorties dans notre fonction ? As-tu des questions sur une partie spécifique du code ?",
+        "timestamp": "2026-04-21T11:45:38.384550+00:00"
+      },
+      {
+        "step": 4,
+        "student_answer": "je veux le code qui a qui a des output et input",
+        "assistant_response": "D'accord, je vais te montrer comment notre fonction `filtrer_et_trier_etudiants` peut être utilisée avec des données que tu peux entrer toi-même, et comment elle te donne des résultats que tu peux voir directement.\n\n1. **Entrée (Input)** : Tu peux créer une liste d'étudiants où chaque étudiant est représenté par un tuple. Le premier élément du tuple est le nom de l'étudiant, et le deuxième est une liste de ses notes. Par exemple, tu pourrais avoir un étudiant appelé \"Alice\" avec les notes [14, 15, 13].\n\n2. **Traitement dans la fonction** : La fonction prend cette liste, calcule la moyenne des notes de chaque étudiant, filtre ceux qui ont une moyenne inférieure à 12, et trie les autres par leur moyenne de manière décroissante.\n\n3. **Sortie (Output)** : Après le traitement, la fonction retourne une liste des étudiants qui ont réussi à avoir au moins 12 de moyenne, avec leurs noms et leurs moyennes, et cette liste est affichée.\n\nVoici le code complet avec ces étapes :\n\n```python\ndef filtrer_et_trier_etudiants(liste_etudiants):\n    etudiants_filtrés = []\n    \n    for nom, notes in liste_etudiants:\n        moyenne = sum(notes) / len(notes)\n        if moyenne >= 12:\n            etudiants_filtrés.append((nom, moyenne))\n    \n    etudiants_filtrés.sort(key=lambda etudiant: etudiant[1], reverse=True)\n    \n    return etudiants_filtrés\n\n# Exemple d'entrée\nliste_etudiants = [\n    (\"Alice\", [14, 15, 13]),\n    (\"Bob\", [10, 11, 9]),\n    (\"Clara\", [16, 14, 15])\n]\n\n# Appel de la fonction et affichage du résultat\nresultat = filtrer_et_trier_etudiants(liste_etudiants)\nprint(resultat)\n```\n\nDans cet exemple, tu vois que \"Bob\" n'apparaît pas dans le résultat final car sa moyenne est en dessous de 12. Les étudiants restants sont triés par leur moyenne en ordre décroissant.\n\nEst-ce que cet exemple clarifie comment utiliser des entrées et voir des sorties avec notre fonction ? As-tu d'autres questions sur un point spécifique ?",
+        "timestamp": "2026-04-21T11:46:20.429207+00:00"
+      }
+    ]
+  },
+  "f678bf7a-695a-4204-b721-b559abb2e631": {
+    "session_id": "f678bf7a-695a-4204-b721-b559abb2e631",
+    "created_at": "2026-04-21T11:46:49.639692+00:00",
+    "updated_at": "2026-04-21T11:46:53.836379+00:00",
+    "code": "def filtrer_et_trier_etudiants(liste_etudiants):\n    etudiants_filtrés = []\n    \n    for nom, notes in liste_etudiants:\n        moyenne = sum(notes) / len(notes)\n        if moyenne >= 12:\n            etudiants_filtrés.append((nom, moyenne))\n    \n    etudiants_filtrés.sort(key=lambda etudiant: etudiant[1], reverse=True)\n    \n    return etudiants_filtrés\n\n# Exemple d'entrée\nliste_etudiants = [\n    (\"Alice\", [14, 15, 13]),\n    (\"Bob\", [10, 11, 9]),\n    (\"Clara\", [16, 14, 15])\n]\n\n# Appel de la fonction et affichage du résultat\nresultat = filtrer_et_trier_etudiants(liste_etudiants)\nprint(resultat)",
+    "level": "intermédiaire",
+    "challenge_description": "Exercice: Tu dois créer une fonction qui accepte une liste d'étudiants. Chaque étudiant est représenté par un tuple contenant son nom et une liste de ses notes. La fonction doit calculer la moyenne des notes de chaque étudiant, éliminer ceux dont la moyenne est inférieure à 12, trier les étudiants restants par leur moyenne en ordre décroissant et retourner une liste de tuples, chaque tuple contenant le nom de l'étudiant et sa moyenne. Nom attendu de la fonction: filtrer_et_trier_etudiants.\nContraintes:\n- La fonction doit retourner une liste de tuples (nom, moyenne).\n- Utilise une fonction pour calculer la moyenne des étudiants.\n- Les étudiants avec une moyenne inférieure à 12 ne doivent pas apparaître dans le résultat final.\nIndices:\n- Utilise la fonction `sum()` pour calculer la somme des notes et `len()` pour obtenir le nombre de notes afin de calculer la moyenne.\n- Après avoir calculé toutes les moyennes, utilise une boucle pour filtrer et une autre pour trier les résultats.\nExemple: Entrée: [('Alice', [14, 15, 13]), ('Bob', [8, 9, 7]), ('Charlie', [16, 18, 20])]\nSortie: [('Charlie', 18.0), ('Alice', 14.0)]",
+    "tutor_mode": true,
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Bonjour ! Je suis ton tuteur IA, et je suis ici pour t'aider à apprendre et à pratiquer le Python dans le cadre du cours \"Assistant exercice\". Avant de commencer, pourrais-tu me dire un peu plus sur ton expérience avec la programmation Python ? Connais-tu déjà les bases comme les boucles et les conditions, ou es-tu tout à fait débutant ? Cela me permettra de mieux adapter notre session à tes besoins.",
+        "timestamp": "2026-04-21T11:46:53.836359+00:00"
+      }
+    ]
+  },
+  "3b6418b4-304b-486f-9d4e-e6e66cdece77": {
+    "session_id": "3b6418b4-304b-486f-9d4e-e6e66cdece77",
+    "created_at": "2026-04-21T11:47:19.723537+00:00",
+    "updated_at": "2026-04-21T11:47:23.660604+00:00",
+    "code": "def filtrer_et_trier_etudiants(liste_etudiants):\n    etudiants_filtrés = []\n    \n    for nom, notes in liste_etudiants:\n        moyenne = sum(notes) / len(notes)\n        if moyenne >= 12:\n            etudiants_filtrés.append((nom, moyenne))\n    \n    etudiants_filtrés.sort(key=lambda etudiant: etudiant[1], reverse=True)\n    \n    return etudiants_filtrés\n\n# Exemple d'entrée\nliste_etudiants = [\n    (\"Alice\", [14, 15, 13]),\n    (\"Bob\", [10, 11, 9]),\n    (\"Clara\", [16, 14, 15])\n]\n\n# Appel de la fonction et affichage du résultat\nresultat = filtrer_et_trier_etudiants(liste_etudiants)\nprint(resultat)",
+    "level": "intermédiaire",
+    "challenge_description": "Exercice: Tu dois créer une fonction qui accepte une liste d'étudiants. Chaque étudiant est représenté par un tuple contenant son nom et une liste de ses notes. La fonction doit calculer la moyenne des notes de chaque étudiant, éliminer ceux dont la moyenne est inférieure à 12, trier les étudiants restants par leur moyenne en ordre décroissant et retourner une liste de tuples, chaque tuple contenant le nom de l'étudiant et sa moyenne. Nom attendu de la fonction: filtrer_et_trier_etudiants.\nContraintes:\n- La fonction doit retourner une liste de tuples (nom, moyenne).\n- Utilise une fonction pour calculer la moyenne des étudiants.\n- Les étudiants avec une moyenne inférieure à 12 ne doivent pas apparaître dans le résultat final.\nIndices:\n- Utilise la fonction `sum()` pour calculer la somme des notes et `len()` pour obtenir le nombre de notes afin de calculer la moyenne.\n- Après avoir calculé toutes les moyennes, utilise une boucle pour filtrer et une autre pour trier les résultats.\nExemple: Entrée: [('Alice', [14, 15, 13]), ('Bob', [8, 9, 7]), ('Charlie', [16, 18, 20])]\nSortie: [('Charlie', 18.0), ('Alice', 14.0)]",
+    "tutor_mode": true,
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Bonjour ! Je suis ton tuteur IA pour le cours \"Assistant exercice\" où nous allons travailler ensemble sur Python. Aujourd'hui, nous allons créer une fonction qui va nous aider à gérer une liste d'étudiants et leurs notes. Avant de commencer, pourrais-tu me dire ce que tu sais déjà sur les fonctions en Python et comment tu te sens à l'idée de manipuler des listes et des tuples ? Cela m'aidera à adapter notre session à ton niveau.",
+        "timestamp": "2026-04-21T11:47:23.660582+00:00"
+      }
+    ]
+  },
+  "504e2c92-2789-4cfc-b23e-46e8fd36d268": {
+    "session_id": "504e2c92-2789-4cfc-b23e-46e8fd36d268",
+    "created_at": "2026-04-21T11:50:21.700742+00:00",
+    "updated_at": "2026-04-21T11:50:25.758384+00:00",
+    "code": "def filtrer_et_trier_etudiants(liste_etudiants):\n    etudiants_filtrés = []\n    \n    for nom, notes in liste_etudiants:\n        moyenne = sum(notes) / len(notes)\n        if moyenne >= 12:\n            etudiants_filtrés.append((nom, moyenne))\n    \n    etudiants_filtrés.sort(key=lambda etudiant: etudiant[1], reverse=True)\n    \n    return etudiants_filtrés\n\n# Exemple d'entrée\nliste_etudiants = [\n    (\"Alice\", [14, 15, 13]),\n    (\"Bob\", [10, 11, 9]),\n    (\"Clara\", [16, 14, 15])\n]\n\n# Appel de la fonction et affichage du résultat\nresultat = filtrer_et_trier_etudiants(liste_etudiants)\nprint(resultat)",
+    "level": "intermédiaire",
+    "challenge_description": "Exercice: Tu dois créer une fonction qui accepte une liste d'étudiants. Chaque étudiant est représenté par un tuple contenant son nom et une liste de ses notes. La fonction doit calculer la moyenne des notes de chaque étudiant, éliminer ceux dont la moyenne est inférieure à 12, trier les étudiants restants par leur moyenne en ordre décroissant et retourner une liste de tuples, chaque tuple contenant le nom de l'étudiant et sa moyenne. Nom attendu de la fonction: filtrer_et_trier_etudiants.\nContraintes:\n- La fonction doit retourner une liste de tuples (nom, moyenne).\n- Utilise une fonction pour calculer la moyenne des étudiants.\n- Les étudiants avec une moyenne inférieure à 12 ne doivent pas apparaître dans le résultat final.\nIndices:\n- Utilise la fonction `sum()` pour calculer la somme des notes et `len()` pour obtenir le nombre de notes afin de calculer la moyenne.\n- Après avoir calculé toutes les moyennes, utilise une boucle pour filtrer et une autre pour trier les résultats.\nExemple: Entrée: [('Alice', [14, 15, 13]), ('Bob', [8, 9, 7]), ('Charlie', [16, 18, 20])]\nSortie: [('Charlie', 18.0), ('Alice', 14.0)]",
+    "tutor_mode": true,
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Bonjour ! Je suis ton tuteur IA pour t'aider à apprendre Python dans le cadre de notre cours \"Assistant exercice\". Avant de commencer à travailler sur l'exercice, pourrais-tu me dire quel est ton niveau actuel en programmation Python et ce que tu espères apprendre ou améliorer aujourd'hui ? Cela me permettra de mieux adapter nos discussions et explications.",
+        "timestamp": "2026-04-21T11:50:25.758359+00:00"
+      }
+    ]
+  },
+  "e1927905-ef56-45cb-b9a1-c24a03b02a7c": {
+    "session_id": "e1927905-ef56-45cb-b9a1-c24a03b02a7c",
+    "created_at": "2026-04-21T13:34:08.719350+00:00",
+    "updated_at": "2026-04-21T13:34:14.919340+00:00",
+    "code": "def process_students(records, min_score):\r\n    # Filtration des enregistrements pour éliminer les noms vides et les scores invalides\r\n    valid_records = [(name, score) for name, score in records if name and isinstance(score, int) and 0 <= score <= 100]\r\n    \r\n    # Filtration des enregistrements pour ne garder que ceux avec un score >= min_score\r\n    filtered_records = [record for record in valid_records if record[1] >= min_score]\r\n    \r\n    # Tri des enregistrements par score décroissant, puis par nom croissant\r\n    sorted_records = sorted(filtered_records, key=lambda x: (-x[1], x[0]))\r\n    \r\n    return sorted_records",
+    "level": "intermédiaire",
+    "challenge_description": "Exercice: Votre mission est de créer une fonction 'process_students(records, min_score)' en Python. Cette fonction doit nettoyer des données d'entrée en éliminant les noms vides et les scores invalides ou hors des bornes (0 à 100). Après cela, elle doit filtrer les étudiants qui ont un score supérieur ou égal à 'min_score', trier ces étudiants par score décroissant puis par nom croissant, et retourner une liste de tuples (nom, score).\nContraintes:\n- Les scores doivent être des entiers entre 0 et 100 inclus.\n- Les noms doivent être des chaînes de caractères non vides.\n- La fonction ne doit pas utiliser de bibliothèques externes pour le tri ou le filtrage.\nIndices:\n- Utilisez une liste de compréhension pour filtrer et une fonction lambda pour trier.\n- Gérez les cas de noms vides et de scores invalides avec des conditions avant de procéder au filtrage.\nExemple: Entree: ([('Alice', 85), ('', 90), ('Bob', 58), ('Charlie', 101), ('Dave', 95)], 60)\\nSortie: [('Dave', 95), ('Alice', 85)]",
+    "tutor_mode": true,
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Bonjour ! Je suis ton tuteur IA pour t'aider à apprendre et pratiquer le Python dans le cadre du cours \"Assistant exercice\". Mon rôle est de t'accompagner pas à pas dans la compréhension et la réalisation de tes exercices de programmation. Pour bien démarrer, pourrais-tu me dire ce que tu as déjà appris en Python et ce que tu trouves difficile ou facile jusqu'à présent ? Cela me permettra de mieux adapter mes explications à ton niveau et à tes besoins.",
+        "timestamp": "2026-04-21T13:34:14.919317+00:00"
+      }
+    ]
+  },
+  "1915c53e-5889-4bbc-842f-99b1cd79f666": {
+    "session_id": "1915c53e-5889-4bbc-842f-99b1cd79f666",
+    "created_at": "2026-04-21T13:55:19.004029+00:00",
+    "updated_at": "2026-04-21T13:55:25.348793+00:00",
+    "code": "def process_students(records, min_score):\n    # Nettoyage et filtrage des données\n    valid_students = [(name, score) for name, score in records if isinstance(score, int) and 0 <= score <= 100 and name]\n\n    # Filtrage selon le score minimum et tri\n    qualified_students = [(name, score) for name, score in valid_students if score >= min_score]\n    qualified_students.sort(key=lambda student: (-student[1], student[0]))\n\n    return qualified_students",
+    "level": "intermédiaire",
+    "challenge_description": "Exercice: Vous devez creer une fonction 'process_students' qui prend en entree une liste de tuples, chaque tuple representant un etudiant avec son nom et son score, et un score minimum. La fonction doit nettoyer les donnees, filtrer les etudiants selon le score minimum, trier les etudiants qualifies par score decroissant et par nom croissant, et retourner la liste des etudiants qualifies.\nContraintes:\n- Les noms vides ou les scores non numeriques doivent etre ignores.\n- Les scores doivent etre des entiers compris entre 0 et 100. Les scores hors de cette plage doivent etre ignores.\n- La fonction doit retourner une liste de tuples, chaque tuple contenant le nom de l'etudiant et son score valide et qualifie.\nIndices:\n- Utilisez une comprehension de liste pour filtrer et nettoyer les donnees.\n- Utilisez les fonctions sorted() de Python pour trier les resultats. Vous pouvez passer une fonction lambda a l'argument 'key' pour un tri complexe.\nExemple: Entree: [('', 82), ('Alice', 95), ('Bob', 'NaN'), ('Charlie', 102), ('David', 80)], 85\\nSortie: [('Alice', 95)]",
+    "tutor_mode": true,
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Bonjour ! Je suis ton tuteur IA pour t'aider à apprendre Python dans le cadre du cours \"Assistant exercice\". Je suis ici pour te guider pas à pas afin de t'aider à comprendre et à améliorer tes compétences en programmation. Pour commencer, pourrais-tu me dire ce que tu as déjà appris en Python et ce que tu trouves difficile ou facile ? Cela me permettra de mieux adapter nos sessions à tes besoins.",
+        "timestamp": "2026-04-21T13:55:25.348775+00:00"
+      }
+    ]
+  },
+  "023a681e-be0d-47ea-be4c-eac4ae57cc01": {
+    "session_id": "023a681e-be0d-47ea-be4c-eac4ae57cc01",
+    "created_at": "2026-04-21T13:57:22.352795+00:00",
+    "updated_at": "2026-04-21T13:57:26.639949+00:00",
+    "code": "def process_students(records, min_score):\n    # Nettoyage et filtrage des données\n    valid_students = [(name, score) for name, score in records if isinstance(score, int) and 0 <= score <= 100 and name]\n\n    # Filtrage selon le score minimum et tri\n    qualified_students = [(name, score) for name, score in valid_students if score >= min_score]\n    qualified_students.sort(key=lambda student: (-student[1], student[0]))\n\n    return qualified_students",
+    "level": "intermédiaire",
+    "challenge_description": "Exercice: Vous devez creer une fonction 'process_students' qui prend en entree une liste de tuples, chaque tuple representant un etudiant avec son nom et son score, et un score minimum. La fonction doit nettoyer les donnees, filtrer les etudiants selon le score minimum, trier les etudiants qualifies par score decroissant et par nom croissant, et retourner la liste des etudiants qualifies.\nContraintes:\n- Les noms vides ou les scores non numeriques doivent etre ignores.\n- Les scores doivent etre des entiers compris entre 0 et 100. Les scores hors de cette plage doivent etre ignores.\n- La fonction doit retourner une liste de tuples, chaque tuple contenant le nom de l'etudiant et son score valide et qualifie.\nIndices:\n- Utilisez une comprehension de liste pour filtrer et nettoyer les donnees.\n- Utilisez les fonctions sorted() de Python pour trier les resultats. Vous pouvez passer une fonction lambda a l'argument 'key' pour un tri complexe.\nExemple: Entree: [('', 82), ('Alice', 95), ('Bob', 'NaN'), ('Charlie', 102), ('David', 80)], 85\\nSortie: [('Alice', 95)]",
+    "tutor_mode": true,
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Bonjour ! Je suis ton assistant IA pour t'aider à apprendre et à pratiquer Python dans le cadre du cours \"Assistant exercice\". Je suis ici pour t'accompagner pas à pas dans la compréhension et la réalisation d'exercices de programmation. Pour commencer, pourrais-tu me dire quel est ton niveau actuel en Python et ce que tu espères apprendre ou améliorer spécifiquement aujourd'hui ?",
+        "timestamp": "2026-04-21T13:57:26.639924+00:00"
+      }
+    ]
+  },
+  "17ea54e8-8581-4d13-a80b-33999d83fd97": {
+    "session_id": "17ea54e8-8581-4d13-a80b-33999d83fd97",
+    "created_at": "2026-04-21T13:59:50.828415+00:00",
+    "updated_at": "2026-04-21T14:02:29.825130+00:00",
+    "code": "def process_students(records, min_score):\n    # Nettoyage et filtrage des données\n    valid_students = [(name, score) for name, score in records if isinstance(score, int) and 0 <= score <= 100 and name]\n\n    # Filtrage selon le score minimum et tri\n    qualified_students = [(name, score) for name, score in valid_students if score >= min_score]\n    qualified_students.sort(key=lambda student: (-student[1], student[0]))\n\n    return qualified_students",
+    "level": "intermédiaire",
+    "challenge_description": "Exercice: Vous devez creer une fonction 'process_students' qui prend en entree une liste de tuples, chaque tuple representant un etudiant avec son nom et son score, et un score minimum. La fonction doit nettoyer les donnees, filtrer les etudiants selon le score minimum, trier les etudiants qualifies par score decroissant et par nom croissant, et retourner la liste des etudiants qualifies.\nContraintes:\n- Les noms vides ou les scores non numeriques doivent etre ignores.\n- Les scores doivent etre des entiers compris entre 0 et 100. Les scores hors de cette plage doivent etre ignores.\n- La fonction doit retourner une liste de tuples, chaque tuple contenant le nom de l'etudiant et son score valide et qualifie.\nIndices:\n- Utilisez une comprehension de liste pour filtrer et nettoyer les donnees.\n- Utilisez les fonctions sorted() de Python pour trier les resultats. Vous pouvez passer une fonction lambda a l'argument 'key' pour un tri complexe.\nExemple: Entree: [('', 82), ('Alice', 95), ('Bob', 'NaN'), ('Charlie', 102), ('David', 80)], 85\\nSortie: [('Alice', 95)]",
+    "tutor_mode": true,
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Bonjour ! Je suis ton tuteur IA pour t'aider à apprendre Python dans le cadre du cours \"Assistant exercice\". Avant de commencer à travailler sur notre fonction `process_students`, pourrais-tu me dire ce que tu as déjà appris en Python ? Cela me permettra de mieux adapter nos discussions et nos exercices à ton niveau. Connais-tu déjà les listes, les tuples et comment utiliser les boucles ou les conditions ?",
+        "timestamp": "2026-04-21T13:59:56.922004+00:00"
+      },
+      {
+        "step": 1,
+        "student_answer": "donnne moin le code complet avec des exemple d'execution",
+        "assistant_response": "Bonjour ! Je vais t'expliquer comment fonctionne le code de la fonction `process_students` que tu as mentionné, et je te montrerai ensuite comment l'utiliser avec des exemples.\n\n1. **Nettoyage et filtrage des données** :\n   La première étape consiste à s'assurer que les données sont valides. On crée une nouvelle liste `valid_students` qui contient seulement les tuples où le score est un entier, le score est entre 0 et 100, et le nom n'est pas vide. Cela nous aide à éviter les erreurs dans les étapes suivantes.\n\n2. **Filtrage selon le score minimum et tri** :\n   Ensuite, on filtre ces étudiants valides pour ne garder que ceux qui ont un score supérieur ou égal au `min_score` spécifié. Après le filtrage, on trie les étudiants qualifiés. On les trie d'abord par score décroissant (les scores les plus élevés en premier) et en cas d'égalité de scores, par nom croissant.\n\n3. **Retourner la liste des étudiants qualifiés** :\n   La fonction retourne finalement la liste des étudiants qualifiés après ces étapes de nettoyage, filtrage et tri.\n\nVoici un exemple d'utilisation de cette fonction :\n\n```python\n# Liste de tuples avec nom d'étudiant et score\nstudents = [(\"Alice\", 85), (\"Bob\", 75), (\"Charlie\", 90), (\"David\", 40), (\"Eve\", 100)]\n\n# Appel de la fonction avec un score minimum de 70\nresult = process_students(students, 70)\nprint(result)\n```\n\nDans cet exemple, la fonction `process_students` est appelée avec la liste `students` et un score minimum de 70. Les étudiants avec un score inférieur à 70 seront filtrés et les autres seront triés. Le résultat attendu sera :\n\n```\n[('Eve', 100), ('Charlie', 90), ('Alice', 85), ('Bob', 75)]\n```\n\nEst-ce que cette explication et cet exemple t'aident à comprendre comment utiliser la fonction `process_students` ?",
+        "timestamp": "2026-04-21T14:00:57.849518+00:00"
+      },
+      {
+        "step": 1,
+        "student_answer": "donnne moin le code complet avec des exemple d'execution",
+        "assistant_response": "Bonjour ! Je vois que tu aimerais avoir le code complet avec des exemples d'exécution pour mieux comprendre. C'est une excellente manière d'apprendre. Commençons par examiner le code que nous avons :\n\n```python\ndef process_students(records, min_score):\n    # Nettoyage et filtrage des données\n    valid_students = [(name, score) for name, score in records if isinstance(score, int) and 0 <= score <= 100 and name]\n\n    # Filtrage selon le score minimum et tri\n    qualified_students = [(name, score) for name, score in valid_students if score >= min_score]\n    qualified_students.sort(key=lambda student: (-student[1], student[0]))\n\n    return qualified_students\n```\n\nCe code définit une fonction `process_students` qui prend deux paramètres : `records`, une liste de tuples contenant le nom et le score de chaque étudiant, et `min_score`, le score minimum pour être qualifié.\n\n1. **Nettoyage et filtrage des données** : On crée une nouvelle liste `valid_students`. Ici, on vérifie que le score est un entier, qu'il est entre 0 et 100, et que le nom n'est pas vide.\n\n2. **Filtrage selon le score minimum et tri** : On crée une liste `qualified_students` en filtrant `valid_students` pour garder seulement ceux dont le score est supérieur ou égal à `min_score`. Ensuite, on trie cette liste : d'abord par score décroissant (les scores les plus élevés en premier), et en cas d'égalité de score, par nom croissant.\n\nVoici maintenant un exemple d'exécution de cette fonction :\n\n```python\n# Liste des étudiants avec nom et score\nstudents = [(\"Alice\", 85), (\"Bob\", 75), (\"Charlie\", 90), (\"David\", 70), (\"Eve\", 100)]\n\n# Appel de la fonction avec un score minimum de 80\nresult = process_students(students, 80)\n\n# Affichage du résultat\nprint(result)\n```\n\nDans cet exemple, seuls les étudiants ayant un score de 80 ou plus seront affichés, et ils seront triés par score décroissant et par nom croissant. Le résultat attendu serait :\n\n```\n[('Eve', 100), ('Charlie', 90), ('Alice', 85)]\n```\n\nEst-ce que cet exemple t'aide à comprendre comment la fonction fonctionne ? As-tu des questions sur une partie spécifique du code ?",
+        "timestamp": "2026-04-21T14:01:09.742356+00:00"
+      },
+      {
+        "step": 3,
+        "student_answer": "donnne moin le code complet avec des exemple d'execution",
+        "assistant_response": "Bonjour ! Je comprends que tu souhaites voir le code complet avec des exemples pour mieux comprendre. Allons-y !\n\nVoici le code de la fonction `process_students` :\n\n```python\ndef process_students(records, min_score):\n    # Nettoyage et filtrage des données\n    valid_students = [(name, score) for name, score in records if isinstance(score, int) and 0 <= score <= 100 and name]\n\n    # Filtrage selon le score minimum et tri\n    qualified_students = [(name, score) for name, score in valid_students if score >= min_score]\n    qualified_students.sort(key=lambda student: (-student[1], student[0]))\n\n    return qualified_students\n```\n\nCe code fait plusieurs choses :\n1. **Nettoyage et filtrage des données** : Il vérifie que chaque score est un entier valide entre 0 et 100 et que le nom n'est pas vide. Cela nous donne une liste `valid_students` avec des données propres.\n2. **Filtrage selon le score minimum et tri** : Il filtre ensuite ces étudiants pour ne garder que ceux dont le score est au moins égal au `min_score`. Puis, il trie ces étudiants qualifiés par score décroissant et, en cas d'égalité, par nom croissant.\n\nVoici maintenant un exemple d'utilisation de cette fonction :\n\n```python\n# Liste des étudiants avec nom et score\nstudents = [(\"Alice\", 85), (\"Bob\", 75), (\"Charlie\", 90), (\"David\", 70), (\"Eve\", 100)]\n\n# Appel de la fonction avec un score minimum de 80\nresult = process_students(students, 80)\n\n# Affichage du résultat\nprint(result)\n```\n\nDans cet exemple, les étudiants dont le score est de 80 ou plus sont sélectionnés et triés. Le résultat sera :\n\n```\n[('Eve', 100), ('Charlie', 90), ('Alice', 85)]\n```\n\nCela te donne-t-il une meilleure idée de comment la fonction fonctionne et comment l'utiliser ? As-tu d'autres questions sur un point précis du code ou de l'exemple ?",
+        "timestamp": "2026-04-21T14:01:51.328961+00:00"
+      },
+      {
+        "step": 3,
+        "student_answer": "donnne moin le code complet avec des exemple d'execution",
+        "assistant_response": "Bonjour ! Je suis ravi de t'aider à comprendre le fonctionnement de la fonction `process_students` avec un exemple concret. Voici le code et son exécution étape par étape :\n\n```python\ndef process_students(records, min_score):\n    # Nettoyage et filtrage des données\n    valid_students = [(name, score) for name, score in records if isinstance(score, int) and 0 <= score <= 100 and name]\n\n    # Filtrage selon le score minimum et tri\n    qualified_students = [(name, score) for name, score in valid_students if score >= min_score]\n    qualified_students.sort(key=lambda student: (-student[1], student[0]))\n\n    return qualified_students\n```\n\n1. **Nettoyage et filtrage des données** : La fonction commence par créer une liste `valid_students`. Elle garde seulement les étudiants dont le score est un entier valide entre 0 et 100 et dont le nom n'est pas vide. Cela assure que les données avec lesquelles nous travaillons sont correctes.\n\n2. **Filtrage selon le score minimum et tri** : Après avoir nettoyé les données, nous filtrons pour garder seulement les étudiants dont le score est au moins égal à `min_score`. Puis, nous trions cette liste en ordre décroissant de score et, en cas d'égalité, en ordre croissant de nom.\n\nExemple d'exécution :\n\n```python\n# Liste des étudiants avec nom et score\nstudents = [(\"Alice\", 85), (\"Bob\", 75), (\"Charlie\", 90), (\"David\", 70), (\"Eve\", 100)]\n\n# Appel de la fonction avec un score minimum de 80\nresult = process_students(students, 80)\n\n# Affichage du résultat\nprint(result)\n```\n\nDans cet exemple, la fonction filtre et trie les étudiants ayant un score de 80 ou plus. Le résultat affiché sera :\n\n```\n[('Eve', 100), ('Charlie', 90), ('Alice', 85)]\n```\n\nEst-ce que cet exemple te permet de mieux comprendre comment utiliser la fonction `process_students` ? As-tu des questions sur une partie spécifique du code ou sur son exécution ?",
+        "timestamp": "2026-04-21T14:02:05.496122+00:00"
+      },
+      {
+        "step": 4,
+        "student_answer": "donnne moin le code complet avec des exemple d'execution",
+        "assistant_response": "Bonjour ! Je vais te fournir le code complet de la fonction `process_students` ainsi que des exemples pour bien comprendre son fonctionnement.\n\nVoici le code de la fonction :\n\n```python\ndef process_students(records, min_score):\n    # Nettoyage et filtrage des données\n    valid_students = [(name, score) for name, score in records if isinstance(score, int) and 0 <= score <= 100 and name]\n\n    # Filtrage selon le score minimum et tri\n    qualified_students = [(name, score) for name, score in valid_students if score >= min_score]\n    qualified_students.sort(key=lambda student: (-student[1], student[0]))\n\n    return qualified_students\n```\n\nCe code effectue plusieurs actions importantes :\n1. **Nettoyage et filtrage des données** : Il vérifie que chaque score est un entier entre 0 et 100 et que le nom n'est pas vide. Cela assure que les données sont correctes pour les étapes suivantes.\n2. **Filtrage selon le score minimum et tri** : Il sélectionne ensuite les étudiants dont le score est supérieur ou égal au score minimal requis, puis les trie par score décroissant et par nom croissant en cas d'égalité de score.\n\nExemple d'exécution de cette fonction :\n\n```python\n# Liste des étudiants avec nom et score\nstudents = [(\"Alice\", 85), (\"Bob\", 75), (\"Charlie\", 90), (\"David\", 70), (\"Eve\", 100)]\n\n# Appel de la fonction avec un score minimum de 80\nresult = process_students(students, 80)\n\n# Affichage du résultat\nprint(result)\n```\n\nDans cet exemple, les étudiants ayant un score de 80 ou plus sont sélectionnés et triés. Le résultat affiché sera :\n\n```\n[('Eve', 100), ('Charlie', 90), ('Alice', 85)]\n```\n\nEst-ce que cet exemple te permet de mieux comprendre comment utiliser la fonction `process_students` ? As-tu d'autres questions sur une partie spécifique du code ou sur son fonctionnement ?",
+        "timestamp": "2026-04-21T14:02:19.505640+00:00"
+      },
+      {
+        "step": 5,
+        "student_answer": "donnne moin le code complet avec des exemple d'execution",
+        "assistant_response": "Bonjour ! Bien sûr, je vais te montrer comment utiliser la fonction `process_students` avec un exemple complet.\n\nVoici le code de la fonction :\n\n```python\ndef process_students(records, min_score):\n    # Nettoyage et filtrage des données\n    valid_students = [(name, score) for name, score in records if isinstance(score, int) and 0 <= score <= 100 and name]\n\n    # Filtrage selon le score minimum et tri\n    qualified_students = [(name, score) for name, score in valid_students if score >= min_score]\n    qualified_students.sort(key=lambda student: (-student[1], student[0]))\n\n    return qualified_students\n```\n\n1. **Nettoyage et filtrage des données** : Cette étape élimine les données incorrectes ou incomplètes. Elle garde seulement les tuples où le score est un entier entre 0 et 100 et où le nom n'est pas vide.\n\n2. **Filtrage selon le score minimum et tri** : Après avoir nettoyé les données, cette étape sélectionne les étudiants dont le score est supérieur ou égal à `min_score`. Ensuite, elle trie ces étudiants par score décroissant et, en cas d'égalité de score, par nom croissant.\n\nVoici un exemple d'utilisation de cette fonction :\n\n```python\n# Liste des étudiants avec nom et score\nstudents = [(\"Alice\", 85), (\"Bob\", 75), (\"Charlie\", 90), (\"David\", 70), (\"Eve\", 100)]\n\n# Appel de la fonction avec un score minimum de 80\nresult = process_students(students, 80)\n\n# Affichage du résultat\nprint(result)\n```\n\nDans cet exemple, la fonction `process_students` est appelée avec une liste d'étudiants et un score minimum de 80. Les étudiants avec un score de 80 ou plus sont sélectionnés et triés. Le résultat affiché sera :\n\n```\n[('Eve', 100), ('Charlie', 90), ('Alice', 85)]\n```\n\nEst-ce que cet exemple te permet de comprendre comment fonctionne la fonction et comment l'utiliser ? As-tu d'autres questions sur le code ou son utilisation ?",
+        "timestamp": "2026-04-21T14:02:29.825107+00:00"
+      }
+    ]
+  },
+  "92357eab-6c23-49dc-9fe7-5256e026515e": {
+    "session_id": "92357eab-6c23-49dc-9fe7-5256e026515e",
+    "created_at": "2026-04-21T14:03:43.676532+00:00",
+    "updated_at": "2026-04-21T14:03:51.989904+00:00",
+    "code": "# session tuteur",
+    "level": "débutant",
+    "challenge_description": "",
+    "tutor_mode": true,
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Здравствуйте! Я ваш виртуальный наставник по программированию на Python. Сегодня мы начнем курс \"Переменные и Операции\", где вы узнаете о работе с числами, текстом и переменными, а также освоите основные типы данных. Это будет важный шаг в изучении Python. Давайте сначала узнаем, насколько вы уже знакомы с Python. Вы уже писали какие-то простые программы или работали с переменными?",
+        "timestamp": "2026-04-21T14:03:51.989882+00:00"
+      }
+    ]
+  },
+  "701b94b4-e634-42c3-b939-af61e0a96535": {
+    "session_id": "701b94b4-e634-42c3-b939-af61e0a96535",
+    "created_at": "2026-04-21T14:04:01.593608+00:00",
+    "updated_at": "2026-04-21T14:04:07.520524+00:00",
+    "code": "def process_students(records, min_score):\r\n    # Étape 1 : Nettoyage des données\r\n    valid_students = [\r\n        (name, score)\r\n        for name, score in records\r\n        if isinstance(score, int) and 0 <= score <= 100 and isinstance(name, str) and name.strip()\r\n    ]\r\n\r\n    # Étape 2 : Filtrage selon le score minimum\r\n    qualified_students = [\r\n        (name, score)\r\n        for name, score in valid_students\r\n        if score >= min_score\r\n    ]\r\n\r\n    # Étape 3 : Tri (score décroissant puis nom croissant)\r\n    qualified_students.sort(key=lambda student: (-student[1], student[0]))\r\n\r\n    return qualified_students\r\n\r\n\r\n# =========================\r\n# 🔹 Exemples d'exécution\r\n# =========================\r\n\r\nrecords = [\r\n    (\"Alice\", 85),\r\n    (\"Bob\", 42),\r\n    (\"Charlie\", 90),\r\n    (\"David\", 75),\r\n    (\"Eve\", 90),\r\n    (\"\", 70),            # nom invalide\r\n    (\"Frank\", 110),      # score invalide\r\n    (\"Grace\", -5),       # score invalide\r\n    (\"Heidi\", \"80\"),     # type invalide\r\n]\r\n\r\n# Cas 1 : seuil = 70\r\nresult1 = process_students(records, 70)\r\nprint(\"Résultat avec seuil 70 :\")\r\nprint(result1)\r\n\r\n# Cas 2 : seuil = 80\r\nresult2 = process_students(records, 80)\r\nprint(\"\\nRésultat avec seuil 80 :\")\r\nprint(result2)\r\n\r\n# Cas 3 : seuil = 90\r\nresult3 = process_students(records, 90)\r\nprint(\"\\nRésultat avec seuil 90 :\")\r\nprint(result3)",
+    "level": "intermédiaire",
+    "challenge_description": "Exercice: Vous devez creer une fonction 'process_students' qui prend en entree une liste de tuples, chaque tuple representant un etudiant avec son nom et son score, et un score minimum. La fonction doit nettoyer les donnees, filtrer les etudiants selon le score minimum, trier les etudiants qualifies par score decroissant et par nom croissant, et retourner la liste des etudiants qualifies.\nContraintes:\n- Les noms vides ou les scores non numeriques doivent etre ignores.\n- Les scores doivent etre des entiers compris entre 0 et 100. Les scores hors de cette plage doivent etre ignores.\n- La fonction doit retourner une liste de tuples, chaque tuple contenant le nom de l'etudiant et son score valide et qualifie.\nIndices:\n- Utilisez une comprehension de liste pour filtrer et nettoyer les donnees.\n- Utilisez les fonctions sorted() de Python pour trier les resultats. Vous pouvez passer une fonction lambda a l'argument 'key' pour un tri complexe.\nExemple: Entree: [('', 82), ('Alice', 95), ('Bob', 'NaN'), ('Charlie', 102), ('David', 80)], 85\\nSortie: [('Alice', 95)]",
+    "tutor_mode": true,
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Bonjour ! Je suis ton tuteur IA pour t'aider à apprendre et à améliorer tes compétences en Python dans le cadre du cours \"Assistant exercice\". Nous allons travailler ensemble pour créer et comprendre des fonctions qui manipulent des données. Pour bien démarrer, pourrais-tu me dire ce que tu as déjà appris en Python et ce que tu trouves le plus difficile jusqu'à présent ? Cela m'aidera à adapter notre session à ton niveau et à tes besoins.",
+        "timestamp": "2026-04-21T14:04:07.520497+00:00"
+      }
+    ]
+  },
+  "bcb74e47-b209-4123-81aa-f91537b498cf": {
+    "session_id": "bcb74e47-b209-4123-81aa-f91537b498cf",
+    "created_at": "2026-04-21T14:05:09.753930+00:00",
+    "updated_at": "2026-04-21T14:05:21.031291+00:00",
+    "code": "def process_students(records, min_score):\r\n    # Étape 1 : Nettoyage des données\r\n    valid_students = [\r\n        (name, score)\r\n        for name, score in records\r\n        if isinstance(score, int) and 0 <= score <= 100 and isinstance(name, str) and name.strip()\r\n    ]\r\n\r\n    # Étape 2 : Filtrage selon le score minimum\r\n    qualified_students = [\r\n        (name, score)\r\n        for name, score in valid_students\r\n        if score >= min_score\r\n    ]\r\n\r\n    # Étape 3 : Tri (score décroissant puis nom croissant)\r\n    qualified_students.sort(key=lambda student: (-student[1], student[0]))\r\n\r\n    return qualified_students\r\n\r\n\r\n# =========================\r\n# 🔹 Exemples d'exécution\r\n# =========================\r\n\r\nrecords = [\r\n    (\"Alice\", 85),\r\n    (\"Bob\", 42),\r\n    (\"Charlie\", 90),\r\n    (\"David\", 75),\r\n    (\"Eve\", 90),\r\n    (\"\", 70),            # nom invalide\r\n    (\"Frank\", 110),      # score invalide\r\n    (\"Grace\", -5),       # score invalide\r\n    (\"Heidi\", \"80\"),     # type invalide\r\n]\r\n\r\n# Cas 1 : seuil = 70\r\nresult1 = process_students(records, 70)\r\nprint(\"Résultat avec seuil 70 :\")\r\nprint(result1)\r\n\r\n# Cas 2 : seuil = 80\r\nresult2 = process_students(records, 80)\r\nprint(\"\\nRésultat avec seuil 80 :\")\r\nprint(result2)\r\n\r\n# Cas 3 : seuil = 90\r\nresult3 = process_students(records, 90)\r\nprint(\"\\nRésultat avec seuil 90 :\")\r\nprint(result3)",
+    "level": "intermédiaire",
+    "challenge_description": "Exercice: Vous devez creer une fonction 'process_students' qui prend en entree une liste de tuples, chaque tuple representant un etudiant avec son nom et son score, et un score minimum. La fonction doit nettoyer les donnees, filtrer les etudiants selon le score minimum, trier les etudiants qualifies par score decroissant et par nom croissant, et retourner la liste des etudiants qualifies.\nContraintes:\n- Les noms vides ou les scores non numeriques doivent etre ignores.\n- Les scores doivent etre des entiers compris entre 0 et 100. Les scores hors de cette plage doivent etre ignores.\n- La fonction doit retourner une liste de tuples, chaque tuple contenant le nom de l'etudiant et son score valide et qualifie.\nIndices:\n- Utilisez une comprehension de liste pour filtrer et nettoyer les donnees.\n- Utilisez les fonctions sorted() de Python pour trier les resultats. Vous pouvez passer une fonction lambda a l'argument 'key' pour un tri complexe.\nExemple: Entree: [('', 82), ('Alice', 95), ('Bob', 'NaN'), ('Charlie', 102), ('David', 80)], 85\\nSortie: [('Alice', 95)]",
+    "tutor_mode": true,
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Bonjour ! Je suis ton tuteur IA pour le cours \"Assistant exercice\" où nous allons travailler ensemble sur la programmation en Python. Aujourd'hui, nous allons créer une fonction qui traite une liste d'étudiants pour identifier ceux qui répondent à certains critères de performance. C'est un excellent moyen de combiner plusieurs concepts de base en Python comme les listes, les tuples, les boucles et les conditions.\n\nPour commencer, pourrais-tu me dire quel est ton niveau actuel en Python et ce que tu aimerais particulièrement apprendre ou améliorer aujourd'hui ? Cela m'aidera à adapter notre session à tes besoins.",
+        "timestamp": "2026-04-21T14:05:21.031263+00:00"
+      }
+    ]
+  },
+  "70753f1c-af81-458e-af9b-5f0d11bbac8e": {
+    "session_id": "70753f1c-af81-458e-af9b-5f0d11bbac8e",
+    "created_at": "2026-04-21T14:14:32.296316+00:00",
+    "updated_at": "2026-04-21T14:14:37.854919+00:00",
+    "code": "def process_students(records, min_score):\n    # Filtrage et nettoyage des données\n    filtered_records = [\n        (name, score) for name, score in records\n        if isinstance(score, int) and 0 <= score <= 100 and name\n    ]\n\n    # Tri des étudiants par score décroissant puis par nom croissant\n    sorted_records = sorted(\n        filtered_records,\n        key=lambda student: (-student[1], student[0])\n    )\n\n    # Filtrage final par score minimal\n    result = [student for student in sorted_records if student[1] >= min_score]\n    return result",
+    "level": "intermédiaire",
+    "challenge_description": "Exercice: Vous devez créer une fonction `process_students(records, min_score)` qui prend en entrée une liste de tuples (nom, score) représentant les étudiants et un score minimal. La fonction doit nettoyer les données, filtrer les étudiants dont le score est supérieur ou égal au score minimal, trier les résultats par score décroissant puis nom croissant, et retourner la liste filtrée et triée.\nContraintes:\n- Les noms vides ou les scores non numériques doivent être ignorés.\n- Les scores doivent être entre 0 et 100 inclus. Les valeurs hors de cet intervalle doivent être ignorées.\n- La fonction ne doit pas utiliser de librairies externes pour le tri et le filtrage.\nIndices:\n- Utilisez une compréhension de liste pour filtrer et nettoyer les données en une seule étape.\n- Pour le tri, utilisez la fonction `sorted()` de Python avec les paramètres `key` et `reverse` appropriés.\nExemple: Entrée: ([('Alice', 85), ('Bob', ''), ('Charlie', 102), ('Dave', 'non numérique'), ('Eva', 68)], 60)\\nSortie: [('Alice', 85), ('Eva', 68)]",
+    "tutor_mode": true,
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "",
+        "assistant_response": "Bonjour ! Je suis ton tuteur IA pour t'aider à apprendre Python dans le cadre du cours \"Assistant exercice\". Je suis ici pour t'accompagner pas à pas dans la compréhension et la réalisation de tes exercices de programmation. Pour commencer, pourrais-tu me dire un peu plus sur ce que tu as déjà appris en Python et ce que tu trouves difficile ou facile ? Cela me permettra de mieux adapter mes explications à ton niveau et à tes besoins.",
+        "timestamp": "2026-04-21T14:14:37.854896+00:00"
+      }
+    ]
+  },
+  "9c07c44a-94ed-4f1c-96f3-b00d4a1df395": {
+    "session_id": "9c07c44a-94ed-4f1c-96f3-b00d4a1df395",
+    "created_at": "2026-04-21T14:25:57.744550+00:00",
+    "updated_at": "2026-04-21T14:26:13.932991+00:00",
+    "code": "def process_students(records, min_score):\n    # Filtrage et nettoyage des données\n    filtered_records = [\n        (name, score) for name, score in records\n        if isinstance(score, int) and 0 <= score <= 100 and name\n    ]\n\n    # Tri des étudiants par score décroissant puis par nom croissant\n    sorted_records = sorted(\n        filtered_records,\n        key=lambda student: (-student[1], student[0])\n    )\n\n    # Filtrage final par score minimal\n    result = [student for student in sorted_records if student[1] >= min_score]\n    return result",
+    "level": "intermédiaire",
+    "challenge_description": "Exercice: Vous devez créer une fonction `process_students(records, min_score)` qui prend en entrée une liste de tuples (nom, score) représentant les étudiants et un score minimal. La fonction doit nettoyer les données, filtrer les étudiants dont le score est supérieur ou égal au score minimal, trier les résultats par score décroissant puis nom croissant, et retourner la liste filtrée et triée.\nContraintes:\n- Les noms vides ou les scores non numériques doivent être ignorés.\n- Les scores doivent être entre 0 et 100 inclus. Les valeurs hors de cet intervalle doivent être ignorées.\n- La fonction ne doit pas utiliser de librairies externes pour le tri et le filtrage.\nIndices:\n- Utilisez une compréhension de liste pour filtrer et nettoyer les données en une seule étape.\n- Pour le tri, utilisez la fonction `sorted()` de Python avec les paramètres `key` et `reverse` appropriés.\nExemple: Entrée: ([('Alice', 85), ('Bob', ''), ('Charlie', 102), ('Dave', 'non numérique'), ('Eva', 68)], 60)\\nSortie: [('Alice', 85), ('Eva', 68)]",
+    "tutor_mode": true,
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "donnne moi le code complet avec des exemple d'execution",
+        "assistant_response": "Bien sûr, je vais te montrer comment fonctionne la fonction `process_students` que nous avons ici, et ensuite je te donnerai quelques exemples d'exécution pour clarifier son utilisation.\n\n### Fonction `process_students`\n\nLa fonction `process_students` prend deux paramètres : `records`, qui est une liste de tuples contenant le nom de l'étudiant et son score, et `min_score`, qui est le score minimal pour filtrer les étudiants.\n\n1. **Nettoyage des données** :\n   - La liste `filtered_records` est créée en incluant seulement les tuples où le score est un entier valide entre 0 et 100, et où le nom n'est pas vide. Cela assure que les données avec lesquelles nous travaillons sont propres et conformes à ce que nous attendons.\n\n2. **Tri des données** :\n   - Les étudiants dans `filtered_records` sont triés par score décroissant (du plus grand au plus petit) et par nom croissant (ordre alphabétique) grâce à la fonction `sorted`. La clé de tri est définie par la fonction lambda : `lambda student: (-student[1], student[0])`.\n\n3. **Filtrage par score minimal** :\n   - Ensuite, la liste `sorted_records` est filtrée pour garder uniquement les étudiants dont le score est supérieur ou égal à `min_score`. Le résultat est stocké dans `result`.\n\n### Exemples d'exécution\n\nImaginons que nous avons la liste suivante de records :\n\n```python\nstudents = [(\"Alice\", 88), (\"Bob\", 75), (\"Charlie\", 90), (\"David\", 90), (\"Eve\", 55)]\n```\n\nEt nous voulons filtrer pour un `min_score` de 80. Voici comment tu pourrais utiliser la fonction :\n\n```python\nresult = process_students(students, 80)\nprint(result)\n```\n\nSortie attendue :\n\n```plaintext\n[('Charlie', 90), ('David', 90), ('Alice', 88)]\n```\n\nIci, seuls Charlie, David et Alice ont des scores supérieurs ou égaux à 80, et ils sont triés par score décroissant puis par nom croissant.\n\nEst-ce que cette explication te permet de comprendre comment la fonction fonctionne et comment l'utiliser avec tes propres données ?",
+        "timestamp": "2026-04-21T14:26:13.932966+00:00"
+      }
+    ]
+  },
+  "0da84f99-a958-430f-90e4-782f161f5902": {
+    "session_id": "0da84f99-a958-430f-90e4-782f161f5902",
+    "created_at": "2026-04-21T14:26:13.984889+00:00",
+    "updated_at": "2026-04-21T14:26:56.854336+00:00",
+    "code": "def process_students(records, min_score):\n    # Filtrage et nettoyage des données\n    filtered_records = [\n        (name, score) for name, score in records\n        if isinstance(score, int) and 0 <= score <= 100 and name\n    ]\n\n    # Tri des étudiants par score décroissant puis par nom croissant\n    sorted_records = sorted(\n        filtered_records,\n        key=lambda student: (-student[1], student[0])\n    )\n\n    # Filtrage final par score minimal\n    result = [student for student in sorted_records if student[1] >= min_score]\n    return result",
+    "level": "intermédiaire",
+    "challenge_description": "Exercice: Vous devez créer une fonction `process_students(records, min_score)` qui prend en entrée une liste de tuples (nom, score) représentant les étudiants et un score minimal. La fonction doit nettoyer les données, filtrer les étudiants dont le score est supérieur ou égal au score minimal, trier les résultats par score décroissant puis nom croissant, et retourner la liste filtrée et triée.\nContraintes:\n- Les noms vides ou les scores non numériques doivent être ignorés.\n- Les scores doivent être entre 0 et 100 inclus. Les valeurs hors de cet intervalle doivent être ignorées.\n- La fonction ne doit pas utiliser de librairies externes pour le tri et le filtrage.\nIndices:\n- Utilisez une compréhension de liste pour filtrer et nettoyer les données en une seule étape.\n- Pour le tri, utilisez la fonction `sorted()` de Python avec les paramètres `key` et `reverse` appropriés.\nExemple: Entrée: ([('Alice', 85), ('Bob', ''), ('Charlie', 102), ('Dave', 'non numérique'), ('Eva', 68)], 60)\\nSortie: [('Alice', 85), ('Eva', 68)]",
+    "tutor_mode": true,
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "donnne moi le code complet avec des exemple d'execution",
+        "assistant_response": "Bien sûr, je vais te montrer comment fonctionne la fonction `process_students` que tu as, et je vais également te donner quelques exemples d'exécution pour que tu puisses voir comment elle s'utilise.\n\n### Explication du Code\n\n1. **Nettoyage des données** : La première étape consiste à filtrer les enregistrements pour s'assurer que chaque score est un entier valide entre 0 et 100 et que le nom n'est pas vide. Cela se fait avec une compréhension de liste qui vérifie ces conditions.\n\n2. **Tri des données** : Ensuite, les enregistrements filtrés sont triés. Le tri est fait d'abord par score en ordre décroissant (c'est pourquoi il y a un `-` devant `student[1]`), puis par nom en ordre croissant.\n\n3. **Filtrage par score minimal** : Après le tri, il y a un autre filtrage pour garder uniquement les étudiants dont le score est supérieur ou égal au score minimal spécifié.\n\n### Exemples d'Exécution\n\n```python\n# Exemple d'enregistrements\nrecords = [\n    (\"Alice\", 88), \n    (\"Bob\", 67), \n    (\"Charlie\", 95), \n    (\"David\", 67), \n    (\"Eve\", 120)  # Ce score est invalide et sera ignoré\n]\n\n# Appel de la fonction avec un score minimal de 70\nresult = process_students(records, 70)\nprint(result)  # Output: [('Charlie', 95), ('Alice', 88)]\n```\n\nDans cet exemple, 'Eve' est ignorée car son score est hors des limites valides (0-100). 'Bob' et 'David' sont aussi ignorés car leurs scores sont inférieurs au score minimal de 70. Les étudiants restants sont triés par score décroissant et par nom croissant.\n\n### Un autre exemple\n\n```python\n# Un autre ensemble d'enregistrements\nrecords = [\n    (\"Zoe\", 85), \n    (\"Anna\", 85), \n    (\"Mark\", 45)\n]\n\n# Appel de la fonction avec un score minimal de 80\nresult = process_students(records, 80)\nprint(result)  # Output: [('Anna', 85), ('Zoe', 85)]\n```\n\nIci, 'Mark' est exclu car son score est inférieur à 80. 'Anna' et 'Zoe' ont le même score, donc elles sont triées par leur nom en ordre croissant.\n\nEst-ce que cet exemple t'aide à comprendre comment utiliser la fonction `process_students` ?",
+        "timestamp": "2026-04-21T14:26:56.854313+00:00"
+      }
+    ]
+  },
+  "e2be0e0e-aab5-43ee-87f7-7622ef4da8e0": {
+    "session_id": "e2be0e0e-aab5-43ee-87f7-7622ef4da8e0",
+    "created_at": "2026-04-21T14:26:21.529825+00:00",
+    "updated_at": "2026-04-21T14:26:38.075233+00:00",
+    "code": "def process_students(records, min_score):\n    # Filtrage et nettoyage des données\n    filtered_records = [\n        (name, score) for name, score in records\n        if isinstance(score, int) and 0 <= score <= 100 and name\n    ]\n\n    # Tri des étudiants par score décroissant puis par nom croissant\n    sorted_records = sorted(\n        filtered_records,\n        key=lambda student: (-student[1], student[0])\n    )\n\n    # Filtrage final par score minimal\n    result = [student for student in sorted_records if student[1] >= min_score]\n    return result",
+    "level": "intermédiaire",
+    "challenge_description": "Exercice: Vous devez créer une fonction `process_students(records, min_score)` qui prend en entrée une liste de tuples (nom, score) représentant les étudiants et un score minimal. La fonction doit nettoyer les données, filtrer les étudiants dont le score est supérieur ou égal au score minimal, trier les résultats par score décroissant puis nom croissant, et retourner la liste filtrée et triée.\nContraintes:\n- Les noms vides ou les scores non numériques doivent être ignorés.\n- Les scores doivent être entre 0 et 100 inclus. Les valeurs hors de cet intervalle doivent être ignorées.\n- La fonction ne doit pas utiliser de librairies externes pour le tri et le filtrage.\nIndices:\n- Utilisez une compréhension de liste pour filtrer et nettoyer les données en une seule étape.\n- Pour le tri, utilisez la fonction `sorted()` de Python avec les paramètres `key` et `reverse` appropriés.\nExemple: Entrée: ([('Alice', 85), ('Bob', ''), ('Charlie', 102), ('Dave', 'non numérique'), ('Eva', 68)], 60)\\nSortie: [('Alice', 85), ('Eva', 68)]",
+    "tutor_mode": true,
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "donnne moi le code complet avec des exemple d'execution",
+        "assistant_response": "Bien sûr, je vais t'expliquer comment fonctionne le code de la fonction `process_students` et te donner des exemples pour mieux comprendre son utilisation.\n\n1. **Nettoyage des données** : La fonction commence par filtrer les enregistrements pour s'assurer que chaque score est un entier valide entre 0 et 100 et que le nom n'est pas vide. Cela permet d'éviter les erreurs dans les étapes suivantes.\n\n```python\nfiltered_records = [\n    (name, score) for name, score in records\n    if isinstance(score, int) and 0 <= score <= 100 and name\n]\n```\n\n2. **Tri des étudiants** : Ensuite, les enregistrements filtrés sont triés. D'abord par score décroissant (les scores les plus hauts en premier), puis par nom croissant en cas d'égalité de scores.\n\n```python\nsorted_records = sorted(\n    filtered_records,\n    key=lambda student: (-student[1], student[0])\n)\n```\n\n3. **Filtrage par score minimal** : Après le tri, la fonction filtre les étudiants pour ne garder que ceux dont le score est supérieur ou égal au score minimal spécifié.\n\n```python\nresult = [student for student in sorted_records if student[1] >= min_score]\n```\n\n4. **Retour du résultat** : Finalement, la liste des étudiants filtrée et triée est retournée.\n\n```python\nreturn result\n```\n\n### Exemples d'exécution\n\nImaginons que tu as la liste suivante d'étudiants avec leurs scores :\n\n```python\nstudents = [(\"Alice\", 88), (\"Bob\", 75), (\"Charlie\", 90), (\"Dave\", 90), (\"Eve\", 101), (\"Fay\", -5), (\"Grace\", 85)]\n```\n\nSi tu exécutes la fonction avec un score minimal de 80 :\n\n```python\nprint(process_students(students, 80))\n```\n\nTu obtiendras :\n\n```python\n[('Charlie', 90), ('Dave', 90), ('Alice', 88), ('Grace', 85)]\n```\n\nLes noms sont triés par score décroissant et par nom croissant en cas d'égalité de score. Les scores non valides (comme 101 ou -5) sont exclus.\n\nEst-ce que cette explication te clarifie le fonctionnement de la fonction et comment l'utiliser? As-tu d'autres questions sur ce code?",
+        "timestamp": "2026-04-21T14:26:38.074994+00:00"
+      }
+    ]
+  },
+  "0615aba9-91a7-467f-b35e-64791f54e152": {
+    "session_id": "0615aba9-91a7-467f-b35e-64791f54e152",
+    "created_at": "2026-04-21T14:26:38.117774+00:00",
+    "updated_at": "2026-04-21T14:27:21.160840+00:00",
+    "code": "def process_students(records, min_score):\n    # Filtrage et nettoyage des données\n    filtered_records = [\n        (name, score) for name, score in records\n        if isinstance(score, int) and 0 <= score <= 100 and name\n    ]\n\n    # Tri des étudiants par score décroissant puis par nom croissant\n    sorted_records = sorted(\n        filtered_records,\n        key=lambda student: (-student[1], student[0])\n    )\n\n    # Filtrage final par score minimal\n    result = [student for student in sorted_records if student[1] >= min_score]\n    return result",
+    "level": "intermédiaire",
+    "challenge_description": "Exercice: Vous devez créer une fonction `process_students(records, min_score)` qui prend en entrée une liste de tuples (nom, score) représentant les étudiants et un score minimal. La fonction doit nettoyer les données, filtrer les étudiants dont le score est supérieur ou égal au score minimal, trier les résultats par score décroissant puis nom croissant, et retourner la liste filtrée et triée.\nContraintes:\n- Les noms vides ou les scores non numériques doivent être ignorés.\n- Les scores doivent être entre 0 et 100 inclus. Les valeurs hors de cet intervalle doivent être ignorées.\n- La fonction ne doit pas utiliser de librairies externes pour le tri et le filtrage.\nIndices:\n- Utilisez une compréhension de liste pour filtrer et nettoyer les données en une seule étape.\n- Pour le tri, utilisez la fonction `sorted()` de Python avec les paramètres `key` et `reverse` appropriés.\nExemple: Entrée: ([('Alice', 85), ('Bob', ''), ('Charlie', 102), ('Dave', 'non numérique'), ('Eva', 68)], 60)\\nSortie: [('Alice', 85), ('Eva', 68)]",
+    "tutor_mode": true,
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "donnne moi le code complet avec des exemple d'execution",
+        "assistant_response": "Bien sûr, je vais te guider à travers le code et te montrer comment il fonctionne avec des exemples. La fonction `process_students` que nous avons ici est conçue pour traiter une liste d'étudiants représentés par des tuples (nom, score). Voici ce que fait chaque partie de la fonction :\n\n1. **Nettoyage des données** : Cette partie s'assure que chaque score est un entier valide entre 0 et 100 et que le nom n'est pas vide. Cela évite les erreurs dans les étapes suivantes.\n\n   ```python\n   filtered_records = [\n       (name, score) for name, score in records\n       if isinstance(score, int) and 0 <= score <= 100 and name\n   ]\n   ```\n\n2. **Tri des étudiants** : Ici, les étudiants sont triés par score décroissant (les scores plus élevés d'abord) et par nom croissant (en cas d'égalité de scores).\n\n   ```python\n   sorted_records = sorted(\n       filtered_records,\n       key=lambda student: (-student[1], student[0])\n   )\n   ```\n\n3. **Filtrage par score minimal** : Enfin, on ne garde que les étudiants qui ont un score supérieur ou égal au score minimal spécifié.\n\n   ```python\n   result = [student for student in sorted_records if student[1] >= min_score]\n   ```\n\nVoici un exemple d'exécution pour mieux comprendre :\n\n```python\nstudents = [\n    (\"Alice\", 88), (\"Bob\", 75), (\"Charlie\", 90), (\"David\", 90), (\"Eve\", 55)\n]\nmin_score = 80\n\n# Appel de la fonction avec la liste des étudiants et le score minimal\nprocessed_students = process_students(students, min_score)\n\n# Affichage du résultat\nprint(processed_students)\n```\n\nDans cet exemple, la liste `students` contient plusieurs étudiants avec leurs scores. Après avoir appelé la fonction `process_students` avec un score minimal de 80, la sortie sera :\n\n```\n[('Charlie', 90), ('David', 90), ('Alice', 88)]\n```\n\nLes étudiants Charlie, David et Alice ont tous des scores supérieurs ou égaux à 80, et ils sont triés par score décroissant puis par nom croissant.\n\nEst-ce que cela te semble clair jusqu'à présent ? As-tu des questions sur un point spécifique du code ou de l'exemple ?",
+        "timestamp": "2026-04-21T14:27:21.160819+00:00"
+      }
+    ]
+  },
+  "0a0bb4ee-7410-4178-b87a-7394b2ab321f": {
+    "session_id": "0a0bb4ee-7410-4178-b87a-7394b2ab321f",
+    "created_at": "2026-04-21T14:29:27.912446+00:00",
+    "updated_at": "2026-04-21T14:29:50.265783+00:00",
+    "code": "def process_students(records, min_score):\n    # Filtrage et nettoyage des données\n    filtered_records = [\n        (name, score) for name, score in records\n        if isinstance(score, int) and 0 <= score <= 100 and name\n    ]\n\n    # Tri des étudiants par score décroissant puis par nom croissant\n    sorted_records = sorted(\n        filtered_records,\n        key=lambda student: (-student[1], student[0])\n    )\n\n    # Filtrage final par score minimal\n    result = [student for student in sorted_records if student[1] >= min_score]\n    return result",
+    "level": "intermédiaire",
+    "challenge_description": "Exercice: Vous devez créer une fonction `process_students(records, min_score)` qui prend en entrée une liste de tuples (nom, score) représentant les étudiants et un score minimal. La fonction doit nettoyer les données, filtrer les étudiants dont le score est supérieur ou égal au score minimal, trier les résultats par score décroissant puis nom croissant, et retourner la liste filtrée et triée.\nContraintes:\n- Les noms vides ou les scores non numériques doivent être ignorés.\n- Les scores doivent être entre 0 et 100 inclus. Les valeurs hors de cet intervalle doivent être ignorées.\n- La fonction ne doit pas utiliser de librairies externes pour le tri et le filtrage.\nIndices:\n- Utilisez une compréhension de liste pour filtrer et nettoyer les données en une seule étape.\n- Pour le tri, utilisez la fonction `sorted()` de Python avec les paramètres `key` et `reverse` appropriés.\nExemple: Entrée: ([('Alice', 85), ('Bob', ''), ('Charlie', 102), ('Dave', 'non numérique'), ('Eva', 68)], 60)\\nSortie: [('Alice', 85), ('Eva', 68)]",
+    "tutor_mode": true,
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "donnne moi le code complet avec des exemple d'execution",
+        "assistant_response": "Bonjour ! Je vais t'expliquer le code que tu as et te montrer comment l'utiliser avec des exemples.\n\n### Explication du code\n\n1. **Filtrage et nettoyage des données** :\n   - Cette partie du code prend chaque tuple `(nom, score)` de la liste `records`.\n   - Elle vérifie si le `score` est un entier, si ce score est entre 0 et 100, et si le `nom` n'est pas vide.\n   - Les tuples qui passent ces vérifications sont gardés dans la liste `filtered_records`.\n\n2. **Tri des étudiants** :\n   - La liste `filtered_records` est triée en utilisant deux critères :\n     - D'abord par `score` de manière décroissante (les plus hauts scores en premier).\n     - Ensuite par `nom` de manière croissante (ordre alphabétique).\n\n3. **Filtrage par score minimal** :\n   - Après le tri, on filtre de nouveau pour garder seulement les étudiants dont le score est supérieur ou égal à `min_score`.\n   - Les résultats sont stockés dans `result` et retournés par la fonction.\n\n### Exemple d'exécution\n\nImaginons que tu as la liste des étudiants suivante :\n\n```python\nstudents = [\n    (\"Alice\", 88),\n    (\"Bob\", 75),\n    (\"Charlie\", 90),\n    (\"David\", 90),\n    (\"Eve\", 55),\n    (\"Faythe\", 101)  # Ce score sera ignoré car il n'est pas valide\n]\n```\n\nPour utiliser la fonction `process_students`, tu dois choisir un score minimal. Par exemple, si tu choisis 80 :\n\n```python\nprint(process_students(students, 80))\n```\n\nLe résultat sera :\n\n```\n[('Charlie', 90), ('David', 90), ('Alice', 88)]\n```\n\nLes étudiants sont triés par leur score (décroissant) et par leur nom (croissant) pour ceux qui ont le même score.\n\nEst-ce que cette explication te semble claire ? As-tu des questions sur un point spécifique du code ?",
+        "timestamp": "2026-04-21T14:29:50.265703+00:00"
+      }
+    ]
+  },
+  "d2dfc8a8-02d5-43ae-91b8-b63596cd59fa": {
+    "session_id": "d2dfc8a8-02d5-43ae-91b8-b63596cd59fa",
+    "created_at": "2026-04-21T14:30:48.023792+00:00",
+    "updated_at": "2026-04-21T14:35:19.744615+00:00",
+    "code": "def process_students(records, min_score):\n    # Filtrage et nettoyage des données\n    filtered_records = [\n        (name, score) for name, score in records\n        if isinstance(score, int) and 0 <= score <= 100 and name\n    ]\n\n    # Tri des étudiants par score décroissant puis par nom croissant\n    sorted_records = sorted(\n        filtered_records,\n        key=lambda student: (-student[1], student[0])\n    )\n\n    # Filtrage final par score minimal\n    result = [student for student in sorted_records if student[1] >= min_score]\n    return result\n\nstudents = [\n    (\"Alice\", 88),\n    (\"Bob\", 75),\n    (\"Charlie\", 90),\n    (\"David\", 90),\n    (\"Eve\", 55),\n    (\"Faythe\", 101)  # Ce score sera ignoré car il n'est pas valide\n]\n\nprint(process_students(students, 80))",
+    "level": "intermédiaire",
+    "challenge_description": "Exercice: Vous devez créer une fonction `process_students(records, min_score)` qui prend en entrée une liste de tuples (nom, score) représentant les étudiants et un score minimal. La fonction doit nettoyer les données, filtrer les étudiants dont le score est supérieur ou égal au score minimal, trier les résultats par score décroissant puis nom croissant, et retourner la liste filtrée et triée.\nContraintes:\n- Les noms vides ou les scores non numériques doivent être ignorés.\n- Les scores doivent être entre 0 et 100 inclus. Les valeurs hors de cet intervalle doivent être ignorées.\n- La fonction ne doit pas utiliser de librairies externes pour le tri et le filtrage.\nIndices:\n- Utilisez une compréhension de liste pour filtrer et nettoyer les données en une seule étape.\n- Pour le tri, utilisez la fonction `sorted()` de Python avec les paramètres `key` et `reverse` appropriés.\nExemple: Entrée: ([('Alice', 85), ('Bob', ''), ('Charlie', 102), ('Dave', 'non numérique'), ('Eva', 68)], 60)\\nSortie: [('Alice', 85), ('Eva', 68)]",
+    "tutor_mode": true,
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "Explique l idee generale en 3 points",
+        "assistant_response": "Bien sûr, je vais te détailler l'idée générale de l'exercice en trois points principaux :\n\n1. **Nettoyage et filtrage des données :** La première étape consiste à s'assurer que les données sont valides. Dans notre cas, cela signifie que les scores doivent être des entiers compris entre 0 et 100, et que le nom de l'étudiant doit être présent (non vide). Cela évite les erreurs dans les étapes suivantes et garantit que nous travaillons uniquement avec des données fiables.\n\n2. **Tri des données :** Une fois les données nettoyées, nous les trions. D'abord par score de manière décroissante (les scores les plus élevés en premier), puis par nom de manière croissante en cas d'égalité de scores. Cela nous permet de présenter les résultats de manière organisée et hiérarchique, facilitant ainsi leur compréhension et leur utilisation ultérieure.\n\n3. **Filtrage selon le score minimal :** Enfin, nous filtrons les étudiants pour ne garder que ceux dont le score est supérieur ou égal au score minimal spécifié. Cela permet de répondre à des critères spécifiques, par exemple, sélectionner uniquement les étudiants qui ont réussi ou qui sont éligibles pour une certaine récompense ou distinction.\n\nEst-ce que cette explication clarifie bien les étapes que le code suit pour traiter la liste des étudiants ?",
+        "timestamp": "2026-04-21T14:31:00.831464+00:00"
+      },
+      {
+        "step": 1,
+        "student_answer": "Montre 3 cas limites importants",
+        "assistant_response": "Bien sûr, examinons trois cas limites importants qui peuvent être pertinents pour notre fonction `process_students` :\n\n1. **Étudiant avec un score en dehors de la plage valide (0-100) :**\n   Prenons l'exemple de Faythe avec un score de 101. Ce score n'est pas valide car il dépasse 100. Notre fonction va d'abord filtrer et éliminer ce tuple lors de la première étape de nettoyage. Cela garantit que tous les scores traités par la suite sont valides et évite les erreurs ou les résultats incohérents.\n\n2. **Étudiant avec un score exactement égal au score minimal :**\n   Imaginons que le score minimal soit 75 et que nous ayons un étudiant, Bob, avec un score de 75. Dans ce cas, après le tri, Bob sera inclus dans la liste finale car son score est égal au score minimal requis. Cela montre comment notre fonction gère les cas où les étudiants ont juste le score nécessaire pour passer le filtre.\n\n3. **Étudiants avec le même score mais des noms différents :**\n   Considérons Charlie et David, tous deux avec un score de 90. Notre fonction les trie d'abord par score, puis par nom en ordre alphabétique si les scores sont égaux. Ainsi, bien que Charlie et David aient le même score, David apparaîtra avant Charlie dans la liste finale en raison de l'ordre alphabétique de leur nom.\n\nCes cas montrent comment la fonction traite différentes situations qui pourraient affecter la validité et l'ordre des données. Est-ce que ces exemples t'aident à comprendre comment la fonction gère les cas limites?",
+        "timestamp": "2026-04-21T14:33:38.724622+00:00"
+      },
+      {
+        "step": 2,
+        "student_answer": "Explique moi ce quoi pour que je comprenne tres bien de quoi il s'agit",
+        "assistant_response": "Bien sûr, je vais t'expliquer de manière simple ce que fait notre fonction `process_students`.\n\nLa fonction `process_students` est conçue pour traiter une liste d'étudiants. Chaque étudiant est représenté par un tuple contenant son nom et son score. Voici ce que fait la fonction étape par étape :\n\n1. **Nettoyage des données :** La fonction commence par vérifier que chaque score est un nombre entier valide entre 0 et 100 et que le nom de l'étudiant n'est pas vide. Les enregistrements qui ne respectent pas ces conditions sont ignorés. Cela nous assure que les données avec lesquelles nous travaillons sont correctes et complètes.\n\n2. **Tri des étudiants :** Ensuite, la fonction trie les étudiants d'abord par score de manière décroissante (les plus grands scores en premier), et si deux étudiants ont le même score, elle les trie par leur nom de manière croissante. Cela aide à organiser les données de manière claire et ordonnée.\n\n3. **Filtrage par score minimal :** Enfin, la fonction filtre les étudiants pour ne garder que ceux dont le score est égal ou supérieur au score minimal spécifié. Cela permet d'obtenir une liste d'étudiants qui répondent à un certain critère de performance.\n\nL'objectif de cette fonction est donc de nettoyer, organiser et filtrer les données des étudiants selon des critères spécifiques, pour faciliter leur analyse ou leur utilisation ultérieure.\n\nEst-ce que cette explication te permet de mieux comprendre le fonctionnement de la fonction `process_students` ?",
+        "timestamp": "2026-04-21T14:34:34.900283+00:00"
+      },
+      {
+        "step": 3,
+        "student_answer": "Donne moi la meilleure version du code",
+        "assistant_response": "Bien sûr, voici une version optimisée et expliquée du code pour la fonction `process_students` que nous avons discutée :\n\n```python\ndef process_students(records, min_score):\n    # Étape 1: Nettoyage des données\n    # Ici, on crée une nouvelle liste qui ne contient que les tuples valides.\n    # Un tuple est valide si le score est un entier entre 0 et 100 et le nom n'est pas vide.\n    filtered_records = [\n        (name, score) for name, score in records\n        if isinstance(score, int) and 0 <= score <= 100 and name\n    ]\n\n    # Étape 2: Tri des étudiants\n    # On trie les étudiants d'abord par score décroissant (-student[1]),\n    # puis par nom croissant (student[0]) en cas d'égalité de score.\n    sorted_records = sorted(\n        filtered_records,\n        key=lambda student: (-student[1], student[0])\n    )\n\n    # Étape 3: Filtrage par score minimal\n    # On sélectionne seulement les étudiants dont le score est au moins égal au score minimal.\n    result = [student for student in sorted_records if student[1] >= min_score]\n    return result\n\n# Liste d'exemple pour tester la fonction\nstudents = [\n    (\"Alice\", 88),\n    (\"Bob\", 75),\n    (\"Charlie\", 90),\n    (\"David\", 90),\n    (\"Eve\", 55),\n    (\"Faythe\", 101)  # Ce score sera ignoré car il n'est pas valide\n]\n\n# Appel de la fonction avec un score minimal de 80\nprint(process_students(students, 80))\n```\n\nCe code est structuré en trois étapes claires : nettoyage des données, tri, et filtrage final selon le score minimal. Chaque étape a une fonction précise qui aide à transformer la liste d'entrée en une liste de sortie qui répond aux critères définis. La liste finale affichée contiendra les étudiants triés par score décroissant et par nom croissant, tout en excluant ceux qui n'ont pas atteint le score minimal.\n\nEst-ce que cette version du code te paraît claire et répond-elle bien à tes attentes ?",
+        "timestamp": "2026-04-21T14:35:19.744591+00:00"
+      }
+    ]
+  },
+  "84fad9f6-1e08-4b3c-8f0b-a21462df933f": {
+    "session_id": "84fad9f6-1e08-4b3c-8f0b-a21462df933f",
+    "created_at": "2026-04-21T14:45:48.119705+00:00",
+    "updated_at": "2026-04-21T14:49:42.858877+00:00",
+    "code": "def process_students(records, min_score):\n    # Filtrage et nettoyage des données\n    filtered_records = [\n        (name, score) for name, score in records\n        if isinstance(score, int) and 0 <= score <= 100 and name\n    ]\n\n    # Tri des étudiants par score décroissant puis par nom croissant\n    sorted_records = sorted(\n        filtered_records,\n        key=lambda student: (-student[1], student[0])\n    )\n\n    # Filtrage final par score minimal\n    result = [student for student in sorted_records if student[1] >= min_score]\n    return result\n\nstudents = [\n    (\"Alice\", 88),\n    (\"Bob\", 75),\n    (\"Charlie\", 90),\n    (\"David\", 90),\n    (\"Eve\", 55),\n    (\"Faythe\", 101)  # Ce score sera ignoré car il n'est pas valide\n]\n\nprint(process_students(students, 80))",
+    "level": "intermédiaire",
+    "challenge_description": "Exercice: Vous devez créer une fonction `process_students(records, min_score)` qui prend en entrée une liste de tuples (nom, score) représentant les étudiants et un score minimal. La fonction doit nettoyer les données, filtrer les étudiants dont le score est supérieur ou égal au score minimal, trier les résultats par score décroissant puis nom croissant, et retourner la liste filtrée et triée.\nContraintes:\n- Les noms vides ou les scores non numériques doivent être ignorés.\n- Les scores doivent être entre 0 et 100 inclus. Les valeurs hors de cet intervalle doivent être ignorées.\n- La fonction ne doit pas utiliser de librairies externes pour le tri et le filtrage.\nIndices:\n- Utilisez une compréhension de liste pour filtrer et nettoyer les données en une seule étape.\n- Pour le tri, utilisez la fonction `sorted()` de Python avec les paramètres `key` et `reverse` appropriés.\nExemple: Entrée: ([('Alice', 85), ('Bob', ''), ('Charlie', 102), ('Dave', 'non numérique'), ('Eva', 68)], 60)\\nSortie: [('Alice', 85), ('Eva', 68)]",
+    "tutor_mode": true,
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "Explique le code et cette resolution actu",
+        "assistant_response": "Bien sûr, je vais t'expliquer ce code étape par étape pour que tu puisses bien comprendre comment il fonctionne.\n\n1. **Filtrage et nettoyage des données** : \n   La première étape consiste à vérifier chaque enregistrement pour s'assurer qu'ils sont valides. On crée une nouvelle liste `filtered_records` qui ne contient que les tuples `(nom, score)` où le score est un entier compris entre 0 et 100, et où le nom n'est pas vide. Cela permet de s'assurer que les données avec lesquelles nous travaillons par la suite sont correctes et utilisables.\n\n2. **Tri des étudiants** :\n   Ensuite, nous trions les enregistrements filtrés. On utilise la fonction `sorted()` avec une fonction `lambda` comme clé de tri. La fonction `lambda` prend chaque étudiant (représenté par un tuple `(nom, score)`) et retourne un tuple `(-score, nom)`. Le signe négatif devant `score` permet de trier les scores par ordre décroissant (les plus grands scores en premier), tandis que les noms sont triés par ordre croissant (de A à Z) en cas d'égalité de scores.\n\n3. **Filtrage par score minimal** :\n   Après le tri, on filtre une dernière fois pour ne garder que les étudiants dont le score est supérieur ou égal au `min_score` spécifié. Cela se fait par une compréhension de liste qui parcourt `sorted_records` et sélectionne seulement les tuples où le score est au moins égal à `min_score`.\n\n4. **Résultat** :\n   Finalement, la fonction retourne la liste `result` qui contient les étudiants filtrés et triés selon les critères mentionnés.\n\nLe code est testé en utilisant une liste d'étudiants avec différents scores, et on appelle la fonction `process_students` en spécifiant un `min_score` de 80. Les étudiants avec un score inférieur à 80 ne seront pas inclus dans le résultat final.\n\nEst-ce que cette explication te permet de comprendre le fonctionnement de chaque partie du code ? As-tu des questions sur un point spécifique ?",
+        "timestamp": "2026-04-21T14:46:12.236028+00:00"
+      },
+      {
+        "step": 1,
+        "student_answer": "explique moi pourquoi utiliser process_students",
+        "assistant_response": "La fonction `process_students` est très utile pour gérer et organiser des données concernant des étudiants. Imaginons que tu as une grande liste d'étudiants avec leurs scores à un examen et tu veux rapidement savoir qui a réussi avec un score au-dessus d'un certain seuil, tout en ayant cette liste organisée de manière claire. \n\nVoici pourquoi on utilise cette fonction :\n\n1. **Nettoyage des données** : Elle commence par éliminer les données incorrectes ou inappropriées, comme des scores non valides ou des noms manquants. Cela assure que les informations avec lesquelles tu travailles sont fiables.\n\n2. **Organisation** : Elle trie les étudiants d'abord par leur performance (les scores les plus élevés en premier) et ensuite par leur nom dans l'ordre alphabétique. Cela rend les résultats faciles à lire et à comparer.\n\n3. **Filtrage spécifique** : Elle te permet de filtrer les étudiants selon un score minimal que tu définis, te donnant ainsi la flexibilité de modifier les critères selon les besoins.\n\nEn résumé, `process_students` aide à transformer une liste brute et peut-être désordonnée d'étudiants en une liste propre, ordonnée et adaptée à tes critères spécifiques. Cela peut être très pratique pour des enseignants, des administrateurs scolaires ou même des étudiants qui étudient les performances de leur groupe.\n\nEst-ce que cela te donne une meilleure idée de l'utilité de cette fonction dans la gestion des données ?",
+        "timestamp": "2026-04-21T14:48:16.977509+00:00"
+      },
+      {
+        "step": 2,
+        "student_answer": "a quoi sert lambda dans le code/",
+        "assistant_response": "Dans le code que tu as vu, `lambda` est utilisée pour définir une fonction simple et rapide qui aide à trier la liste des étudiants. La fonction `lambda` dans notre exemple prend un étudiant, qui est représenté par un tuple `(nom, score)`, et retourne un tuple `(-score, nom)`. Ce retour est utilisé comme clé de tri.\n\n1. **`-score`** : Le signe moins devant `score` est utilisé pour trier les scores en ordre décroissant. Cela signifie que les étudiants avec les scores les plus élevés seront placés en premier dans la liste triée.\n   \n2. **`nom`** : En cas d'égalité de scores, les étudiants sont triés par leur nom en ordre croissant (de A à Z). Cela permet d'organiser les étudiants qui ont le même score de manière alphabétique.\n\nEn résumé, `lambda` sert ici à définir comment les tuples `(nom, score)` doivent être ordonnés dans la liste finale, en fonction des scores et des noms des étudiants. C'est une façon concise et efficace de spécifier les critères de tri dans la fonction `sorted()`.\n\nEst-ce que cela clarifie l'utilisation de `lambda` dans notre code ? Y a-t-il un autre point que tu souhaiterais approfondir ?",
+        "timestamp": "2026-04-21T14:49:42.858816+00:00"
+      }
+    ]
+  },
+  "fc644c76-5d8e-46e0-b90d-040039335af4": {
+    "session_id": "fc644c76-5d8e-46e0-b90d-040039335af4",
+    "created_at": "2026-04-21T15:08:54.150740+00:00",
+    "updated_at": "2026-04-21T15:09:15.017941+00:00",
+    "code": "def process_students(records, min_score):\n    # Filtrage et nettoyage des données\n    filtered_records = [\n        (name, score) for name, score in records\n        if isinstance(score, int) and 0 <= score <= 100 and name\n    ]\n\n    # Tri des étudiants par score décroissant puis par nom croissant\n    sorted_records = sorted(\n        filtered_records,\n        key=lambda student: (-student[1], student[0])\n    )\n\n    # Filtrage final par score minimal\n    result = [student for student in sorted_records if student[1] >= min_score]\n    return result\n\nstudents = [\n    (\"Alice\", 88),\n    (\"Bob\", 75),\n    (\"Charlie\", 90),\n    (\"David\", 90),\n    (\"Eve\", 55),\n    (\"Faythe\", 101)  # Ce score sera ignoré car il n'est pas valide\n]\n\nprint(process_students(students, 80))",
+    "level": "intermédiaire",
+    "challenge_description": "Exercice: Vous devez créer une fonction `process_students(records, min_score)` qui prend en entrée une liste de tuples (nom, score) représentant les étudiants et un score minimal. La fonction doit nettoyer les données, filtrer les étudiants dont le score est supérieur ou égal au score minimal, trier les résultats par score décroissant puis nom croissant, et retourner la liste filtrée et triée.\nContraintes:\n- Les noms vides ou les scores non numériques doivent être ignorés.\n- Les scores doivent être entre 0 et 100 inclus. Les valeurs hors de cet intervalle doivent être ignorées.\n- La fonction ne doit pas utiliser de librairies externes pour le tri et le filtrage.\nIndices:\n- Utilisez une compréhension de liste pour filtrer et nettoyer les données en une seule étape.\n- Pour le tri, utilisez la fonction `sorted()` de Python avec les paramètres `key` et `reverse` appropriés.\nExemple: Entrée: ([('Alice', 85), ('Bob', ''), ('Charlie', 102), ('Dave', 'non numérique'), ('Eva', 68)], 60)\\nSortie: [('Alice', 85), ('Eva', 68)]",
+    "tutor_mode": true,
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "print('PLOT_JSON:{\"title\":\"Courbe f(x)\",\"xLabel\":\"x\",\"yLabel\":\"f(x)\",\"x\":[0,1,2,3,4],\"y\":[1,4,9,16,25]}') print('PERF_JSON:{\"title\":\"Benchmark\",\"points\":[{\"n\":100,\"timeMs\":1.2},{\"n\":1000,\"timeMs\":8.7},{\"n\":5000,\"timeMs\":39.4}]}')  Je veux ajouter a moi code pour voir le visuel dans le graph",
+        "assistant_response": "Bonjour ! Je vois que tu aimerais ajouter des visualisations à ton code pour mieux comprendre les données sous forme de graphiques. C'est une excellente idée pour rendre les données plus concrètes et faciles à analyser.\n\nPour intégrer des graphiques dans ton code Python, tu peux utiliser des bibliothèques comme `matplotlib` ou `seaborn`. Voici un petit guide pour commencer avec `matplotlib`, qui est très populaire pour la création de graphiques :\n\n1. **Installation de la bibliothèque :** Si tu n'as pas encore installé `matplotlib`, tu peux le faire via pip :\n   ```bash\n   pip install matplotlib\n   ```\n\n2. **Intégration dans ton code :** Voici comment tu pourrais modifier ton code pour ajouter un graphique simple qui représente les données que tu as mentionnées :\n\n   ```python\n   import matplotlib.pyplot as plt\n\n   # Tes données\n   x = [0, 1, 2, 3, 4]\n   y = [1, 4, 9, 16, 25]\n\n   plt.figure(figsize=(10, 5))  # Taille du graphique\n   plt.plot(x, y, marker='o')  # Création du graphique avec des points marqués par des 'o'\n   plt.title(\"Courbe f(x)\")  # Titre du graphique\n   plt.xlabel(\"x\")  # Label de l'axe des x\n   plt.ylabel(\"f(x)\")  # Label de l'axe des y\n   plt.grid(True)  # Ajout d'une grille pour mieux lire les valeurs\n   plt.show()  # Affiche le graphique\n   ```\n\nDans cet exemple, `plt.plot()` est utilisé pour tracer les points définis par les listes `x` et `y`. Tu peux personnaliser le graphique de plusieurs manières en changeant les couleurs, les types de lignes, etc.\n\nEst-ce que cela t'aide à voir comment intégrer des graphiques dans ton code ? As-tu d'autres questions sur la manière de visualiser d'autres types de données ?",
+        "timestamp": "2026-04-21T15:09:15.017914+00:00"
+      }
+    ]
+  },
+  "2d5c1fc9-f417-49a0-9e81-4e8e2b7301f7": {
+    "session_id": "2d5c1fc9-f417-49a0-9e81-4e8e2b7301f7",
+    "created_at": "2026-04-21T15:09:26.406219+00:00",
+    "updated_at": "2026-04-21T15:09:39.961714+00:00",
+    "code": "def process_students(records, min_score):\n    # Filtrage et nettoyage des données\n    filtered_records = [\n        (name, score) for name, score in records\n        if isinstance(score, int) and 0 <= score <= 100 and name\n    ]\n\n    # Tri des étudiants par score décroissant puis par nom croissant\n    sorted_records = sorted(\n        filtered_records,\n        key=lambda student: (-student[1], student[0])\n    )\n\n    # Filtrage final par score minimal\n    result = [student for student in sorted_records if student[1] >= min_score]\n    return result\n\nstudents = [\n    (\"Alice\", 88),\n    (\"Bob\", 75),\n    (\"Charlie\", 90),\n    (\"David\", 90),\n    (\"Eve\", 55),\n    (\"Faythe\", 101)  # Ce score sera ignoré car il n'est pas valide\n]\n\nprint(process_students(students, 80))",
+    "level": "intermédiaire",
+    "challenge_description": "Exercice: Vous devez créer une fonction `process_students(records, min_score)` qui prend en entrée une liste de tuples (nom, score) représentant les étudiants et un score minimal. La fonction doit nettoyer les données, filtrer les étudiants dont le score est supérieur ou égal au score minimal, trier les résultats par score décroissant puis nom croissant, et retourner la liste filtrée et triée.\nContraintes:\n- Les noms vides ou les scores non numériques doivent être ignorés.\n- Les scores doivent être entre 0 et 100 inclus. Les valeurs hors de cet intervalle doivent être ignorées.\n- La fonction ne doit pas utiliser de librairies externes pour le tri et le filtrage.\nIndices:\n- Utilisez une compréhension de liste pour filtrer et nettoyer les données en une seule étape.\n- Pour le tri, utilisez la fonction `sorted()` de Python avec les paramètres `key` et `reverse` appropriés.\nExemple: Entrée: ([('Alice', 85), ('Bob', ''), ('Charlie', 102), ('Dave', 'non numérique'), ('Eva', 68)], 60)\\nSortie: [('Alice', 85), ('Eva', 68)]",
+    "tutor_mode": true,
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "print('PLOT_JSON:{\"title\":\"Courbe f(x)\",\"xLabel\":\"x\",\"yLabel\":\"f(x)\",\"x\":[0,1,2,3,4],\"y\":[1,4,9,16,25]}') print('PERF_JSON:{\"title\":\"Benchmark\",\"points\":[{\"n\":100,\"timeMs\":1.2},{\"n\":1000,\"timeMs\":8.7},{\"n\":5000,\"timeMs\":39.4}]}')",
+        "assistant_response": "Bonjour ! Je vois que tu as partagé des lignes de code qui semblent générer des sorties JSON pour des graphiques et des benchmarks. Cependant, ton message ne contient pas de question spécifique sur l'exercice de traitement des étudiants en Python que nous avons ici. Peut-être voulais-tu illustrer un autre point ou poser une question sur ces sorties JSON ? \n\nPour revenir à l'exercice sur Python, la fonction `process_students` que tu as est conçue pour nettoyer, filtrer et trier une liste d'étudiants basée sur leurs scores. Voici ce qu'elle fait, étape par étape :\n\n1. **Nettoyage des données :** La fonction commence par filtrer les enregistrements pour s'assurer que chaque score est un entier valide entre 0 et 100 et que le nom de l'étudiant n'est pas vide.\n2. **Tri des étudiants :** Ensuite, elle trie les étudiants d'abord par score de manière décroissante (les scores les plus élevés en premier), puis par nom de manière croissante (ordre alphabétique) si deux étudiants ont le même score.\n3. **Filtrage par score minimal :** Enfin, elle filtre les étudiants pour ne garder que ceux dont le score est supérieur ou égal au score minimal spécifié.\n\nDans l'exemple donné, les étudiants avec des scores supérieurs ou égaux à 80 sont retournés, triés par score et par nom.\n\nEst-ce que cela clarifie le fonctionnement de la fonction ? As-tu des questions sur un autre aspect de ce code ou quelque chose d'autre en rapport avec les sorties JSON que tu as mentionnées ?",
+        "timestamp": "2026-04-21T15:09:39.961689+00:00"
+      }
+    ]
+  },
+  "1094d0d8-11c4-4631-a02b-3fa8796f4a86": {
+    "session_id": "1094d0d8-11c4-4631-a02b-3fa8796f4a86",
+    "created_at": "2026-04-21T15:09:40.014584+00:00",
+    "updated_at": "2026-04-21T15:09:57.329767+00:00",
+    "code": "def process_students(records, min_score):\n    # Filtrage et nettoyage des données\n    filtered_records = [\n        (name, score) for name, score in records\n        if isinstance(score, int) and 0 <= score <= 100 and name\n    ]\n\n    # Tri des étudiants par score décroissant puis par nom croissant\n    sorted_records = sorted(\n        filtered_records,\n        key=lambda student: (-student[1], student[0])\n    )\n\n    # Filtrage final par score minimal\n    result = [student for student in sorted_records if student[1] >= min_score]\n    return result\n\nstudents = [\n    (\"Alice\", 88),\n    (\"Bob\", 75),\n    (\"Charlie\", 90),\n    (\"David\", 90),\n    (\"Eve\", 55),\n    (\"Faythe\", 101)  # Ce score sera ignoré car il n'est pas valide\n]\n\nprint(process_students(students, 80))",
+    "level": "intermédiaire",
+    "challenge_description": "Exercice: Vous devez créer une fonction `process_students(records, min_score)` qui prend en entrée une liste de tuples (nom, score) représentant les étudiants et un score minimal. La fonction doit nettoyer les données, filtrer les étudiants dont le score est supérieur ou égal au score minimal, trier les résultats par score décroissant puis nom croissant, et retourner la liste filtrée et triée.\nContraintes:\n- Les noms vides ou les scores non numériques doivent être ignorés.\n- Les scores doivent être entre 0 et 100 inclus. Les valeurs hors de cet intervalle doivent être ignorées.\n- La fonction ne doit pas utiliser de librairies externes pour le tri et le filtrage.\nIndices:\n- Utilisez une compréhension de liste pour filtrer et nettoyer les données en une seule étape.\n- Pour le tri, utilisez la fonction `sorted()` de Python avec les paramètres `key` et `reverse` appropriés.\nExemple: Entrée: ([('Alice', 85), ('Bob', ''), ('Charlie', 102), ('Dave', 'non numérique'), ('Eva', 68)], 60)\\nSortie: [('Alice', 85), ('Eva', 68)]",
+    "tutor_mode": true,
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "print('PLOT_JSON:{\"title\":\"Courbe f(x)\",\"xLabel\":\"x\",\"yLabel\":\"f(x)\",\"x\":[0,1,2,3,4],\"y\":[1,4,9,16,25]}') print('PERF_JSON:{\"title\":\"Benchmark\",\"points\":[{\"n\":100,\"timeMs\":1.2},{\"n\":1000,\"timeMs\":8.7},{\"n\":5000,\"timeMs\":39.4}]}')",
+        "assistant_response": "Bonjour ! Je vois que tu as partagé des lignes de code qui semblent vouloir imprimer des données JSON. Cependant, ton message semble un peu hors contexte par rapport à l'exercice sur lequel nous travaillons, qui est de créer une fonction pour traiter les données des étudiants. Peut-être voulais-tu illustrer quelque chose de spécifique ou poser une question liée à ces impressions JSON ?\n\nPour revenir à notre exercice sur la fonction `process_students`, voici ce que fait chaque partie du code :\n\n1. **Nettoyage des données :** On crée une nouvelle liste `filtered_records` où on garde seulement les étudiants dont les scores sont des entiers valides entre 0 et 100, et où le nom n'est pas vide. Cela assure que les données avec lesquelles nous travaillons sont cohérentes et utilisables.\n\n2. **Tri des données :** Les étudiants sont triés d'abord par score de manière décroissante (les scores plus élevés en premier), et en cas d'égalité de scores, par nom de manière croissante. Cela est fait en utilisant une fonction lambda dans `sorted()` qui retourne d'abord le score négatif (pour le tri décroissant) et ensuite le nom (pour le tri croissant).\n\n3. **Filtrage par score minimal :** Après le tri, on filtre encore une fois pour garder seulement les étudiants dont le score est supérieur ou égal au `min_score` spécifié.\n\nLa liste finale est retournée et affichée. Par exemple, avec `min_score` de 80, seuls les étudiants ayant un score de 80 ou plus sont retournés.\n\nEst-ce que cette explication t'aide à mieux comprendre comment la fonction fonctionne ? As-tu des questions spécifiques sur les parties du code ou sur les données JSON que tu as mentionnées ?",
+        "timestamp": "2026-04-21T15:09:57.329736+00:00"
+      }
+    ]
+  },
+  "91e7264f-af39-40d1-9ae3-4b8a4140d4b8": {
+    "session_id": "91e7264f-af39-40d1-9ae3-4b8a4140d4b8",
+    "created_at": "2026-04-22T11:01:59.322123+00:00",
+    "updated_at": "2026-04-22T11:02:10.627492+00:00",
+    "code": "def carre(x):\n    if not isinstance(x, int):\n        raise TypeError('L\\'argument doit être un entier')\n    return x * x\n\ndef calculer_carres():\n    resultats = []\n    for i in range(10):\n        resultats.append(carre(i))\n    return resultats",
+    "level": "intermédiaire",
+    "challenge_description": "Exercice: Crée une fonction Python 'carre(x)' qui retourne le carré d'un nombre entier x. Ensuite, utilise cette fonction pour calculer les carrés de tous les nombres de 0 à 9, stocke ces résultats dans une liste 'resultats', et retourne cette liste. Nom attendu de la fonction: calculer_carres.\nContraintes:\n- La fonction 'carre(x)' doit uniquement accepter des entiers comme argument.\n- La liste 'resultats' doit contenir exactement 10 éléments après exécution.\n- Ne pas utiliser de bibliothèques ou de fonctions externes autres que celles fournies par Python de base.\nIndices:\n- Utilise une boucle for pour itérer sur les nombres de 0 à 9 et appliquer la fonction 'carre'.\n- Pense à initialiser ta liste 'resultats' avant de commencer la boucle.\nExemple: Si la fonction carre est appelée avec l'argument 3, elle doit retourner 9.",
+    "tutor_mode": true,
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "Explique moi mieux le code",
+        "assistant_response": "Bien sûr, je vais t'expliquer le code étape par étape. \n\n1. **Fonction `carre(x)`:** Cette fonction prend un argument `x`, qui doit être un nombre entier. Si `x` n'est pas un entier, la fonction lève une erreur pour nous prévenir (c'est ce que fait `raise TypeError(...)`). Si `x` est bien un entier, la fonction calcule le carré de `x` (c'est-à-dire `x * x`) et retourne ce résultat.\n\n2. **Fonction `calculer_carres()`:** Cette fonction ne prend aucun argument. Elle commence par créer une liste vide appelée `resultats`. Ensuite, elle utilise une boucle `for` pour parcourir les nombres de 0 à 9 (grâce à `range(10)`). Pour chaque nombre `i` dans cette plage, elle appelle la fonction `carre(i)` pour obtenir le carré de `i`, et ajoute ce carré à la liste `resultats` avec `append()`. Une fois tous les carrés calculés, la fonction retourne la liste `resultats` contenant les carrés de 0 à 9.\n\nLe code est structuré de manière à séparer les calculs (la fonction `carre`) et la gestion de la liste des résultats (la fonction `calculer_carres`), ce qui rend le code plus clair et plus facile à maintenir.\n\nEst-ce que cette explication te clarifie le fonctionnement des deux fonctions ?",
+        "timestamp": "2026-04-22T11:02:10.627471+00:00"
+      }
+    ]
+  },
+  "a074624c-dbf3-46c4-976a-cc53b477f56c": {
+    "session_id": "a074624c-dbf3-46c4-976a-cc53b477f56c",
+    "created_at": "2026-04-22T11:42:54.425212+00:00",
+    "updated_at": "2026-04-22T11:43:09.608274+00:00",
+    "code": "def carre(x):\n    return x * x\n\nx = list(range(10))\ny = [carre(num) for num in x]\n\nfor i in range(len(x)):\n    print(f'({x[i]}, {y[i]})')",
+    "level": "intermédiaire",
+    "challenge_description": "Exercice: Ecris une fonction Python 'carre(x)' qui retourne le carré d'un nombre. Ensuite, utilise cette fonction pour calculer les carrés des nombres de 0 à 9. Stocke ces valeurs dans deux listes: 'x' contenant les nombres de 0 à 9 et 'y' contenant les carrés correspondants. Affiche les résultats sous forme de paires de valeurs (x, y).\nContraintes:\n- La fonction 'carre(x)' doit être définie pour prendre un seul argument numérique et retourner son carré.\n- Les listes 'x' et 'y' doivent être utilisées pour stocker respectivement les nombres et leurs carrés.\n- L'affichage des résultats doit être fait à l'aide d'une boucle qui parcourt les listes 'x' et 'y'.\nIndices:\n- Pense à utiliser l'opérateur de multiplication pour calculer le carré d'un nombre.\n- Utilise une boucle 'for' pour parcourir les nombres de 0 à 9 et pour remplir les listes 'x' et 'y'.\nExemple: Si x = 3, alors carre(x) devrait retourner 9. Après exécution du programme, l'affichage devrait inclure la paire (3, 9) parmi d'autres.",
+    "tutor_mode": true,
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "Explique moi mieux le code",
+        "assistant_response": "Bien sûr, je vais t'expliquer ce code étape par étape pour que tu comprennes bien ce qu'il fait.\n\n1. **Définition de la fonction `carre(x)`** :\n   ```python\n   def carre(x):\n       return x * x\n   ```\n   Cette fonction prend un nombre `x` en entrée et retourne son carré, c'est-à-dire `x` multiplié par lui-même. Par exemple, si tu passes 3 à cette fonction, elle te retournera 9.\n\n2. **Création de la liste `x`** :\n   ```python\n   x = list(range(10))\n   ```\n   Ici, on crée une liste `x` qui contient les nombres de 0 à 9. La fonction `range(10)` génère une séquence de nombres de 0 jusqu'à 9, et `list()` convertit cette séquence en une liste.\n\n3. **Calcul des carrés et stockage dans la liste `y`** :\n   ```python\n   y = [carre(num) for num in x]\n   ```\n   Cette ligne crée une nouvelle liste `y` qui contient les carrés des nombres présents dans la liste `x`. La partie `[carre(num) for num in x]` est une compréhension de liste : pour chaque élément `num` dans la liste `x`, on calcule `carre(num)` et on ajoute le résultat dans la liste `y`.\n\n4. **Affichage des résultats** :\n   ```python\n   for i in range(len(x)):\n       print(f'({x[i]}, {y[i]})')\n   ```\n   Enfin, cette boucle parcourt chaque indice `i` de 0 à la longueur de la liste `x` (qui est 10), et pour chaque indice, elle affiche une paire `(x[i], y[i])`, où `x[i]` est un nombre de la liste `x` et `y[i]` est son carré correspondant dans la liste `y`.\n\nEst-ce que cette explication te rend le code plus clair ? Y a-t-il une partie que tu voudrais que je détaille davantage ?",
+        "timestamp": "2026-04-22T11:43:09.608242+00:00"
+      }
+    ]
+  },
+  "b48796aa-d244-4ceb-baf0-4dbb2c63bb44": {
+    "session_id": "b48796aa-d244-4ceb-baf0-4dbb2c63bb44",
+    "created_at": "2026-04-22T12:23:43.937221+00:00",
+    "updated_at": "2026-04-22T12:27:09.294772+00:00",
+    "code": "def carre(x):\r\n    return x * x\r\n\r\ndef calculer_carres():\r\n    resultats = []\r\n    for i in range(10):\r\n        resultats.append(carre(i))\r\n    return resultats",
+    "level": "intermédiaire",
+    "challenge_description": "Exercice: Ecris une fonction Python 'carre' qui prend un entier x et retourne le carré de ce nombre. Ensuite, utilise cette fonction pour calculer les carrés de tous les nombres de 0 à 9, stocke ces valeurs dans une liste 'resultats' et retourne cette liste. Nom attendu de la fonction: calculer_carres.\nContraintes:\n- La fonction doit s'appeler 'carre'.\n- La liste 'resultats' doit contenir exactement 10 éléments.\n- Chaque élément de la liste 'resultats' doit être le carré de son index.\nIndices:\n- Utilise une boucle for pour itérer de 0 à 9.\n- Utilise la fonction 'carre' dans ta boucle pour calculer et stocker les résultats.\nExemple: Si la fonction 'carre' est appelée avec x=5, elle doit retourner 25. Après exécution complète, la fonction principale doit retourner la liste [0, 1, 4, 9, 16, 25, 36, 49, 64, 81].",
+    "tutor_mode": true,
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "Explique moi ce code etape par etape",
+        "assistant_response": "### 1) Ce que j'ai compris\nTu souhaites comprendre le fonctionnement du code Python que tu as partagé, qui calcule les carrés des nombres de 0 à 9 et les stocke dans une liste.\n\n### 2) Explication guidée\nLe code est composé de deux fonctions principales. La première, `carre(x)`, prend un nombre `x` en entrée et retourne son carré, c'est-à-dire `x * x`. La seconde fonction, `calculer_carres()`, crée une liste vide `resultats`, puis utilise une boucle `for` pour parcourir les nombres de 0 à 9. Pour chaque nombre `i`, elle appelle la fonction `carre(i)` pour obtenir le carré de `i`, et ajoute ce carré à la liste `resultats`. Finalement, elle retourne la liste `resultats` qui contient les carrés de tous les nombres de 0 à 9.\n\n### 3) Action immédiate\nPour mieux comprendre, essaie de modifier le code pour calculer les carrés des nombres de 0 à 5 seulement. Change la ligne avec `range(10)` en `range(6)` dans la fonction `calculer_carres()`.\n\n### 4) Question checkpoint\nPeux-tu me dire ce que fait la fonction `range` dans le contexte de notre boucle `for`?",
+        "timestamp": "2026-04-22T12:23:56.611059+00:00"
+      },
+      {
+        "step": 1,
+        "student_answer": "Donne-moi une mini checklist pour valider ma solution",
+        "assistant_response": "### 1) Ce que j'ai compris\nTu souhaites avoir une checklist pour valider la solution que tu as écrite, afin de t'assurer que tout fonctionne correctement.\n\n### 2) Explication guidée\nPour t'assurer que ton code fonctionne correctement, il est important de vérifier plusieurs éléments clés. Ta fonction `carre(x)` doit correctement calculer le carré d'un nombre donné, et la fonction `calculer_carres()` doit générer une liste des carrés des nombres de 0 à 9.\n\n### 3) Action immédiate\nVoici une mini checklist pour valider ta solution :\n- **Vérifie la fonction `carre(x)`** : Assure-toi qu'elle retourne bien le carré du nombre passé en argument.\n- **Teste la fonction `calculer_carres()`** : Vérifie que la liste `resultats` contient les bons carrés des nombres de 0 à 9.\n- **Imprime les résultats** : Ajoute un `print(calculer_carres())` à la fin de ton script pour voir les résultats et confirmer leur exactitude.\n\n### 4) Question checkpoint\nPeux-tu me dire si après avoir ajouté le `print`, les résultats affichés sont ceux que tu attendais ?",
+        "timestamp": "2026-04-22T12:26:16.292682+00:00"
+      },
+      {
+        "step": 2,
+        "student_answer": "comment je peux modifier le coder pour tester avec des output etc..?",
+        "assistant_response": "### 1) Ce que j'ai compris\nTu souhaites savoir comment modifier le code pour pouvoir tester les résultats de tes fonctions et voir les valeurs qu'elles retournent.\n\n### 2) Explication guidée\nPour tester les fonctions, tu peux ajouter des instructions `print()` dans ton code. Ces instructions te permettront d'afficher les résultats des fonctions directement dans la console, ce qui est très utile pour vérifier que tout fonctionne comme prévu.\n\n### 3) Action immédiate\nAjoute `print(carre(5))` juste après la définition de ta fonction `carre` pour tester cette fonction et voir le carré de 5. Ensuite, ajoute `print(calculer_carres())` à la fin de ton script pour voir la liste des carrés de 0 à 9.\n\n### 4) Question checkpoint\nPeux-tu me dire ce que tu observes dans la console après avoir ajouté ces instructions `print()` et exécuté ton code ?",
+        "timestamp": "2026-04-22T12:27:09.294737+00:00"
+      }
+    ]
+  },
+  "f49ad855-a5ca-4481-9cd5-7c58e44c6338": {
+    "session_id": "f49ad855-a5ca-4481-9cd5-7c58e44c6338",
+    "created_at": "2026-04-22T12:32:45.649357+00:00",
+    "updated_at": "2026-04-22T12:34:50.516886+00:00",
+    "code": "# session tuteur",
+    "level": "intermédiaire",
+    "challenge_description": "Genere un mini-challenge pour afficher l enonce ici.",
+    "tutor_mode": true,
+    "history": [
+      {
+        "step": 0,
+        "student_answer": "salut",
+        "assistant_response": "Salut ! Ravi de te retrouver pour continuer notre exploration de Python. Aujourd'hui, nous allons progresser en travaillant sur un mini-challenge pratique.\n\n1) **Ce que j'ai compris** :\nTu es prêt à plonger dans un nouvel exercice pour renforcer tes compétences en Python.\n\n2) **Explication guidée** :\nNous allons créer un petit programme qui demande à l'utilisateur de saisir un nombre, puis vérifie si ce nombre est pair ou impair. Cela te permettra de pratiquer la gestion des entrées utilisateur et la mise en œuvre de conditions.\n\n3) **Action immédiate** :\nPour commencer, écris un programme qui demande à l'utilisateur de saisir un nombre. Utilise la fonction `input()` pour cela, et convertis cette entrée en un entier avec la fonction `int()`.\n\n4) **Question checkpoint** :\nPeux-tu me dire quelle fonction tu utiliserais pour convertir l'entrée de l'utilisateur en un nombre entier ?",
+        "timestamp": "2026-04-22T12:32:52.596997+00:00"
+      },
+      {
+        "step": 1,
+        "student_answer": "cree un exo base sur l'utilisation de if et les operation python",
+        "assistant_response": "1) **Ce que j'ai compris** :\nTu souhaites travailler sur un exercice impliquant l'utilisation de la condition `if` et des opérations en Python. C'est une excellente manière de renforcer ta compréhension des structures conditionnelles et des opérations de base.\n\n2) **Explication guidée** :\nPour cet exercice, nous allons créer un programme qui demande à l'utilisateur de saisir un nombre. Ensuite, le programme utilisera une condition `if` pour vérifier si ce nombre est positif, négatif ou zéro. Cela te permettra de voir comment utiliser `if`, `elif` et `else` en situation réelle.\n\n3) **Action immédiate** :\nCommence par écrire un programme qui demande à l'utilisateur de saisir un nombre. Utilise `input()` pour obtenir l'entrée de l'utilisateur, puis convertis cette entrée en un entier avec `int()`.\n\n4) **Question checkpoint** :\nPeux-tu me dire comment tu ferais pour demander à l'utilisateur de saisir un nombre et le convertir en entier ?",
+        "timestamp": "2026-04-22T12:33:55.892438+00:00"
+      },
+      {
+        "step": 2,
+        "student_answer": "donne le code",
+        "assistant_response": "1) **Ce que j'ai compris** :  \nTu souhaites que je te fournisse directement le code pour l'exercice sur la vérification si un nombre est positif, négatif ou zéro. Cela t'aidera à visualiser comment mettre en pratique ce que nous avons discuté.\n\n2) **Explication guidée** :  \nLe code que je vais te donner commence par demander à l'utilisateur de saisir un nombre. Ensuite, il utilise une structure conditionnelle `if-elif-else` pour déterminer si le nombre est positif, négatif ou zéro et affiche un message approprié.\n\n3) **Action immédiate** :  \nVoici le code que tu peux essayer :\n```python\n# Demande à l'utilisateur de saisir un nombre\nnombre = int(input(\"Entrez un nombre: \"))\n\n# Vérifie si le nombre est positif, négatif ou zéro\nif nombre > 0:\n    print(\"Le nombre est positif.\")\nelif nombre < 0:\n    print(\"Le nombre est négatif.\")\nelse:\n    print(\"Le nombre est zéro.\")\n```\n\n4) **Question checkpoint** :  \nPeux-tu me dire ce que fait `elif` dans ce code ?",
+        "timestamp": "2026-04-22T12:34:50.516851+00:00"
+      }
+    ]
   }
 }

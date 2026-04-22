@@ -7,7 +7,7 @@ from threading import Lock
 from datetime import datetime, timezone
 from uuid import uuid4
 import json
-from app.prompting import build_pedagogy_block
+from app.prompting import build_pedagogy_block, get_response_language
 from typing import Any
 
 router = APIRouter()
@@ -174,45 +174,95 @@ async def interactive_debug(req: DebugRequest):
 
     current_step = len(history)
     pedagogy_block = build_pedagogy_block(req.pedagogy_context)
+    response_language = get_response_language(req.pedagogy_context, "français simple")
     history_context = _build_history_context(history)
+    def _auto_select_strategy(answer: str, hist: list, lvl: str) -> str:
+        """
+        Choisit la strategie pedagogique optimale en fonction du contexte:
+        - 'socratique'  si l etudiant cherche son erreur ou formule une hypothese
+        - 'creatif'     si l etudiant demande un exemple, analogie ou defi
+        - 'coach'       sinon (explication directe, debut de session, debutant)
+        """
+        a = answer.lower()
+        is_beginner = lvl in ("débutant", "debutant")
+        is_first = len(hist) <= 1
+
+        seeking_hints = any(kw in a for kw in [
+            "pourquoi", "comment", "je ne comprends", "je suis perdu",
+            "c est quoi", "c'est quoi", "aide moi", "qu est ce", "qu'est-ce",
+            "aidez", "expliqu", "comprends pas", "erreur",
+        ])
+        wants_example = any(kw in a for kw in [
+            "exemple", "analogie", "comme si", "imagine", "defi", "exercice",
+            "montre moi", "montre-moi", "image", "metaphore",
+        ])
+        reasoning_mode = any(kw in a for kw in [
+            "je pense que", "je crois", "peut etre", "peut-etre",
+            "si j", "si on", "est ce que", "est-ce que", "non ?", "vrai ?",
+        ])
+
+        if is_beginner or is_first:
+            return "coach"
+        if reasoning_mode or seeking_hints:
+            return "socratique"
+        if wants_example:
+            return "creatif"
+        # Alterne entre coach et socratique selon la progression
+        return "socratique" if len(hist) % 3 == 0 else "coach"
+
+    tutor_strategy = _auto_select_strategy(student_answer, history, level)
 
     code_display = (code if code and code.strip() not in ("", "# session tuteur") else "")
 
     if tutor_mode:
-        # ── Tutor mode: natural Russian tutoring ──────────────────────────
+        # ── Tutor mode: natural tutoring in requested language ───────────
+        strategy_rules = {
+            "coach": "Donne des explications directes et actionnables. Priorise la clarte et l execution pas-a-pas.",
+            "socratique": "Guide surtout par questions progressives. Ne donne la reponse qu en dernier recours.",
+            "creatif": "Utilise une analogie concrete et propose un mini defi court pour ancrer la comprehension.",
+        }
+
         base_context = f"""{pedagogy_block}
 
-Ты ИИ-наставник, доброжелательный тьютор для платформы изучения Python.
+Tu es un tuteur IA bienveillant pour une plateforme d apprentissage de Python.
 
-Курс: {course_title or "Python"}
-{("Описание: " + course_description) if course_description else ""}
-Уровень ученика: {level}
-{("Текущий код:\n```python\n" + code_display + "\n```") if code_display else "Код пока не отправлен."}
+Cours: {course_title or "Python"}
+{("Description: " + course_description) if course_description else ""}
+Niveau de l etudiant: {level}
+{("Code courant:\n```python\n" + code_display + "\n```") if code_display else "Code non fourni pour le moment."}
 
-История:
+Historique:
 {history_context}
 
-ОБЯЗАТЕЛЬНЫЕ ПРАВИЛА (не нарушай):
-- Всегда отвечай только на русском языке (кириллица).
-- Стиль: теплый, поддерживающий, понятный.
-- Если вопрос про теорию: объясняй просто и с коротким примером.
-- Если есть код: разбирай по шагам, что делает каждая часть.
-- Если ученик запутался: объясни иначе, можно через аналогию.
-- В конце каждого ответа задай один короткий вопрос для проверки понимания.
-- Не используй формат Статус/Ошибка/Совет/Следующий шаг.
-- Длина: 3-8 предложений + 1 вопрос. Коротко и ясно.
+REGLES OBLIGATOIRES:
+- Reponds uniquement en {response_language}.
+- Style: chaleureux, clair, pedagogique et concret.
+- Strategie active: {tutor_strategy}.
+- Regle de strategie: {strategy_rules[tutor_strategy]}
+- Si la question porte sur la theorie: explique simplement avec un petit exemple.
+- Si du code est present: decompose-le par etapes et explique l intention de chaque bloc.
+- Si l etudiant est perdu: reformule autrement, si utile avec une analogie simple.
+- Termine par une courte question de verification de comprehension.
+- N utilise pas le format Statut/Erreur/Conseil/Etape suivante.
+- Reponse en 4 blocs courts et dans cet ordre exact:
+    1) Ce que j ai compris
+    2) Explication guidee
+    3) Action immediate (une micro-tache)
+    4) Question checkpoint
+- Longueur cible: 5 a 10 phrases, orientee apprentissage actif.
 """
 
         if student_answer == "":
             prompt = f"""{base_context}
 
-Это начало сессии. Представься как наставник, упомяни курс "{course_title or 'Python'}" и задай вводный вопрос, чтобы понять текущий уровень ученика."""
+Debut de session. Presente-toi comme tuteur, mentionne le cours "{course_title or 'Python'}" et pose une premiere question pour comprendre le niveau et le besoin de l etudiant."""
         else:
             prompt = f"""{base_context}
 
-Сообщение ученика: "{student_answer}"
+Message de l etudiant: "{student_answer}"
 
-Ответь естественно на русском языке прямо на это сообщение."""
+Reponds naturellement dans la langue demandee, de facon directement utile pour comprendre l exercice et le code.
+Ajoute une mini progression: rappelle ce qui est acquis puis ce qu il reste a debloquer."""
 
     else:
         # ── Debug mode: original structured format ────────────────────────
@@ -298,10 +348,11 @@ async def interactive_debug(req: DebugRequest):
             updated_history = updated_session.get("history", [])
 
         return {
-            "prompt_version": "v3.2-ai-debug-learning-simple",
+            "prompt_version": "v3.4-ai-tutor-adaptive",
             "session_id": session_id,
             "step": len(updated_history),
             "response": assistant_response,
+            "tutor_strategy": tutor_strategy,
             "history": updated_history,
         }
     except HTTPException:

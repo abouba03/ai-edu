@@ -2,16 +2,18 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from openai import OpenAI
 from app.config import settings
-from app.prompting import build_pedagogy_block, parse_json_response
+from app.prompting import build_pedagogy_block, get_response_language, parse_json_response
 from typing import Any
 import ast
 import re
 import traceback
 import io
+import random
 from contextlib import redirect_stdout
 
 router = APIRouter()
 client = OpenAI(api_key=settings.OPENAI_API_KEY or "missing-openai-key")
+MIN_REQUIRED_TEST_CASES = 4
 
 
 def _normalize_item(text: str, max_len: int = 120) -> str:
@@ -64,6 +66,30 @@ def _safe_literal_eval(value: str) -> Any:
     return ast.literal_eval(value)
 
 
+def _align_enonce_with_mode(enonce: str, mode: str, function_name: str = "") -> str:
+    text = str(enonce or "").strip()
+    if not text:
+        return text
+
+    normalized_mode = str(mode or "function").strip().lower()
+    if normalized_mode == "script":
+        return text
+
+    aligned = text
+    aligned = re.sub(r"\b[Tt]u dois écrire un programme\b", "Tu dois écrire une fonction", aligned)
+    aligned = re.sub(r"\b[Tt]u dois ecrire un programme\b", "Tu dois écrire une fonction", aligned)
+    aligned = re.sub(r"\b[Ee]cris un programme\b", "Écris une fonction", aligned)
+    aligned = re.sub(r"\b[Ee]crire un programme\b", "Écrire une fonction", aligned)
+    aligned = re.sub(r"\b[Ll]e programme doit afficher\b", "La fonction doit retourner", aligned)
+    aligned = re.sub(r"\b[Ll]e programme devra afficher\b", "La fonction devra retourner", aligned)
+    aligned = re.sub(r"\b[Ll]e programme retourne\b", "La fonction retourne", aligned)
+
+    if function_name and "fonction" in aligned.lower() and function_name not in aligned:
+        aligned += f" Nom attendu de la fonction: {function_name}."
+
+    return aligned
+
+
 def _generate_dynamic_test_suite(challenge_description: str, pedagogy_context: dict[str, Any] | None = None) -> dict[str, Any] | None:
     pedagogy_block = build_pedagogy_block(pedagogy_context)
     prompt = f"""
@@ -75,8 +101,9 @@ def _generate_dynamic_test_suite(challenge_description: str, pedagogy_context: d
 
 Цель:
 - Определи ожидаемую функцию (имя и сигнатура).
-- Предложи 3-5 уместных unit-тестов.
+- Предложи 5-7 уместных unit-тестов.
 - Каждый тест должен быть однозначным и исполняемым.
+- Тесты должны покрывать разные случаи: nominal, bord, valeurs limites, cas atypiques.
 
 Строгие правила:
 - Верни только валидный JSON.
@@ -139,10 +166,10 @@ def _generate_dynamic_test_suite(challenge_description: str, pedagogy_context: d
             "args": args,
             "expected": expected,
         })
-        if len(tests) >= 5:
+        if len(tests) >= 7:
             break
 
-    if len(tests) < 2:
+    if len(tests) < MIN_REQUIRED_TEST_CASES:
         return None
 
     return {
@@ -163,8 +190,9 @@ def _generate_dynamic_stdio_test_suite(challenge_description: str, pedagogy_cont
 {challenge_description}
 
 Цель:
-- Предложи 3-5 тестов вход/выход для проверки скрипта.
+- Предложи 5-7 тестов вход/выход для проверки скрипта.
 - Каждый тест должен задавать входные данные и ожидаемый итоговый вывод.
+- Тесты должны покрывать разные сценарии и крайние случаи.
 
 Строгие правила:
 - Верни только валидный JSON.
@@ -220,10 +248,10 @@ def _generate_dynamic_stdio_test_suite(challenge_description: str, pedagogy_cont
             "stdin_lines": stdin_lines,
             "expected_stdout": expected_stdout,
         })
-        if len(tests) >= 5:
+        if len(tests) >= 7:
             break
 
-    if len(tests) < 2:
+    if len(tests) < MIN_REQUIRED_TEST_CASES:
         return None
 
     return {
@@ -235,6 +263,141 @@ def _generate_dynamic_stdio_test_suite(challenge_description: str, pedagogy_cont
 
 def _normalize_stdout(value: Any) -> str:
     return "\n".join(str(value or "").replace("\r\n", "\n").strip().splitlines()).strip()
+
+
+def _extract_mocked_secret_from_expected(expected: Any) -> int | None:
+    """Return a deterministic secret value when expected payload encodes it.
+
+    This supports random-based challenges where tests provide an expected
+    `code_secret` value and the student function internally calls random.randint.
+    """
+    if not isinstance(expected, dict):
+        return None
+
+    code_secret = expected.get("code_secret")
+    if not isinstance(code_secret, str):
+        return None
+
+    normalized = code_secret.strip()
+    if not re.fullmatch(r"\d{1,4}", normalized):
+        return None
+
+    value = int(normalized)
+    if 0 <= value <= 9999:
+        return value
+    return None
+
+
+def _looks_random_challenge(text: str) -> bool:
+    normalized = str(text or "").lower()
+    if not normalized:
+        return False
+
+    keywords = [
+        "random",
+        "randint",
+        "alea",
+        "aléa",
+        "aléatoire",
+        "aleatoire",
+        "code secret",
+    ]
+    return any(keyword in normalized for keyword in keywords)
+
+
+def _parse_test_args_and_expected(test_case: dict[str, Any]) -> tuple[list[Any] | None, Any]:
+    args_value = test_case.get("args")
+    expected_value = test_case.get("expected")
+
+    if isinstance(args_value, list):
+        return args_value, expected_value
+
+    args_literal = str(test_case.get("args_literal") or "").strip()
+    expected_literal = str(test_case.get("expected_literal") or "").strip()
+    if not args_literal:
+        return None, None
+
+    try:
+        args = _safe_literal_eval(args_literal)
+    except Exception:
+        return None, None
+
+    expected: Any = None
+    if expected_literal:
+        try:
+            expected = _safe_literal_eval(expected_literal)
+        except Exception:
+            expected = expected_literal
+
+    if not isinstance(args, list):
+        return None, None
+
+    return args, expected
+
+
+def _has_nondeterministic_random_tests(challenge_description: str, challenge_tests: dict[str, Any] | None) -> bool:
+    if not isinstance(challenge_tests, dict):
+        return False
+
+    mode = str(challenge_tests.get("mode") or "function").strip().lower()
+    if mode != "function":
+        return False
+
+    if not _looks_random_challenge(challenge_description):
+        return False
+
+    tests_raw = challenge_tests.get("test_cases") if isinstance(challenge_tests.get("test_cases"), list) else []
+    if not tests_raw:
+        return False
+
+    for raw in tests_raw:
+        if not isinstance(raw, dict):
+            continue
+
+        args, expected = _parse_test_args_and_expected(raw)
+        if args is None:
+            continue
+
+        # For random-based function challenges with zero-arg calls,
+        # expected output must carry a fixed secret to make tests deterministic.
+        if len(args) == 0 and _extract_mocked_secret_from_expected(expected) is None:
+            return True
+
+    return False
+
+
+def _autofix_random_tests(challenge_tests: dict[str, Any]) -> dict[str, Any]:
+    """
+    For random-based challenges where test expected values lack a fixed code_secret,
+    inject a deterministic code_secret (e.g. 1234, 5678, ...) so that random.randint
+    can be mocked during test execution, making results reproducible.
+    """
+    import copy
+
+    fixed = copy.deepcopy(challenge_tests)
+    test_cases = fixed.get("test_cases")
+    if not isinstance(test_cases, list):
+        return fixed
+
+    secrets = [1234, 5678, 4321, 9876, 1111, 2468, 3579]
+    secret_index = 0
+
+    for raw in test_cases:
+        if not isinstance(raw, dict):
+            continue
+
+        args = raw.get("args")
+        if not isinstance(args, list):
+            continue
+
+        expected = raw.get("expected")
+        if len(args) == 0 and _extract_mocked_secret_from_expected(expected) is None:
+            # Replace expected with a structured dict carrying a fixed code_secret
+            chosen = secrets[secret_index % len(secrets)]
+            secret_index += 1
+            raw["expected"] = {"code_secret": str(chosen).zfill(4)}
+
+    return fixed
 
 
 def _run_test_suite(student_code: str, suite: dict[str, Any]) -> dict[str, Any]:
@@ -304,9 +467,9 @@ def _run_test_suite(student_code: str, suite: dict[str, Any]) -> dict[str, Any]:
             "results": results,
         }
 
-    namespace: dict[str, Any] = {}
+    namespace: dict[str, Any] = {"__builtins__": __builtins__}
     try:
-        exec(student_code, {"__builtins__": __builtins__}, namespace)
+        exec(student_code, namespace, namespace)
     except Exception as exc:
         return {
             "suite_id": suite["id"],
@@ -343,7 +506,17 @@ def _run_test_suite(student_code: str, suite: dict[str, Any]) -> dict[str, Any]:
         test_name = str(test_case.get("name") or "test")
 
         try:
+            mocked_secret = _extract_mocked_secret_from_expected(expected)
+            original_randint = random.randint
+
+            if mocked_secret is not None:
+                random.randint = lambda _a, _b: mocked_secret
+
             actual = func(*args)
+
+            if mocked_secret is not None:
+                random.randint = original_randint
+
             ok = actual == expected
             if ok:
                 passed += 1
@@ -355,6 +528,10 @@ def _run_test_suite(student_code: str, suite: dict[str, Any]) -> dict[str, Any]:
                 "actual": repr(actual),
             })
         except Exception as exc:
+            try:
+                random.randint = original_randint  # type: ignore[name-defined]
+            except Exception:
+                pass
             results.append({
                 "name": test_name,
                 "status": "error",
@@ -612,29 +789,36 @@ def _test_feedback_from_suite(student_code: str, suite: dict[str, Any], prompt_v
 
 @router.post("/submit-challenge/")
 async def submit_challenge(req: SubmissionRequest):
+    response_language = get_response_language(req.pedagogy_context)
+
     if not req.student_code.strip() or len(req.student_code.strip()) < 6:
         return {
             "evaluation": (
-                "Оценка: 0/10\n"
-                "Комментарий: Код не найден. Добавь минимально рабочее решение и отправь снова.\n"
-                "Что сделать:\n"
-                "- Добавь хотя бы одну функцию или полный логический блок\n"
-                "Идея:\n"
-                "- Начни с простой версии, которая проходит один тест\n"
-                "Дальше:\n"
-                "- Отправь первую версию, даже если она неполная"
+                "Note: 0/10\n"
+                "Commentaire: Code introuvable. Ajoute une première version fonctionnelle puis relance la validation.\n"
+                "À faire:\n"
+                "- Ajoute au moins une fonction ou un bloc logique complet\n"
+                "Idée:\n"
+                "- Commence par une version simple qui passe un premier test\n"
+                "Suite:\n"
+                "- Soumets une première itération même si elle n'est pas parfaite"
             ),
             "evaluation_json": {
                 "prompt_version": "v2.3",
                 "note": "0/10",
-                "commentaire": "Код не найден. Добавь минимально рабочее решение и отправь снова.",
-                "consignes": ["Добавь хотя бы одну функцию или полный логический блок"],
-                "idees": ["Начни с простой версии, которая проходит один тест"],
-                "prochaines_etapes": ["Отправь первую версию, даже если она неполная"],
+                "commentaire": "Code introuvable. Ajoute une première version fonctionnelle puis relance la validation.",
+                "consignes": ["Ajoute au moins une fonction ou un bloc logique complet"],
+                "idees": ["Commence par une version simple qui passe un premier test"],
+                "prochaines_etapes": ["Soumets une première itération même si elle n'est pas parfaite"],
             },
         }
 
-    generated_suite = _build_suite_from_generated_tests(req.challenge_tests or {}) if req.challenge_tests else None
+    # Auto-fix non-deterministic random tests instead of rejecting with 422.
+    fixed_tests = req.challenge_tests
+    if fixed_tests is not None and _has_nondeterministic_random_tests(req.challenge_description, fixed_tests):
+        fixed_tests = _autofix_random_tests(fixed_tests)
+
+    generated_suite = _build_suite_from_generated_tests(fixed_tests or {}) if fixed_tests else None
     if generated_suite is not None:
         return _test_feedback_from_suite(req.student_code, generated_suite, prompt_version="v3.2-generated-suite")
 
@@ -667,15 +851,15 @@ async def submit_challenge(req: SubmissionRequest):
 - Если код есть, не пиши, что решение отсутствует.
 - Ответ должен быть коротким.
 
-Пиши только на простом русском языке.
+Réponds uniquement en {response_language}.
 Верни строго JSON:
 {{
     "prompt_version": "v2.3",
     "note": ".../10",
-    "commentaire": "до 280 символов",
-    "consignes": ["максимум 1-2 пункта"],
-    "idees": ["максимум 1-2 пункта"],
-    "prochaines_etapes": ["максимум 1-2 пункта"]
+    "commentaire": "jusqu'à 280 caractères",
+    "consignes": ["maximum 1-2 points"],
+    "idees": ["maximum 1-2 points"],
+    "prochaines_etapes": ["maximum 1-2 points"]
 }}
 """
 
@@ -707,13 +891,13 @@ async def submit_challenge(req: SubmissionRequest):
         idees_text = "\n".join([f"- {item}" for item in idees if isinstance(item, str)])
         prochaines_etapes_text = "\n".join([f"- {item}" for item in prochaines_etapes if isinstance(item, str)])
 
-        formatted = f"Оценка: {note}\nКомментарий: {commentaire}"
+        formatted = f"Note: {note}\nCommentaire: {commentaire}"
         if consignes_text:
-            formatted += f"\nЧто сделать:\n{consignes_text}"
+            formatted += f"\nÀ faire:\n{consignes_text}"
         if idees_text:
-            formatted += f"\nИдея:\n{idees_text}"
+            formatted += f"\nIdée:\n{idees_text}"
         if prochaines_etapes_text:
-            formatted += f"\nДальше:\n{prochaines_etapes_text}"
+            formatted += f"\nSuite:\n{prochaines_etapes_text}"
 
         return {
             "evaluation": formatted,
@@ -727,6 +911,7 @@ async def submit_challenge(req: SubmissionRequest):
 @router.post("/generate-challenge/")
 async def generate_challenge(req: ChallengeRequest):
     pedagogy_block = build_pedagogy_block(req.pedagogy_context)
+    response_language = get_response_language(req.pedagogy_context)
     title = (req.challenge_topic or "").strip() or str((req.pedagogy_context or {}).get("courseTitle") or "").strip()
     description = (req.course_description or "").strip() or str((req.pedagogy_context or {}).get("courseDescription") or "").strip()
     topic = f"{title}. Description: {description}" if description else title
@@ -742,6 +927,7 @@ async def generate_challenge(req: ChallengeRequest):
 3. Одна-две обучающие подсказки (без готового решения)
 4. Пример входа/выхода
 5. Стартовый шаблон кода (starter code)
+6. Набор тестов для автопроверки
 
 Требования к качеству:
 - Реалистичная задача по теме курса.
@@ -752,8 +938,11 @@ async def generate_challenge(req: ChallengeRequest):
 - По умолчанию НЕ требовать интерактивный input()/print().
 - Предпочитать чистую тестируемую функцию (параметры -> результат).
 - Требовать input()/print() только если это явно нужно по контексту курса.
+- Сгенерируй МИНИМУМ {MIN_REQUIRED_TEST_CASES} теста(ов), лучше 5-7.
+- Тесты должны покрывать разные сценарии: nominal, bord, entree vide/zero, valeurs atypiques si pertinent.
+- Никаких заглушек и общих "default" тестов.
 
-Пиши только на простом русском языке.
+Réponds uniquement en {response_language}.
 Верни строго JSON:
 {{
     "prompt_version": "v2.5",
@@ -793,14 +982,63 @@ async def generate_challenge(req: ChallengeRequest):
             exemple = str(parsed.get("exemple") or "")
             starter_code = str(parsed.get("starter_code") or "").strip()
             evaluation = parsed.get("evaluation") if isinstance(parsed.get("evaluation"), dict) else {}
+            mode = str(evaluation.get("mode") or "function").strip().lower()
+            function_name = str(evaluation.get("function_name") or "").strip()
+            test_cases_raw = evaluation.get("test_cases") if isinstance(evaluation.get("test_cases"), list) else []
+            quality_checks = evaluation.get("quality_checks") if isinstance(evaluation.get("quality_checks"), list) else []
+
+            normalized_test_cases: list[dict[str, Any]] = []
+            seen_signatures: set[str] = set()
+            for item in test_cases_raw:
+                if not isinstance(item, dict):
+                    continue
+
+                name = str(item.get("name") or "test").strip() or "test"
+                constraint = str(item.get("constraint") or "").strip()
+
+                if mode == "script":
+                    stdin_lines_raw = item.get("stdin_lines") if isinstance(item.get("stdin_lines"), list) else None
+                    expected_stdout = str(item.get("expected_stdout") or "").strip()
+                    if stdin_lines_raw is None or not expected_stdout:
+                        continue
+                    stdin_lines = [str(v) for v in stdin_lines_raw if isinstance(v, (str, int, float, bool))]
+                    signature = f"script::{stdin_lines}::{expected_stdout}"
+                    if signature in seen_signatures:
+                        continue
+                    seen_signatures.add(signature)
+                    normalized_test_cases.append({
+                        "name": name,
+                        "stdin_lines": stdin_lines,
+                        "expected_stdout": expected_stdout,
+                        "constraint": constraint,
+                    })
+                else:
+                    args_literal = str(item.get("args_literal") or "").strip()
+                    expected_literal = str(item.get("expected_literal") or "").strip()
+                    if not args_literal or not expected_literal:
+                        continue
+                    signature = f"function::{args_literal}::{expected_literal}"
+                    if signature in seen_signatures:
+                        continue
+                    seen_signatures.add(signature)
+                    normalized_test_cases.append({
+                        "name": name,
+                        "args_literal": args_literal,
+                        "expected_literal": expected_literal,
+                        "constraint": constraint,
+                    })
+
             challenge_tests = {
-                "mode": str(evaluation.get("mode") or "function"),
-                "function_name": str(evaluation.get("function_name") or ""),
-                "test_cases": evaluation.get("test_cases") if isinstance(evaluation.get("test_cases"), list) else [],
-                "quality_checks": evaluation.get("quality_checks") if isinstance(evaluation.get("quality_checks"), list) else [],
+                "mode": mode,
+                "function_name": function_name,
+                "test_cases": normalized_test_cases,
+                "quality_checks": quality_checks,
             }
 
-            if not challenge_tests["test_cases"]:
+            enonce = _align_enonce_with_mode(enonce, mode, function_name)
+            parsed["enonce"] = enonce
+
+            if len(challenge_tests["test_cases"]) < MIN_REQUIRED_TEST_CASES:
                 fallback_suite = _generate_dynamic_test_suite(enonce, req.pedagogy_context)
                 if fallback_suite and fallback_suite.get("mode") == "function":
                     challenge_tests = {
@@ -811,22 +1049,27 @@ async def generate_challenge(req: ChallengeRequest):
                                 "name": str(item.get("name") or "test"),
                                 "args_literal": repr(item.get("args", [])),
                                 "expected_literal": repr(item.get("expected")),
-                                "constraint": "Проверь ожидаемое поведение",
+                                "constraint": "Couvre un scenario distinct de validation.",
                             }
                             for item in (fallback_suite.get("tests") or [])
                             if isinstance(item, dict)
                         ],
-                        "quality_checks": [
-                            "Соблюдай требуемую сигнатуру функции.",
-                            "Обработай граничные случаи из тестов.",
-                        ],
+                        "quality_checks": quality_checks,
                     }
 
+            if len(challenge_tests["test_cases"]) < MIN_REQUIRED_TEST_CASES:
+                raise HTTPException(
+                    status_code=502,
+                    detail=(
+                        f"Réponse IA incomplète: tests insuffisants ({len(challenge_tests['test_cases'])}/{MIN_REQUIRED_TEST_CASES})."
+                    ),
+                )
+
             if not enonce.strip():
-                raise HTTPException(status_code=502, detail="Неполный ответ ИИ: отсутствует условие задачи.")
+                raise HTTPException(status_code=502, detail="Réponse IA incomplète: énoncé manquant.")
 
             if not contraintes_text.strip():
-                raise HTTPException(status_code=502, detail="Неполный ответ ИИ: отсутствуют ограничения.")
+                raise HTTPException(status_code=502, detail="Réponse IA incomplète: contraintes manquantes.")
 
             if not hints_text.strip():
                 hints_text = "- Commence par une version minimale qui fonctionne sur un cas simple.\n- Ajoute ensuite un cas limite avant de soumettre."
@@ -835,11 +1078,11 @@ async def generate_challenge(req: ChallengeRequest):
                 starter_code = (
                     "def solution(*args):\n"
                     "    \"\"\"\n"
-                    "    TODO: реализуй логику по условию задачи.\n"
+                    "    TODO: implémente la logique demandée.\n"
                     "    \"\"\"\n"
                     "    pass\n"
                 )
-            formatted = f"Задание: {enonce}\nПравила:\n{contraintes_text}\nПодсказки:\n{hints_text}\nПример: {exemple}"
+            formatted = f"Exercice: {enonce}\nContraintes:\n{contraintes_text}\nIndices:\n{hints_text}\nExemple: {exemple}"
             return {
                 "challenge": formatted,
                 "challenge_json": parsed,
@@ -861,4 +1104,4 @@ async def generate_challenge(req: ChallengeRequest):
         tb = traceback.format_exc()
         print(f"[ERROR] OpenAI Error: {error_msg}")
         print(f"[ERROR] Traceback: {tb}")
-        raise HTTPException(status_code=503, detail=f"Сервис генерации ИИ временно недоступен: {error_msg}")
+        raise HTTPException(status_code=503, detail=f"Service IA temporairement indisponible: {error_msg}")

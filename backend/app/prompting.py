@@ -6,10 +6,17 @@ from typing import Any
 PROMPT_VERSION = "v2.1"
 
 
+def get_response_language(context: dict[str, Any] | None, default: str = "français simple") -> str:
+    context = context or {}
+    language = str(context.get("responseLanguage") or default).strip()
+    return language or default
+
+
 def build_pedagogy_block(context: dict[str, Any] | None) -> str:
     context = context or {}
 
     level = str(context.get("level") or "начинающий")
+    response_language = get_response_language(context)
     progress_percent = context.get("progressPercent")
     ai_tone = str(context.get("aiTone") or "Доброжелательный и точный наставник")
     pedagogical_style = str(context.get("pedagogicalStyle") or "Пошаговое активное обучение")
@@ -23,7 +30,7 @@ def build_pedagogy_block(context: dict[str, Any] | None) -> str:
 
     return (
         f"Prompt-Version: {PROMPT_VERSION}\n"
-        f"Язык ответа: русский (простой).\n"
+        f"Langue de réponse: {response_language}.\n"
         f"Уровень: {level}\n"
         f"Прогресс (%): {progress_text}\n"
         f"Тон ИИ: {ai_tone}\n"

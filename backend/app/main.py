@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from openai import AsyncOpenAI
@@ -10,14 +10,26 @@ from app.routers import interactive_debug
 from app.routers import challenge
 from app.routers import motivational_feedback
 from app.routers import quiz_generator
-from app.prompting import build_pedagogy_block, parse_json_response
+from app.prompting import build_pedagogy_block, get_response_language, parse_json_response
 from typing import Any
 import json
 import io
 import traceback
-from contextlib import redirect_stdout
+import asyncio
+import os
+import tempfile
+import time
+import threading
+from contextlib import redirect_stdout, redirect_stderr
 
 import subprocess
+
+# Windows + asyncio subprocess (used by /ws/console) requires Proactor loop.
+if sys.platform.startswith("win"):
+    try:
+        asyncio.set_event_loop_policy(asyncio.WindowsProactorEventLoopPolicy())
+    except Exception:
+        pass
 
 app = FastAPI()  # 👉 Doit être AVANT include_router
 
@@ -71,11 +83,21 @@ class ResolveChallengeRequest(BaseModel):
     pedagogy_context: dict[str, Any] | None = None
     max_iterations: int = 3
 
-MAX_PROMPT_CHARS = 4000
+MAX_PROMPT_CHARS = 12000
+APP_START_TS = time.time()
 
 @app.get("/")
 async def root():
     return {"message": "API работает с FastAPI и OpenAI"}
+
+
+@app.get("/health")
+async def health():
+    return {
+        "status": "ok",
+        "service": "ai-edu-backend",
+        "uptime_seconds": round(time.time() - APP_START_TS, 2),
+    }
 
 @app.post("/generate/")
 async def generate(data: CodePrompt):
@@ -83,14 +105,11 @@ async def generate(data: CodePrompt):
     if not prompt:
         raise HTTPException(status_code=400, detail="Промпт пустой. Опишите задачу для генерации кода.")
     if len(prompt) > MAX_PROMPT_CHARS:
-        raise HTTPException(
-            status_code=400,
-            detail=f"Промпт слишком длинный. Максимум: {MAX_PROMPT_CHARS} символов."
-        )
+        prompt = prompt[:MAX_PROMPT_CHARS]
 
     try:
-        generated_code = await generate_code(prompt, data.pedagogy_context)
-        return {"code": generated_code}
+        generated_payload = await generate_code(prompt, data.pedagogy_context)
+        return generated_payload
     except HTTPException:
         raise
     except Exception:
@@ -99,34 +118,46 @@ async def generate(data: CodePrompt):
             detail="Сервис ИИ временно недоступен. Проверьте ключ OpenAI и попробуйте снова."
         )
 
-async def generate_code(prompt: str, pedagogy_context: dict[str, Any] | None = None) -> str:
+async def generate_code(prompt: str, pedagogy_context: dict[str, Any] | None = None) -> dict[str, Any]:
     pedagogy_block = build_pedagogy_block(pedagogy_context)
+    response_language = get_response_language(pedagogy_context)
     response = await openai_client.chat.completions.create(
         model="gpt-4-turbo",
         messages=[
             {
                 "role": "system",
                 "content": (
-                    "Ты эксперт по Python и отвечаешь только на простом русском языке. "
+                    f"Tu es un expert Python et tu réponds uniquement en {response_language}. "
                     "Верни строго валидный JSON в формате: "
                     "{\"code\": string, \"explanation\": string, \"safety_checks\": string[]}. "
-                    "Не выдумывай несуществующие библиотеки и API."
+                    "N'invente ni bibliothèques ni API inexistantes."
                 ),
             },
             {"role": "user", "content": f"{pedagogy_block}\nЗапрос пользователя:\n{prompt}"}
         ],
         temperature=0.5,
-        max_tokens=500
+        max_tokens=700
     )
     content = response.choices[0].message.content
     try:
         parsed = parse_json_response(content or "")
         code = parsed.get("code")
         if isinstance(code, str) and code.strip():
-            return code
+            explanation = str(parsed.get("explanation") or "").strip()
+            safety_checks = parsed.get("safety_checks") if isinstance(parsed.get("safety_checks"), list) else []
+            return {
+                "code": code,
+                "explanation": explanation,
+                "safety_checks": [str(item).strip() for item in safety_checks if str(item).strip()],
+            }
     except Exception:
         pass
-    return content or ""
+    fallback = content or ""
+    return {
+        "code": fallback,
+        "explanation": "",
+        "safety_checks": [],
+    }
 
 @app.post("/correct/")
 async def correct(data: CodeCorrection):
@@ -371,21 +402,318 @@ async def execute_console_code(request: ConsoleExecutionRequest):
 
     namespace: dict[str, Any] = {"__builtins__": __builtins__, "input": fake_input}
     output_buffer = io.StringIO()
+    error_buffer = io.StringIO()
 
     try:
-        with redirect_stdout(output_buffer):
+        with redirect_stdout(output_buffer), redirect_stderr(error_buffer):
             exec(code, namespace, namespace)
+
+        stdout_value = output_buffer.getvalue()
+        stderr_value = error_buffer.getvalue()
         return {
             "success": True,
-            "stdout": output_buffer.getvalue(),
+            "stdout": stdout_value,
+            "stderr": stderr_value,
+            "exit_code": 0,
             "error": "",
+            "trace": "",
         }
     except Exception as exc:
+        stdout_value = output_buffer.getvalue()
+        stderr_value = error_buffer.getvalue()
+        trace = traceback.format_exc()
+
+        # Keep stderr terminal-like while preserving the legacy error/trace fields.
+        merged_stderr = "\n".join(part for part in [stderr_value.strip(), trace.strip()] if part).strip()
         return {
             "success": False,
-            "stdout": output_buffer.getvalue(),
+            "stdout": stdout_value,
+            "stderr": merged_stderr,
+            "exit_code": 1,
             "error": str(exc),
-            "trace": traceback.format_exc(limit=1),
+            "trace": trace,
         }
-    
-  
+
+
+@app.websocket("/ws/console")
+async def websocket_console(websocket: WebSocket) -> None:
+    """
+    Interactive terminal: runs Python code as a real subprocess.
+    - Streams stdout/stderr in real time.
+    - Forwards stdin lines sent by the client when input() is called.
+    - Times out after 30 s and kills the process.
+    """
+    await websocket.accept()
+
+    # ── 1. Receive the code ─────────────────────────────────────────────
+    try:
+        data = await asyncio.wait_for(websocket.receive_json(), timeout=10)
+    except Exception:
+        await websocket.close(code=1008)
+        return
+
+    code = str(data.get("code", "")).strip()
+    if not code:
+        await websocket.send_json({"type": "stderr", "data": "Code vide."})
+        await websocket.close()
+        return
+
+    if len(code) > settings.EXECUTION_MAX_CODE_CHARS:
+        await websocket.send_json({
+            "type": "stderr",
+            "data": f"Code trop long (max {settings.EXECUTION_MAX_CODE_CHARS} chars).",
+        })
+        await websocket.close()
+        return
+
+    # ── 2. Write to a temp file (with auto-plot instrumentation) ────────
+    tmp_path: str | None = None
+    proc: Any = None
+
+    # Preamble: intercept stdout to detect if user code already prints PLOT_JSON
+    _AUTOPLOT_PREAMBLE = """\
+import sys as _aep_sys, json as _aep_json
+class _AepOut:
+    def __init__(self, o): self._o = o; self.p = False
+    def write(self, s):
+        if isinstance(s, str) and 'PLOT_JSON' in s: self.p = True
+        return self._o.write(s)
+    def flush(self): return self._o.flush()
+    def fileno(self): return self._o.fileno()
+_aep_out = _AepOut(_aep_sys.stdout); _aep_sys.stdout = _aep_out
+"""
+    # Postamble: if no PLOT_JSON printed, scan namespace and function returns for numeric series
+    _AUTOPLOT_POSTAMBLE = """
+_aep_sys.stdout = _aep_out._o
+if not _aep_out.p:
+    try:
+        def _aep_isnum(v):
+            return isinstance(v, (list, tuple)) and len(v) >= 2 and all(isinstance(x, (int, float)) for x in v)
+        def _aep_series_from_vars(_vars):
+            _xc = ['x', 'xs', 'X', 'n', 'ns', 'sizes', 'n_values', 'inputs']
+            _yc = ['y', 'ys', 'Y', 'result', 'results', 'output', 'outputs', 'values', 'times', 'durations', 'temps', 'data']
+            _xk = next((k for k in _xc if k in _vars), None)
+            _yk = next((k for k in _yc if k in _vars), None)
+            _ser = []
+            if _xk and _yk and len(_vars[_xk]) == len(_vars[_yk]):
+                _ser.append({"name": _yk, "points": [{"x": float(a), "y": float(b)} for a, b in zip(_vars[_xk], _vars[_yk])]})
+                return _ser
+            for _k, _v in list(_vars.items())[:3]:
+                _ser.append({"name": _k, "points": [{"x": float(i), "y": float(v)} for i, v in enumerate(_v)]})
+            return _ser
+
+        _aep_vars = {k: list(v) for k, v in globals().items()
+                     if not k.startswith('_') and k != '__builtins__' and _aep_isnum(v)}
+        _ser = _aep_series_from_vars(_aep_vars) if _aep_vars else []
+
+        # Fallback: try calling user functions that accept zero required args.
+        if not _ser:
+            for _name, _obj in list(globals().items()):
+                if _name.startswith('_') or not callable(_obj):
+                    continue
+                try:
+                    import inspect as _aep_inspect
+                    _sig = _aep_inspect.signature(_obj)
+                    _required = [p for p in _sig.parameters.values()
+                                 if p.kind in (_aep_inspect.Parameter.POSITIONAL_ONLY,
+                                               _aep_inspect.Parameter.POSITIONAL_OR_KEYWORD)
+                                 and p.default is _aep_inspect._empty]
+                    if _required:
+                        continue
+                    _ret = _obj()
+                except Exception:
+                    continue
+
+                try:
+                    _ret_vars = {}
+                    if _aep_isnum(_ret):
+                        _ret_vars['result'] = list(_ret)
+                    elif isinstance(_ret, dict):
+                        for _k, _v in _ret.items():
+                            if isinstance(_k, str) and _aep_isnum(_v):
+                                _ret_vars[_k] = list(_v)
+                    elif isinstance(_ret, tuple) and len(_ret) == 2 and _aep_isnum(_ret[0]) and _aep_isnum(_ret[1]):
+                        _ret_vars['x'] = list(_ret[0])
+                        _ret_vars['y'] = list(_ret[1])
+
+                    if _ret_vars:
+                        _ser = _aep_series_from_vars(_ret_vars)
+                        if _ser:
+                            break
+                except Exception:
+                    continue
+
+        if _ser:
+            _aep_out._o.write("PLOT_JSON:" + _aep_json.dumps({"title": "Resultat auto", "series": _ser}) + "\\n")
+    except Exception:
+        pass
+"""
+    instrumented_code = _AUTOPLOT_PREAMBLE + code + _AUTOPLOT_POSTAMBLE
+
+    try:
+        with tempfile.NamedTemporaryFile(
+            mode="w", suffix=".py", delete=False, encoding="utf-8"
+        ) as f:
+            f.write(instrumented_code)
+            tmp_path = f.name
+
+        # ── 3. Spawn subprocess (unbuffered, UTF-8 forced) ─────────────
+        t_start = time.perf_counter()
+        proc_env = {
+            **os.environ,
+            "PYTHONUNBUFFERED": "1",
+            "PYTHONIOENCODING": "utf-8",
+            "PYTHONUTF8": "1",
+        }
+        if os.name == "nt":
+            # Windows fallback: avoid asyncio subprocess APIs that may be unsupported
+            # with the active loop policy in some uvicorn/runtime combinations.
+            proc = subprocess.Popen(
+                [sys.executable, "-X", "utf8", "-u", tmp_path],
+                stdin=subprocess.PIPE,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                env=proc_env,
+            )
+        else:
+            proc = await asyncio.create_subprocess_exec(
+                sys.executable, "-X", "utf8", "-u", tmp_path,
+                stdin=asyncio.subprocess.PIPE,
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE,
+                env=proc_env,
+            )
+
+        stop = asyncio.Event()
+
+        # ── 4a. Stream stdout/stderr → client ───────────────────────────
+        async def stream_pipe(stream: Any, kind: str) -> None:
+            try:
+                if os.name == "nt":
+                    loop = asyncio.get_running_loop()
+                    queue: asyncio.Queue[bytes | None] = asyncio.Queue()
+
+                    def _reader() -> None:
+                        try:
+                            while True:
+                                chunk = stream.read(512)
+                                if not chunk:
+                                    break
+                                loop.call_soon_threadsafe(queue.put_nowait, chunk)
+                        finally:
+                            loop.call_soon_threadsafe(queue.put_nowait, None)
+
+                    threading.Thread(target=_reader, daemon=True).start()
+
+                    while True:
+                        chunk = await queue.get()
+                        if chunk is None:
+                            break
+                        await websocket.send_json({
+                            "type": kind,
+                            "data": chunk.decode("utf-8", errors="replace"),
+                        })
+                    return
+
+                while True:
+                    chunk = await stream.read(512)
+                    if not chunk:
+                        break
+                    await websocket.send_json({
+                        "type": kind,
+                        "data": chunk.decode("utf-8", errors="replace"),
+                    })
+            except Exception:
+                pass
+
+        # ── 4b. Forward client stdin → process ──────────────────────────
+        async def forward_stdin() -> None:
+            try:
+                while not stop.is_set():
+                    try:
+                        msg = await asyncio.wait_for(websocket.receive_json(), timeout=1.0)
+                    except asyncio.TimeoutError:
+                        continue
+                    if isinstance(msg, dict) and msg.get("type") == "stdin" and proc and proc.stdin:
+                        line = str(msg.get("data", ""))
+                        proc.stdin.write((line + "\n").encode())
+                        if os.name == "nt":
+                            proc.stdin.flush()
+                        else:
+                            await proc.stdin.drain()
+            except (WebSocketDisconnect, Exception):
+                pass
+            finally:
+                stop.set()
+                try:
+                    if proc.stdin:
+                        proc.stdin.close()
+                except Exception:
+                    pass
+
+        stdin_task = asyncio.create_task(forward_stdin())
+
+        # ── 5. Wait for stdout+stderr with 30 s timeout ─────────────────
+        try:
+            await asyncio.wait_for(
+                asyncio.gather(
+                    stream_pipe(proc.stdout, "stdout"),
+                    stream_pipe(proc.stderr, "stderr"),
+                ),
+                timeout=30,
+            )
+        except asyncio.TimeoutError:
+            if proc.returncode is None:
+                proc.kill()
+            try:
+                await websocket.send_json({
+                    "type": "stderr",
+                    "data": "\n[Timeout: 30 s depasse — processus tue]",
+                })
+            except Exception:
+                pass
+        finally:
+            stop.set()
+            stdin_task.cancel()
+            try:
+                await stdin_task
+            except asyncio.CancelledError:
+                pass
+
+        if os.name == "nt":
+            rc = await asyncio.to_thread(proc.wait)
+        else:
+            rc = await proc.wait()
+        elapsed = time.perf_counter() - t_start
+        try:
+            await websocket.send_json({
+                "type": "meta",
+                "data": f"\nTemps d'execution : {elapsed:.3f}s",
+            })
+        except Exception:
+            pass
+        try:
+            await websocket.send_json({"type": "exit", "code": rc})
+        except Exception:
+            pass
+
+    except WebSocketDisconnect:
+        if proc and proc.returncode is None:
+            proc.kill()
+    except Exception as exc:
+        traceback.print_exc()
+        err_text = f"{type(exc).__name__}: {exc}"
+        try:
+            await websocket.send_json({"type": "stderr", "data": f"Erreur serveur: {err_text}"})
+        except Exception:
+            pass
+    finally:
+        if tmp_path:
+            try:
+                os.unlink(tmp_path)
+            except Exception:
+                pass
+        try:
+            await websocket.close()
+        except Exception:
+            pass

@@ -190,6 +190,7 @@ export default function TuteurChat() {
     level,
     progressPercent,
     tutorMode: true,
+    responseLanguage: 'русский',
     pedagogicalStyle: 'Tutorat bienveillant et conversationnel',
     aiTone: 'Tuteur chaleureux, pédagogue, répond toujours en russe',
     language: 'ru',
