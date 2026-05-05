@@ -9,6 +9,7 @@ import re
 import traceback
 import io
 import random
+import time
 from contextlib import redirect_stdout
 
 router = APIRouter()
@@ -500,6 +501,7 @@ def _run_test_suite(student_code: str, suite: dict[str, Any]) -> dict[str, Any]:
 
     results: list[dict[str, Any]] = []
     passed = 0
+    total_exec_ns: int = 0
     for test_case in suite["tests"]:
         args = test_case.get("args", [])
         expected = test_case.get("expected")
@@ -512,7 +514,10 @@ def _run_test_suite(student_code: str, suite: dict[str, Any]) -> dict[str, Any]:
             if mocked_secret is not None:
                 random.randint = lambda _a, _b: mocked_secret
 
+            _t0 = time.perf_counter_ns()
             actual = func(*args)
+            _t1 = time.perf_counter_ns()
+            total_exec_ns += (_t1 - _t0)
 
             if mocked_secret is not None:
                 random.randint = original_randint
@@ -526,6 +531,7 @@ def _run_test_suite(student_code: str, suite: dict[str, Any]) -> dict[str, Any]:
                 "input": repr(args),
                 "expected": repr(expected),
                 "actual": repr(actual),
+                "exec_time_us": round((_t1 - _t0) / 1_000, 2),
             })
         except Exception as exc:
             try:
@@ -543,6 +549,7 @@ def _run_test_suite(student_code: str, suite: dict[str, Any]) -> dict[str, Any]:
 
     total = len(suite["tests"])
     failed = total - passed
+    exec_time_ms = round(total_exec_ns / 1_000_000, 3)
     return {
         "suite_id": suite["id"],
         "mode": "function",
@@ -552,6 +559,7 @@ def _run_test_suite(student_code: str, suite: dict[str, Any]) -> dict[str, Any]:
         "failed": failed,
         "all_passed": passed == total,
         "runtime_error": "",
+        "exec_time_ms": exec_time_ms,
         "results": results,
     }
 
@@ -722,8 +730,10 @@ def _test_feedback_from_suite(student_code: str, suite: dict[str, Any], prompt_v
     total = int(report.get("total", 0))
     passed = int(report.get("passed", 0))
     runtime_error = str(report.get("runtime_error") or "")
+    runtime_traceback = str(report.get("trace") or "")
     test_mode = str(report.get("mode") or "function")
     results = report.get("results", []) if isinstance(report.get("results"), list) else []
+    exec_time_ms: float = float(report.get("exec_time_ms") or 0.0)
 
     if runtime_error:
         note = "1/10"
@@ -780,6 +790,8 @@ def _test_feedback_from_suite(student_code: str, suite: dict[str, Any], prompt_v
                 "total": total,
                 "all_passed": total > 0 and passed == total,
                 "runtime_error": runtime_error,
+                "runtime_traceback": runtime_traceback,
+                "exec_time_ms": exec_time_ms,
             },
             "test_results": results,
         },
@@ -794,22 +806,22 @@ async def submit_challenge(req: SubmissionRequest):
     if not req.student_code.strip() or len(req.student_code.strip()) < 6:
         return {
             "evaluation": (
-                "Note: 0/10\n"
-                "Commentaire: Code introuvable. Ajoute une première version fonctionnelle puis relance la validation.\n"
-                "À faire:\n"
-                "- Ajoute au moins une fonction ou un bloc logique complet\n"
-                "Idée:\n"
-                "- Commence par une version simple qui passe un premier test\n"
-                "Suite:\n"
-                "- Soumets une première itération même si elle n'est pas parfaite"
+                "Оценка: 0/10\n"
+                "Комментарий: Код не найден. Добавь первую рабочую версию и запусти проверку снова.\n"
+                "Что сделать:\n"
+                "- Добавь хотя бы одну функцию или законченный логический блок\n"
+                "Идея:\n"
+                "- Начни с простой версии, которая проходит первый тест\n"
+                "Дальше:\n"
+                "- Отправь первую итерацию, даже если она еще не идеальна"
             ),
             "evaluation_json": {
                 "prompt_version": "v2.3",
                 "note": "0/10",
-                "commentaire": "Code introuvable. Ajoute une première version fonctionnelle puis relance la validation.",
-                "consignes": ["Ajoute au moins une fonction ou un bloc logique complet"],
-                "idees": ["Commence par une version simple qui passe un premier test"],
-                "prochaines_etapes": ["Soumets une première itération même si elle n'est pas parfaite"],
+                "commentaire": "Код не найден. Добавь первую рабочую версию и запусти проверку снова.",
+                "consignes": ["Добавь хотя бы одну функцию или законченный логический блок"],
+                "idees": ["Начни с простой версии, которая проходит первый тест"],
+                "prochaines_etapes": ["Отправь первую итерацию, даже если она еще не идеальна"],
             },
         }
 
@@ -851,15 +863,15 @@ async def submit_challenge(req: SubmissionRequest):
 - Если код есть, не пиши, что решение отсутствует.
 - Ответ должен быть коротким.
 
-Réponds uniquement en {response_language}.
+Отвечай только на {response_language}.
 Верни строго JSON:
 {{
     "prompt_version": "v2.3",
     "note": ".../10",
-    "commentaire": "jusqu'à 280 caractères",
-    "consignes": ["maximum 1-2 points"],
-    "idees": ["maximum 1-2 points"],
-    "prochaines_etapes": ["maximum 1-2 points"]
+    "commentaire": "до 280 символов",
+    "consignes": ["максимум 1-2 пункта"],
+    "idees": ["максимум 1-2 пункта"],
+    "prochaines_etapes": ["максимум 1-2 пункта"]
 }}
 """
 
@@ -891,13 +903,13 @@ Réponds uniquement en {response_language}.
         idees_text = "\n".join([f"- {item}" for item in idees if isinstance(item, str)])
         prochaines_etapes_text = "\n".join([f"- {item}" for item in prochaines_etapes if isinstance(item, str)])
 
-        formatted = f"Note: {note}\nCommentaire: {commentaire}"
+        formatted = f"Оценка: {note}\nКомментарий: {commentaire}"
         if consignes_text:
-            formatted += f"\nÀ faire:\n{consignes_text}"
+            formatted += f"\nЧто сделать:\n{consignes_text}"
         if idees_text:
-            formatted += f"\nIdée:\n{idees_text}"
+            formatted += f"\nИдея:\n{idees_text}"
         if prochaines_etapes_text:
-            formatted += f"\nSuite:\n{prochaines_etapes_text}"
+            formatted += f"\nДальше:\n{prochaines_etapes_text}"
 
         return {
             "evaluation": formatted,

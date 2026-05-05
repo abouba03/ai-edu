@@ -24,13 +24,15 @@ echo.
 echo   === AI-EDU Platform ===
 echo.
 
-:: Tuer les processus uvicorn du projet + tout process en ecoute sur 8002
+:: Tuer les processus uvicorn du projet + tout process en ecoute sur 8002/8003
 echo   [1/4] Nettoyage des instances backend...
 powershell -NoProfile -ExecutionPolicy Bypass -Command "Get-CimInstance Win32_Process | Where-Object { $_.Name -eq 'python.exe' -and $_.CommandLine -match 'uvicorn app.main:app' } | ForEach-Object { try { Stop-Process -Id $_.ProcessId -Force -ErrorAction Stop } catch {} }" >nul 2>&1
+powershell -NoProfile -ExecutionPolicy Bypass -Command "Get-CimInstance Win32_Process | Where-Object { $_.Name -eq 'python.exe' -and $_.CommandLine -match 'uvicorn app.socketio_console:app' } | ForEach-Object { try { Stop-Process -Id $_.ProcessId -Force -ErrorAction Stop } catch {} }" >nul 2>&1
 for /f "tokens=5" %%P in ('netstat -ano ^| findstr /R /C:":8002 .*LISTENING"') do taskkill /PID %%P /F >nul 2>&1
+for /f "tokens=5" %%P in ('netstat -ano ^| findstr /R /C:":8003 .*LISTENING"') do taskkill /PID %%P /F >nul 2>&1
 timeout /t 1 /nobreak >nul
 
-echo   [2/4] Verification port 8002...
+echo   [2/4] Verification ports 8002/8003...
 for /f "tokens=5" %%P in ('netstat -ano ^| findstr /R /C:":8002 .*LISTENING"') do (
     "%PYTHON%" -c "import urllib.request,sys; r=urllib.request.urlopen('http://127.0.0.1:8002/health', timeout=2); sys.exit(0 if getattr(r, 'status', 0)==200 else 1)" >nul 2>&1
     if errorlevel 1 "%PYTHON%" -c "import urllib.request,sys; r=urllib.request.urlopen('http://127.0.0.1:8002/docs', timeout=2); sys.exit(0 if getattr(r, 'status', 0)==200 else 1)" >nul 2>&1
@@ -43,9 +45,15 @@ for /f "tokens=5" %%P in ('netstat -ano ^| findstr /R /C:":8002 .*LISTENING"') d
     pause
     exit /b 1
 )
+for /f "tokens=5" %%P in ('netstat -ano ^| findstr /R /C:":8003 .*LISTENING"') do (
+    echo [ERREUR] Le port 8003 est occupe ^(PID %%P^) et bloque Socket.IO.
+    pause
+    exit /b 1
+)
 
-echo   [3/4] Lancement du backend sur http://127.0.0.1:8002
+echo   [3/4] Lancement du backend sur http://127.0.0.1:8002 + Socket.IO sur 8003
 start "Backend 8002" cmd /k "cd /d "%ROOT%backend" && "%PYTHON%" -m uvicorn app.main:app --host 127.0.0.1 --port 8002 --ws wsproto --reload"
+start "Backend Socket.IO 8003" cmd /k "cd /d "%ROOT%backend" && "%PYTHON%" -m uvicorn app.socketio_console:app --host 127.0.0.1 --port 8003 --reload"
 
 :: Attendre que le backend soit pret avant de lancer le frontend
 echo   Attente du backend...
@@ -73,8 +81,9 @@ echo   [4/4] Lancement du frontend sur http://localhost:3000
 start "Frontend 3000" cmd /k "cd /d "%ROOT%frontend" && npm run dev"
 
 echo.
-echo   Les deux serveurs sont en cours d execution.
-echo   Backend  : http://127.0.0.1:8002
+echo   Les services sont en cours d execution.
+echo   Backend API    : http://127.0.0.1:8002
+echo   Backend Socket : http://127.0.0.1:8003
 echo   Frontend : http://localhost:3000
 echo.
 echo   Ferme cette fenetre quand tu veux. Les serveurs continuent dans leurs fenetres.

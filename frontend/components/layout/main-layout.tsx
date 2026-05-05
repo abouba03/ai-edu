@@ -122,6 +122,7 @@ function UserCard({ name, level, loaded }: { name: string; level: string; loaded
 export default function MainLayout({ children, initialUser }: MainLayoutProps) {
   const { isSignedIn } = useAuth();
   const pathname = usePathname();
+  const isGeneratorFocusPage = pathname.startsWith('/generator/exercise') || pathname.startsWith('/generator/code');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const userName = useMemo(() => initialUser?.name ?? 'Étudiant', [initialUser]);
   const userLevel = useMemo(() => initialUser?.level ?? 'débutant', [initialUser]);
@@ -199,39 +200,41 @@ export default function MainLayout({ children, initialUser }: MainLayoutProps) {
         {/* Left: mobile trigger + logo */}
         <div className="flex items-center gap-3">
           {/* Mobile hamburger */}
-          <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
-            <SheetTrigger asChild>
-              <button
-                aria-label="Открыть меню"
-                className="lg:hidden border-2 border-[#1C293C] bg-white p-2 shadow-[2px_2px_0px_0px_#1C293C] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-100"
+          {!isGeneratorFocusPage && (
+            <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
+              <SheetTrigger asChild>
+                <button
+                  aria-label="Открыть меню"
+                  className="lg:hidden border-2 border-[#1C293C] bg-white p-2 shadow-[2px_2px_0px_0px_#1C293C] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-100"
+                >
+                  {isMobileMenuOpen ? (
+                    <X className="h-4 w-4" />
+                  ) : (
+                    <Menu className="h-4 w-4" />
+                  )}
+                </button>
+              </SheetTrigger>
+
+              <SheetContent
+                side="left"
+                className="w-[280px] sm:w-[300px] rounded-none border-r-2 border-[#1C293C] bg-[#FBFBF9] p-0 flex flex-col"
               >
-                {isMobileMenuOpen ? (
-                  <X className="h-4 w-4" />
-                ) : (
-                  <Menu className="h-4 w-4" />
-                )}
-              </button>
-            </SheetTrigger>
+                <SheetHeader className="border-b-2 border-[#1C293C] px-5 py-4 shrink-0">
+                  <SheetTitle className="text-left font-black text-[#1C293C]">
+                    AI Edu<span className="text-[#432DD7]">.</span> — обучение
+                  </SheetTitle>
+                </SheetHeader>
 
-            <SheetContent
-              side="left"
-              className="w-[280px] sm:w-[300px] rounded-none border-r-2 border-[#1C293C] bg-[#FBFBF9] p-0 flex flex-col"
-            >
-              <SheetHeader className="border-b-2 border-[#1C293C] px-5 py-4 shrink-0">
-                <SheetTitle className="text-left font-black text-[#1C293C]">
-                  AI Edu<span className="text-[#432DD7]">.</span> — обучение
-                </SheetTitle>
-              </SheetHeader>
-
-              <div className="flex flex-col flex-1 overflow-hidden">
-                {/* Mobile user card */}
-                <div className="px-3 pt-4 pb-2 border-b-2 border-[#1C293C]/10">
-                  <UserCard name={userName} level={userLevel} />
+                <div className="flex flex-col flex-1 overflow-hidden">
+                  {/* Mobile user card */}
+                  <div className="px-3 pt-4 pb-2 border-b-2 border-[#1C293C]/10">
+                    <UserCard name={userName} level={userLevel} />
+                  </div>
+                  <SidebarContent onNav={closeMenu} />
                 </div>
-                <SidebarContent onNav={closeMenu} />
-              </div>
-            </SheetContent>
-          </Sheet>
+              </SheetContent>
+            </Sheet>
+          )}
 
           {/* Logo */}
           <Link href="/dashboard" className="flex items-center gap-2.5 select-none">
@@ -242,7 +245,7 @@ export default function MainLayout({ children, initialUser }: MainLayoutProps) {
               <span className="font-black text-[15px] text-[#1C293C]">AI Edu</span>
               <span className="font-black text-[15px] text-[#432DD7]">.</span>
               <p className="text-[10px] font-semibold text-[#1C293C]/50 tracking-wide -mt-0.5">
-                Learning Platform
+                Учебная платформа
               </p>
             </div>
           </Link>
@@ -273,16 +276,25 @@ export default function MainLayout({ children, initialUser }: MainLayoutProps) {
       </header>
 
       {/* ── BODY ── */}
-      <div className="flex min-h-[calc(100vh-60px)]">
+      <div
+        className={cn(
+          'flex',
+          isGeneratorFocusPage ? 'h-[calc(100vh-60px)] overflow-hidden' : 'min-h-[calc(100vh-60px)]',
+        )}
+      >
 
         {/* Desktop Sidebar */}
-        <aside className="hidden lg:flex w-[240px] shrink-0 flex-col border-r-2 border-[#1C293C] bg-[#FBFBF9]">
-          <SidebarContent />
-        </aside>
+        {!isGeneratorFocusPage && (
+          <aside className="hidden lg:flex w-[240px] shrink-0 flex-col border-r-2 border-[#1C293C] bg-[#FBFBF9]">
+            <SidebarContent />
+          </aside>
+        )}
 
         {/* Main content */}
-        <main className="flex-1 min-w-0">
-          <div className="p-4 lg:p-8">{children}</div>
+        <main className={cn('flex-1 min-w-0', isGeneratorFocusPage && 'overflow-hidden')}>
+          <div className={cn(isGeneratorFocusPage ? 'h-full overflow-hidden' : 'p-4 lg:p-8')}>
+            {children}
+          </div>
         </main>
       </div>
     </div>

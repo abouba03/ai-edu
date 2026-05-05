@@ -38,10 +38,10 @@ export default function GeneratorTerminalPanel({
           <span className="h-2.5 w-2.5 rounded-full bg-[#4ade80]" />
           <Terminal className="ml-1 h-3 w-3 text-white/40" />
           <span className="text-[10px] font-black uppercase tracking-widest text-white/60">
-            Terminal Python
+            Терминал Python
           </span>
           {runningConsole && (
-            <span className="text-[10px] text-[#4ade80] animate-pulse">● en cours</span>
+            <span className="text-[10px] text-[#4ade80] animate-pulse">● выполняется</span>
           )}
         </div>
         <div className="flex items-center gap-2">
@@ -51,14 +51,14 @@ export default function GeneratorTerminalPanel({
               onClick={onStopExecution}
               className="border border-[#f87171]/40 px-2 py-0.5 text-[10px] font-black text-[#f87171] transition-colors hover:text-white"
             >
-              Stop
+              Стоп
             </button>
           )}
           <button
             type="button"
             onClick={onClearConsole}
             className="text-white/40 transition-colors hover:text-white"
-            title="Effacer"
+            title="Очистить"
           >
             <X className="h-3.5 w-3.5" />
           </button>
@@ -71,7 +71,7 @@ export default function GeneratorTerminalPanel({
       >
         {consoleLines.length === 0 ? (
           <p className="select-none text-xs font-mono text-white/20">
-            Prete. Clique sur Executer pour lancer le code.
+            Готово. Нажми «Запустить», чтобы выполнить код.
           </p>
         ) : (
           <pre className="whitespace-pre-wrap break-all text-xs font-mono leading-relaxed">
@@ -110,8 +110,8 @@ export default function GeneratorTerminalPanel({
           spellCheck={false}
           placeholder={
             runningConsole
-              ? 'Tape une valeur et appuie sur Entree…'
-              : 'Lance le code pour interagir'
+              ? 'Введи значение и нажми Enter...'
+              : 'Сначала запусти код'
           }
           className="flex-1 bg-transparent text-xs font-mono text-[#e6edf3] placeholder:text-white/20 focus:outline-none disabled:cursor-not-allowed disabled:opacity-30"
         />

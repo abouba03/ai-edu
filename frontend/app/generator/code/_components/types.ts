@@ -5,6 +5,8 @@ export type ConsoleLine = {
 
 export type LeftPanelTab = 'enonce' | 'terminal' | 'chat';
 
+export type GeneratorLevel = 'debutant' | 'intermediaire' | 'avance';
+
 export type PlotPoint = {
   x: number;
   y: number;

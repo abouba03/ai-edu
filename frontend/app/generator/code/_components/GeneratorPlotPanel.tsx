@@ -52,8 +52,8 @@ export default function GeneratorPlotPanel({ plotPayload }: GeneratorPlotPanelPr
     return (
       <div className="space-y-2">
         <div className="border border-[#1C293C]/20 bg-[#FBFBF9] px-2.5 py-2">
-          <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7]">Courbe resultat</p>
-          <p className="mt-1 text-[11px] text-[#1C293C]/75">Aucune donnee recue pour le moment.</p>
+          <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7]">График результата</p>
+          <p className="mt-1 text-[11px] text-[#1C293C]/75">Пока нет данных.</p>
         </div>
 
         <div className="border border-[#1C293C]/20 bg-white p-2">
@@ -68,13 +68,13 @@ export default function GeneratorPlotPanel({ plotPayload }: GeneratorPlotPanelPr
                 strokeWidth="2"
                 points={buildPlaceholderPolyline(width, height)}
               />
-              <text x="12" y="18" fill="#1C293C99" fontSize="12">Apercu du graphe</text>
+              <text x="12" y="18" fill="#1C293C99" fontSize="12">Предпросмотр графика</text>
             </svg>
           </div>
         </div>
 
         <div className="border border-[#1C293C]/20 bg-[#FBFBF9] px-2.5 py-2 text-[11px] text-[#1C293C]/80">
-          Imprime: {`PLOT_JSON:{"title":"Courbe","x":[0,1,2],"y":[0,1,4]}`}
+          Выведи: {`PLOT_JSON:{"title":"График","x":[0,1,2],"y":[0,1,4]}`}
         </div>
       </div>
     );
@@ -83,9 +83,9 @@ export default function GeneratorPlotPanel({ plotPayload }: GeneratorPlotPanelPr
   return (
     <div className="space-y-2">
       <div className="border border-[#1C293C]/20 bg-[#FBFBF9] px-2.5 py-2">
-        <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7]">Courbe resultat</p>
+        <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7]">График результата</p>
         <p className="mt-1 text-xs font-semibold text-[#1C293C]">
-          {plotPayload?.title?.trim() || 'Resultat numerique'}
+          {plotPayload?.title?.trim() || 'Числовой результат'}
         </p>
         <p className="text-[11px] text-[#1C293C]/70">
           {plotPayload?.xLabel || 'x'} / {plotPayload?.yLabel || 'y'}

@@ -1,6 +1,7 @@
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 generator client {
@@ -193,4 +194,41 @@ model CourseReflection {
   user        User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
 
   @@index([clerkId, courseSlug, createdAt])
+}
+
+// ── Generateur d'exercices adaptatifs ─────────────────────────────────
+
+model ExerciseSession {
+  id              String            @id @default(uuid())
+  clerkId         String            @unique
+  level           String            @default("debutant")
+  difficulty      Int               @default(1)
+  totalPoints     Int               @default(0)
+  passedCount     Int               @default(0)
+  failedCount     Int               @default(0)
+  consecutiveWins Int               @default(0)
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  attempts        ExerciseAttempt[]
+
+  @@index([clerkId])
+}
+
+model ExerciseAttempt {
+  id              String          @id @default(uuid())
+  clerkId         String
+  sessionId       String
+  challengeTitle  String          @default("")
+  challengeJson   Json
+  submittedCode   String
+  score           Int             @default(0)
+  passed          Boolean         @default(false)
+  pointsEarned    Int             @default(0)
+  difficulty      Int             @default(1)
+  evaluation      Json?
+  createdAt       DateTime        @default(now())
+  session         ExerciseSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([clerkId, createdAt])
+  @@index([sessionId, createdAt])
 }

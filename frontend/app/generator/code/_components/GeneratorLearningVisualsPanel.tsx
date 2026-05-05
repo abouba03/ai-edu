@@ -144,7 +144,7 @@ export default function GeneratorLearningVisualsPanel({
       </section>
 
       <section className="border border-[#1C293C]/20 bg-white p-2.5 space-y-1.5">
-        <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7]">Performance (n -> temps)</p>
+        <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7]">Performance (n {'>'} temps)</p>
 
         {perfPayload?.points?.length ? (
           <div className="space-y-1.5">

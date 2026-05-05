@@ -1,332 +1,346 @@
 'use client';
 
-import { useState } from 'react';
-import Link from 'next/link';
-import axios from 'axios';
-import { ArrowLeft, CheckCircle2, FileCode2, Lightbulb, Loader2, RefreshCw } from 'lucide-react';
-import { trackEvent } from '@/lib/event-tracker';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import ExerciseTopBar from './_components/ExerciseTopBar';
+import ExerciseSidebar from './_components/ExerciseSidebar';
+import ExerciseEditor from './_components/ExerciseEditor';
+import ExerciseResultModal from './_components/ExerciseResultModal';
+import type {
+  ExecuteResult,
+  ExerciseStats,
+  GeneratedExercise,
+  SidebarTab,
+  SubmitResult,
+} from './_components/types';
 
-type ChallengeTests = {
-  mode?: string;
-  function_name?: string;
-  test_cases?: Array<{
-    name?: string;
-    args_literal?: string;
-    expected_literal?: string;
-    constraint?: string;
-  }>;
-};
+function toRuError(detail?: string): string {
+  const raw = String(detail ?? '').trim();
+  if (!raw) return 'Произошла ошибка. Попробуй снова.';
 
-type AiProfile = {
-  user?: { level?: string };
-  profile?: {
-    weak?: string[];
-    strong?: string[];
-    recentTopics?: string[];
-  };
-  quizStats?: Array<{ slug: string; passRate: number; attempts: number }>;
-  challengeStats?: Array<{ slug: string; passRate: number; attempts: number }>;
-};
+  if (raw === 'unauthenticated') return 'Нужно войти в аккаунт.';
+  if (raw === 'invalid_json') return 'Неверный формат данных.';
+  if (raw === 'db_temporarily_unavailable') return 'База данных временно недоступна. Попробуй чуть позже.';
+  if (raw === 'server_error') return 'Ошибка сервера.';
+  if (raw.startsWith('execution_failed:')) return 'Ошибка при выполнении кода в рантайме.';
 
-const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-
-const TOPIC_LABELS: Record<string, string> = {
-  'operations-et-variables-python': 'Переменные и операции',
-  'conditions-et-boucles-python': 'Условия и циклы',
-  'listes-strings-slices': 'Списки и строки',
-  'tuples-dictionnaires-sets': 'Кортежи, словари и множества',
-  'fonctions-fichiers-python': 'Функции и файлы',
-  'exceptions-with-modules': 'Исключения и модули',
-  'oop-bases-python': 'ООП: классы и объекты',
-  'oop-avance-et-decorateurs': 'ООП: наследование и декораторы',
-  'python-capstone-et-revision': 'Финальный проект',
-};
-
-function topicLabel(slug: string): string {
-  return TOPIC_LABELS[slug] ?? slug;
+  return raw;
 }
 
-function normalizeLevel(value?: string): 'débutant' | 'intermédiaire' | 'avancé' {
-  const normalized = (value || '').toLowerCase();
-  if (normalized.includes('avanc')) return 'avancé';
-  if (normalized.includes('interm')) return 'intermédiaire';
-  return 'débutant';
+function looksRussian(text: string): boolean {
+  return /[А-Яа-яЁё]/.test(String(text || ''));
 }
 
-function inferExercisePlan(profile: AiProfile | null) {
-  const weakTopic = profile?.profile?.weak?.[0];
-  if (weakTopic) {
-    return {
-      slug: weakTopic,
-      reason: 'weak_topic',
-      level: normalizeLevel(profile?.user?.level),
-    };
-  }
+function isRussianExercise(data: GeneratedExercise): boolean {
+  const probes = [
+    data.challenge,
+    data.challenge_json?.enonce,
+    data.challenge_json?.exemple,
+    ...(data.challenge_json?.contraintes ?? []),
+    ...(data.challenge_json?.hints ?? []),
+  ].map((v) => String(v ?? ''));
 
-  const challengeWeak = (profile?.challengeStats || [])
-    .filter((item) => item.attempts > 0)
-    .sort((a, b) => a.passRate - b.passRate)[0];
-
-  if (challengeWeak?.slug) {
-    return {
-      slug: challengeWeak.slug,
-      reason: 'challenge_low_passrate',
-      level: normalizeLevel(profile?.user?.level),
-    };
-  }
-
-  const recent = profile?.profile?.recentTopics?.[0];
-  if (recent) {
-    return {
-      slug: recent,
-      reason: 'recent_topic_reinforcement',
-      level: normalizeLevel(profile?.user?.level),
-    };
-  }
-
-  return {
-    slug: 'operations-et-variables-python',
-    reason: 'fallback_default',
-    level: 'débutant' as const,
-  };
+  const count = probes.filter(looksRussian).length;
+  return count >= 3;
 }
 
-export default function GeneratorExercisePage() {
-  const [currentSlug, setCurrentSlug] = useState('');
-  const [challenge, setChallenge] = useState('');
-  const [challengeTests, setChallengeTests] = useState<ChallengeTests | null>(null);
-  const [learnerCode, setLearnerCode] = useState('');
-  const [feedback, setFeedback] = useState('');
-  const [loadingGenerate, setLoadingGenerate] = useState(false);
-  const [loadingSubmit, setLoadingSubmit] = useState(false);
-  const [error, setError] = useState('');
+export default function ExercisePage() {
+  const [stats, setStats] = useState<ExerciseStats | null>(null);
+  const [statsLoading, setStatsLoading] = useState(true);
+  const [exercise, setExercise] = useState<GeneratedExercise | null>(null);
+  const [loadingChallenge, setLoadingChallenge] = useState(false);
+  const [challengeError, setChallengeError] = useState('');
+  const [code, setCode] = useState('');
+  const [executing, setExecuting] = useState(false);
+  const [executeResult, setExecuteResult] = useState<ExecuteResult | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitResult, setSubmitResult] = useState<SubmitResult | null>(null);
+  const [showModal, setShowModal] = useState(false);
+  const [sidebarTab, setSidebarTab] = useState<SidebarTab>('enonce');
+  const [lastDifficultyChange, setLastDifficultyChange] = useState<number | null>(null);
+  const [lastLevelUp, setLastLevelUp] = useState(false);
+  const [performanceRunsMs, setPerformanceRunsMs] = useState<number[]>([]);
 
-  async function generatePersonalizedExercise() {
-    if (loadingGenerate) return;
+  // Chronomètre challenge : temps depuis le chargement jusqu'à la validation
+  const challengeStartedAt = useRef<number | null>(null);
+  const [validationMs, setValidationMs] = useState<number | null>(null);
+  const [challengeTimerMs, setChallengeTimerMs] = useState<number | null>(null);
 
-    setLoadingGenerate(true);
-    setError('');
-    setFeedback('');
-
+  const loadStats = useCallback(async () => {
     try {
-      const profileRes = await fetch('/api/learner/ai-profile', { cache: 'no-store' });
-      const profileData: AiProfile = await profileRes.json();
-      const plan = inferExercisePlan(profileData);
+      const res = await fetch('/api/exercise/stats', { cache: 'no-store' });
+      if (res.ok) {
+        const data = await res.json() as ExerciseStats;
+        setStats(data);
+      }
+    } catch { /* noop */ }
+    finally { setStatsLoading(false); }
+  }, []);
 
-      setCurrentSlug(plan.slug);
+  const loadLatestChallenge = useCallback(async (): Promise<boolean> => {
+    try {
+      const res = await fetch('/api/exercise/latest', { cache: 'no-store' });
+      if (!res.ok) {
+        return false;
+      }
 
-      await trackEvent({
-        action: 'generator_exercise_plan',
-        feature: 'generator_exercise_page',
-        status: 'start',
-        metadata: {
-          topicSlug: plan.slug,
-          reason: plan.reason,
-          level: plan.level,
-        },
-      });
-
-      const challengeRes = await axios.post(`${apiBaseUrl}/generate-challenge/`, {
-        level: plan.level,
-        language: 'Python',
-        challenge_topic: topicLabel(plan.slug),
-        course_description: `Auto-personalized by learner profile. reason=${plan.reason}`,
-        pedagogy_context: {
-          level: plan.level,
-          pedagogicalStyle: 'Задание для выявления текущих пробелов и проверки понимания',
-          aiTone: 'Coach clair et exigeant',
-          targetAudience: 'Étudiant',
-          courseTitle: topicLabel(plan.slug),
-        },
-      });
-
-      const nextChallenge = String(challengeRes.data?.challenge ?? '').trim();
-      const tests = challengeRes.data?.challenge_tests && typeof challengeRes.data.challenge_tests === 'object'
-        ? (challengeRes.data.challenge_tests as ChallengeTests)
-        : null;
-
-      setChallenge(nextChallenge || 'Задание не получено.');
-      setChallengeTests(tests);
-      setLearnerCode(`# ${topicLabel(plan.slug)}\n\n`);
-
-      await trackEvent({
-        action: 'generator_exercise_plan',
-        feature: 'generator_exercise_page',
-        status: 'success',
-        metadata: {
-          topicSlug: plan.slug,
-          reason: plan.reason,
-          testsCount: tests?.test_cases?.length ?? 0,
-        },
-      });
+      const data = await res.json() as GeneratedExercise;
+      if (!isRussianExercise(data)) {
+        // Older cached drafts can still be in French: force a fresh RU generation.
+        return false;
+      }
+      setExercise(data);
+      setCode(data.starter_code ?? '');
+      setChallengeError('');
+      setSidebarTab('enonce');
+      challengeStartedAt.current = Date.now();
+      setValidationMs(null);
+      setChallengeTimerMs(0);
+      setPerformanceRunsMs([]);
+      return true;
     } catch {
-      setError('Ошибка генерации персонализированного упражнения. Проверь backend.');
-      await trackEvent({
-        action: 'generator_exercise_plan',
-        feature: 'generator_exercise_page',
-        status: 'error',
-      });
-    } finally {
-      setLoadingGenerate(false);
+      return false;
     }
-  }
+  }, []);
 
-  async function submitSolution() {
-    if (!challenge.trim() || !learnerCode.trim() || loadingSubmit) return;
-
-    setLoadingSubmit(true);
-
-    await trackEvent({
-      action: 'generator_exercise_submit',
-      feature: 'generator_exercise_page',
-      status: 'start',
-      metadata: { topicSlug: currentSlug },
-    });
+  const generateChallenge = useCallback(async () => {
+    setLoadingChallenge(true);
+    setChallengeError('');
+    setExecuteResult(null);
+    setSubmitResult(null);
+    setShowModal(false);
+    setLastDifficultyChange(null);
+    setLastLevelUp(false);
+    setValidationMs(null);
+    setChallengeTimerMs(null);
+    setPerformanceRunsMs([]);
+    challengeStartedAt.current = null;
+    setSidebarTab('enonce');
 
     try {
-      const response = await axios.post(`${apiBaseUrl}/submit-challenge/`, {
-        challenge_description: challenge,
-        student_code: learnerCode,
-        challenge_tests: challengeTests,
-        pedagogy_context: {
-          pedagogicalStyle: 'Correction ciblée sur erreurs logiques',
-          aiTone: 'Coach clair et exigeant',
-          targetAudience: 'Étudiant',
-          courseTitle: topicLabel(currentSlug),
-        },
+      const res = await fetch('/api/exercise/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({}),
       });
+      if (!res.ok) {
+        const err = await res.json() as { detail?: string };
+        setChallengeError(toRuError(err.detail) || 'Ошибка генерации.');
+        return;
+      }
+      const data = await res.json() as GeneratedExercise;
+      setExercise(data);
+      setCode(data.starter_code ?? '');
+      challengeStartedAt.current = Date.now();
+      setValidationMs(null);
+      setChallengeTimerMs(0);
+      setPerformanceRunsMs([]);
+    } catch {
+      setChallengeError('Не удалось сгенерировать задачу. Проверь подключение.');
+    } finally {
+      setLoadingChallenge(false);
+    }
+  }, []);
 
-      const evaluationJson = response.data?.evaluation_json;
-      const evaluationText = response.data?.evaluation ?? '';
-      const serializedFeedback =
-        evaluationJson && typeof evaluationJson === 'object'
-          ? JSON.stringify(evaluationJson, null, 2)
-          : String(evaluationText || '');
-
-      setFeedback(serializedFeedback);
-
-      const noteRaw = String(evaluationJson?.note ?? '');
-      const noteMatch = noteRaw.match(/(\d+(?:[.,]\d+)?)\s*\/\s*10/);
-      const note = noteMatch ? Number(noteMatch[1].replace(',', '.')) : null;
-      const solved = Boolean(evaluationJson?.test_summary?.all_passed) || (note !== null && note >= 7);
-
-      await fetch('/api/course-progress', {
+  const handleSubmit = useCallback(async () => {
+    if (!exercise || !code.trim()) return;
+    setSubmitting(true);
+    try {
+      const res = await fetch('/api/exercise/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          type: 'challenge',
-          courseSlug: currentSlug || 'operations-et-variables-python',
-          courseTitle: topicLabel(currentSlug || 'operations-et-variables-python'),
-          challengeText: challenge,
-          submittedCode: learnerCode,
-          evaluation: evaluationJson ?? { evaluation: evaluationText },
-          status: solved ? 'success' : 'submitted',
+          challenge_description: exercise.challenge_json.enonce,
+          challenge_json: exercise.challenge_json,
+          challenge_tests: exercise.challenge_tests,
+          student_code: code,
+          difficulty: exercise.difficulty,
+        }),
+      });
+      if (!res.ok) {
+        const err = await res.json() as { detail?: string };
+        setChallengeError(toRuError(err.detail) || 'Ошибка при отправке.');
+        return;
+      }
+      const result = await res.json() as SubmitResult;
+      // Chrono : si pas déjà validé via execute, calculer maintenant
+      if (validationMs == null && challengeStartedAt.current != null) {
+        const elapsed = Date.now() - challengeStartedAt.current;
+        setValidationMs(elapsed);
+        setChallengeTimerMs(elapsed);
+      }
+      setSubmitResult(result);
+      setStats(result.stats);
+      setLastDifficultyChange(result.difficultyChange);
+      setLastLevelUp(result.levelUp);
+      setSidebarTab('tests');
+      setShowModal(true);
+    } catch {
+      setChallengeError('Сетевая ошибка при отправке.');
+    } finally {
+      setSubmitting(false);
+    }
+  }, [exercise, code, validationMs]);
+
+  const handleExecute = useCallback(async () => {
+    if (!exercise || !code.trim()) return;
+    setExecuting(true);
+    setChallengeError('');
+    setSidebarTab('tests');
+
+    try {
+      const res = await fetch('/api/exercise/execute', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          challenge_description: exercise.challenge_json.enonce,
+          challenge_tests: exercise.challenge_tests,
+          student_code: code,
         }),
       });
 
-      await trackEvent({
-        action: 'generator_exercise_submit',
-        feature: 'generator_exercise_page',
-        status: solved ? 'success' : 'error',
-        metadata: { topicSlug: currentSlug, solved },
-      });
+      if (!res.ok) {
+        const err = await res.json() as { detail?: string };
+        setChallengeError(toRuError(err.detail) || 'Ошибка во время запуска тестов.');
+        return;
+      }
+
+      const result = await res.json() as ExecuteResult;
+      const execTimeRaw = result.evaluationJson?.test_summary?.exec_time_ms;
+      const execTimeMs = typeof execTimeRaw === 'number' ? execTimeRaw : Number(execTimeRaw);
+      if (Number.isFinite(execTimeMs) && execTimeMs > 0) {
+        setPerformanceRunsMs((prev) => [...prev, execTimeMs].slice(-30));
+      }
+
+      // Valider si tous les tests passent → chrono
+      const elapsed = challengeStartedAt.current != null ? Date.now() - challengeStartedAt.current : null;
+      const isFullPass = result.evaluationJson?.test_summary?.all_passed === true || result.passed === true;
+      const enriched: ExecuteResult = {
+        ...result,
+        validationMs: (isFullPass && elapsed != null) ? elapsed : undefined,
+      };
+      if (isFullPass && elapsed != null) {
+        setValidationMs(elapsed);
+        setChallengeTimerMs(elapsed);
+      }
+      setExecuteResult(enriched);
     } catch {
-      setFeedback('Ошибка проверки решения. Попробуй еще раз.');
-      await trackEvent({
-        action: 'generator_exercise_submit',
-        feature: 'generator_exercise_page',
-        status: 'error',
-        metadata: { topicSlug: currentSlug },
-      });
+      setChallengeError('Сетевая ошибка во время запуска тестов.');
     } finally {
-      setLoadingSubmit(false);
+      setExecuting(false);
     }
-  }
+  }, [exercise, code]);
+
+  useEffect(() => {
+    if (challengeStartedAt.current == null || validationMs !== null) {
+      return;
+    }
+
+    const tick = () => {
+      if (challengeStartedAt.current != null) {
+        setChallengeTimerMs(Date.now() - challengeStartedAt.current);
+      }
+    };
+
+    tick();
+    const id = window.setInterval(tick, 1000);
+    return () => window.clearInterval(id);
+  }, [exercise, validationMs]);
+
+  useEffect(() => { loadStats(); }, [loadStats]);
+  useEffect(() => {
+    let cancelled = false;
+
+    async function bootstrapChallenge() {
+      setLoadingChallenge(true);
+      const loaded = await loadLatestChallenge();
+      if (!loaded && !cancelled) {
+        await generateChallenge();
+      }
+      if (!cancelled && loaded) {
+        setLoadingChallenge(false);
+      }
+    }
+
+    bootstrapChallenge();
+    return () => {
+      cancelled = true;
+    };
+  }, [loadLatestChallenge, generateChallenge]);
+
+  const currentExecMs = executeResult?.evaluationJson?.test_summary?.exec_time_ms ?? null;
+  const bestExecMs = performanceRunsMs.length > 0 ? Math.min(...performanceRunsMs) : null;
+  const avgExecMs = performanceRunsMs.length > 0
+    ? performanceRunsMs.reduce((sum, v) => sum + v, 0) / performanceRunsMs.length
+    : null;
+  const deltaVsBestMs = (currentExecMs != null && bestExecMs != null) ? currentExecMs - bestExecMs : null;
+  const deltaVsBestPct = (deltaVsBestMs != null && bestExecMs != null && bestExecMs > 0)
+    ? (deltaVsBestMs / bestExecMs) * 100
+    : null;
 
   return (
-    <div className="space-y-4">
-      <section className="border-2 border-[#1C293C] bg-[#FBFBF9] p-4 shadow-[4px_4px_0px_0px_#1C293C]">
-        <div className="flex items-center justify-between gap-2 flex-wrap">
-          <div>
-            <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7]">Feature 02</p>
-            <h1 className="text-2xl font-black text-[#1C293C] inline-flex items-center gap-2">
-              <FileCode2 className="h-5 w-5" /> Exercices personnalisés
-            </h1>
-            <p className="mt-1 text-sm font-medium text-[#1C293C]/65">
-              Aucun formulaire de thème ou mode: l&apos;exercice est généré automatiquement depuis tes données d&apos;apprentissage.
-            </p>
-          </div>
-          <Link
-            href="/generator"
-            className="inline-flex items-center gap-2 border-2 border-[#1C293C] bg-white px-3 py-1.5 text-xs font-black text-[#1C293C] shadow-[2px_2px_0px_0px_#1C293C]"
-          >
-            <ArrowLeft className="h-3.5 w-3.5" /> Retour hub
-          </Link>
+    <div className="flex flex-col h-full overflow-hidden bg-[#F5F5F0]">
+      <ExerciseTopBar
+        stats={stats}
+        loading={statsLoading}
+        difficultyChange={lastDifficultyChange}
+        levelUp={lastLevelUp}
+        concepts={exercise?.challenge_json?.concepts ?? []}
+      />
+
+      {challengeError && (
+        <div className="mt-2 border-2 border-[#DC2626] bg-red-50 px-3 py-2 text-sm text-[#DC2626] font-semibold flex items-center justify-between shrink-0">
+          <span>{challengeError}</span>
+          <button type="button" onClick={() => setChallengeError('')} className="text-[#DC2626] hover:opacity-70 ml-4">x</button>
         </div>
-      </section>
-
-      <section className="border-2 border-[#1C293C] bg-white p-4 shadow-[4px_4px_0px_0px_#1C293C] space-y-3">
-        <button
-          type="button"
-          onClick={generatePersonalizedExercise}
-          disabled={loadingGenerate}
-          className="inline-flex items-center gap-2 border-2 border-[#1C293C] bg-[#432DD7] px-4 py-2 text-sm font-black text-white shadow-[3px_3px_0px_0px_#1C293C] disabled:opacity-50"
-        >
-          {loadingGenerate ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
-          {loadingGenerate ? 'Генерация...' : 'Générer un exercice personnalisé'}
-        </button>
-
-        {currentSlug && (
-          <p className="text-xs font-semibold text-[#1C293C]/70">
-            Sujet choisi automatiquement: <span className="font-black text-[#1C293C]">{topicLabel(currentSlug)}</span>
-          </p>
-        )}
-
-        {error && <p className="text-sm font-bold text-red-700">{error}</p>}
-      </section>
-
-      {challenge && (
-        <section className="border-2 border-[#1C293C] bg-[#FBFBF9] p-4 shadow-[4px_4px_0px_0px_#1C293C] space-y-4">
-          <article className="border-2 border-[#1C293C] bg-white p-4 shadow-[3px_3px_0px_0px_#1C293C]">
-            <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7] inline-flex items-center gap-1.5">
-              <Lightbulb className="h-3.5 w-3.5" /> Exercice
-            </p>
-            <pre className="mt-2 whitespace-pre-wrap text-sm text-[#1C293C]/80 font-medium leading-relaxed">{challenge}</pre>
-            {challengeTests?.test_cases?.length ? (
-              <p className="mt-3 text-xs font-bold text-[#1C293C]/70 inline-flex items-center gap-1.5">
-                <CheckCircle2 className="h-3.5 w-3.5 text-[#432DD7]" />
-                {challengeTests.test_cases.length} tests automatiques
-              </p>
-            ) : null}
-          </article>
-
-          <article className="border-2 border-[#1C293C] bg-white p-4 shadow-[3px_3px_0px_0px_#1C293C]">
-            <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7] mb-2">Ta solution</p>
-            <textarea
-              value={learnerCode}
-              onChange={(event) => setLearnerCode(event.target.value)}
-              className="w-full min-h-[280px] border-2 border-[#1C293C] bg-[#FBFBF9] p-3 font-mono text-sm text-[#1C293C] shadow-[2px_2px_0px_0px_#1C293C]"
-              placeholder="Écris ta solution ici..."
-            />
-          </article>
-
-          <button
-            type="button"
-            onClick={submitSolution}
-            disabled={loadingSubmit || !learnerCode.trim()}
-            className="inline-flex items-center gap-2 border-2 border-[#1C293C] bg-[#FDC800] px-4 py-2 text-sm font-black text-[#1C293C] shadow-[3px_3px_0px_0px_#1C293C] disabled:opacity-50"
-          >
-            {loadingSubmit ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
-            {loadingSubmit ? 'Проверка...' : 'Vérifier ma solution'}
-          </button>
-        </section>
       )}
 
-      {feedback && (
-        <section className="border-2 border-[#1C293C] bg-[#1C293C] shadow-[4px_4px_0px_0px_#432DD7]">
-          <div className="px-3 py-2 border-b border-white/10 text-[10px] uppercase tracking-widest font-black text-white/70">Feedback</div>
-          <pre className="overflow-x-auto p-4 text-sm font-mono text-green-300 whitespace-pre-wrap max-h-[340px] overflow-y-auto">{feedback}</pre>
-        </section>
+      <div className="flex flex-1 min-h-0 flex-col xl:flex-row gap-2 overflow-hidden">
+        <div className="w-full xl:w-[380px] shrink-0 flex flex-col overflow-hidden">
+          <ExerciseSidebar
+            challengeJson={exercise?.challenge_json ?? null}
+            challengeTests={exercise?.challenge_tests ?? null}
+            activeTab={sidebarTab}
+            onTabChange={setSidebarTab}
+            loading={loadingChallenge}
+            executing={executing}
+            executeResult={executeResult}
+            validationMs={validationMs}
+            performanceSummary={{
+              runs: performanceRunsMs.length,
+              currentMs: currentExecMs,
+              bestMs: bestExecMs,
+              averageMs: avgExecMs,
+              deltaVsBestMs,
+              deltaVsBestPct,
+            }}
+          />
+        </div>
+
+        <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
+          <ExerciseEditor
+            code={code}
+            starterCode={exercise?.starter_code ?? ''}
+            executing={executing}
+            submitting={submitting}
+            submitted={submitResult !== null}
+            challengeTimerMs={challengeTimerMs}
+            isChallengeValidated={validationMs !== null}
+            executeTimeMs={executeResult?.evaluationJson?.test_summary?.exec_time_ms ?? null}
+            onCodeChange={setCode}
+            onExecute={handleExecute}
+            onSubmit={handleSubmit}
+            onNewChallenge={generateChallenge}
+            loadingChallenge={loadingChallenge}
+          />
+        </div>
+      </div>
+
+      {showModal && submitResult && (
+        <ExerciseResultModal
+          result={submitResult}
+          onClose={() => setShowModal(false)}
+          onNewChallenge={generateChallenge}
+        />
       )}
     </div>
   );

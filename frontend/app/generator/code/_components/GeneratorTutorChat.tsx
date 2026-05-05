@@ -1,8 +1,9 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import axios from 'axios';
-import { Loader2, Send, Volume2, VolumeX } from 'lucide-react';
+import { AlertTriangle, Code2, Loader2, RotateCcw, Send, Volume2, VolumeX, Zap } from 'lucide-react';
+import type { ConsoleLine } from './types';
 
 type ChatMessage = {
   id: string;
@@ -17,43 +18,52 @@ type GeneratorTutorChatProps = {
   challengeDescription: string;
   enonceText: string;
   solutionCode: string;
+  consoleLines?: ConsoleLine[];
   level: 'debutant' | 'intermediaire' | 'avance';
   onApplyToEditor: (code: string, mode: 'replace' | 'append') => void;
 };
 
-const apiBaseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8002';
+const apiBaseUrl = '/api/generator/code';
 const CHAT_TIMEOUT_PRIMARY_MS = 30000;
 const CHAT_TIMEOUT_FALLBACK_MS = 4500;
 
 const MODE_CONFIG: Record<TutorMode, { label: string; subtitle: string; color: string; quickReplies: string[] }> = {
   coach: {
-    label: 'Coach',
+    label: 'Коуч',
     color: '#432DD7',
-    subtitle: 'Explications directes et plan d action',
+    subtitle: 'Прямые объяснения и план действий',
     quickReplies: [
-      'Explique moi ce code etape par etape',
-      'Donne-moi une mini checklist pour valider ma solution',
+      'Объясни, что делает этот код',
+      'Как улучшить читаемость этого кода?',
     ],
   },
   socratique: {
-    label: 'Socratique',
+    label: 'Сократический',
     color: '#0B6E4F',
-    subtitle: 'Questions guidees pour raisonner par soi-meme',
+    subtitle: 'Наводящие вопросы для самостоятельного мышления',
     quickReplies: [
-      'Pose moi 3 questions pour trouver mon erreur',
-      'Aide-moi a deduire la logique sans donner la reponse',
+      'Почему здесь нужен именно такой подход?',
+      'Какая концепция Python здесь используется?',
     ],
   },
   creatif: {
-    label: 'Creatif',
+    label: 'Творческий',
     color: '#D97706',
-    subtitle: 'Analogies et mini defi pour memoriser',
+    subtitle: 'Аналогии и мини-задачи для запоминания',
     quickReplies: [
-      'Explique avec une analogie simple',
-      'Propose un mini defi de 5 minutes sur cet exercice',
+      'Объясни этот код на аналогии из жизни',
+      'Дай похожее задание для практики',
     ],
   },
 };
+
+const CODE_ACTIONS = [
+  { label: 'Анализ кода', icon: '🔍', prompt: 'Проанализируй мой текущий Python-код. Найди сильные стороны, потенциальные ошибки и предложи конкретные улучшения для редактора.' },
+  { label: 'Исправить ошибки', icon: '🔧', prompt: 'Исправь все ошибки в моем коде и дай полный исправленный код в Python-блоке, чтобы я мог сразу применить его в редакторе.' },
+  { label: 'Объяснить код', icon: '📖', prompt: 'Объясни мой код построчно, чтобы я понял каждую часть.' },
+  { label: 'Оптимизировать', icon: '⚡', prompt: 'Оптимизируй мой Python-код и дай улучшенную, более читаемую версию в Python-блоке для применения в редакторе.' },
+  { label: 'Добавить комментарии', icon: '💬', prompt: 'Добавь учебные комментарии в мой код и верни версию с комментариями в Python-блоке.' },
+];
 
 function uid() {
   return Math.random().toString(36).slice(2, 10);
@@ -79,13 +89,23 @@ function MessageContent({
 }) {
   const segments = text.split(/(```(?:\w*\n)?[\s\S]*?```)/g);
 
-  const normalizeText = (value: string): string => {
-    return value
-      .replace(/\*\*(.*?)\*\*/g, '$1')
-      .replace(/\r\n/g, '\n')
-      .replace(/\n{3,}/g, '\n\n')
-      .trim();
-  };
+  // Render a line of prose with inline **bold** and `code` spans
+  function renderInline(raw: string): React.ReactNode {
+    const parts = raw.split(/(`[^`]+`|\*\*[^*]+\*\*)/g);
+    return parts.map((part, i) => {
+      if (part.startsWith('`') && part.endsWith('`')) {
+        return (
+          <code key={i} className="rounded bg-[#F0EDFF] px-1 py-0.5 font-mono text-[11px] text-[#432DD7]">
+            {part.slice(1, -1)}
+          </code>
+        );
+      }
+      if (part.startsWith('**') && part.endsWith('**')) {
+        return <strong key={i} className="font-bold text-[#1C293C]">{part.slice(2, -2)}</strong>;
+      }
+      return part;
+    });
+  }
 
   return (
     <div className="space-y-1.5 text-[12px] leading-relaxed">
@@ -112,14 +132,14 @@ function MessageContent({
                     onClick={() => onApplyToEditor(codeContent, 'replace')}
                     className="border border-[#1C293C]/30 px-2 py-1 text-[10px] font-bold text-[#1C293C] hover:bg-[#FDC800]"
                   >
-                    Remplacer dans l editeur
+                    Заменить в редакторе
                   </button>
                   <button
                     type="button"
                     onClick={() => onApplyToEditor(codeContent, 'append')}
                     className="border border-[#1C293C]/30 px-2 py-1 text-[10px] font-bold text-[#1C293C] hover:bg-[#FDC800]"
                   >
-                    Ajouter dans l editeur
+                    Добавить в редактор
                   </button>
                 </div>
               )}
@@ -127,10 +147,13 @@ function MessageContent({
           );
         }
 
-        const cleaned = normalizeText(segment);
-        if (!cleaned) return null;
+        const normalized = segment
+          .replace(/\r\n/g, '\n')
+          .replace(/\n{3,}/g, '\n\n')
+          .trim();
+        if (!normalized) return null;
 
-        const lines = cleaned.split('\n');
+        const lines = normalized.split('\n');
 
         return (
           <div key={index} className="space-y-1">
@@ -140,27 +163,43 @@ function MessageContent({
                 return <div key={`${index}-${lineIndex}`} className="h-1" />;
               }
 
-              const numbered = trimmed.match(/^(\d+)\.\s+(.*)$/);
+              // Numbered list: "1. text" or "Erreur 1 : text"
+              const numbered = trimmed.match(/^(\d+)[\.\):]\s+(.*)$/) ||
+                               trimmed.match(/^(Erreur|Etape|Etape)\s+(\d+)\s*[:\-]\s*(.*)$/i);
               if (numbered) {
+                const label = numbered[1];
+                const rest = numbered[2] ?? numbered[3] ?? '';
                 return (
                   <p key={`${index}-${lineIndex}`} className="text-[12px] text-[#1C293C]">
-                    <span className="font-semibold text-[#432DD7]">{numbered[1]}.</span> {numbered[2]}
+                    <strong className="font-bold text-[#432DD7]">{label}.</strong>{' '}
+                    {renderInline(rest)}
                   </p>
                 );
               }
 
-              const dashed = trimmed.match(/^[-•]\s+(.*)$/);
+              // Dashed / bullet list
+              const dashed = trimmed.match(/^[-•→]\s+(.*)$/);
               if (dashed) {
                 return (
-                  <p key={`${index}-${lineIndex}`} className="text-[12px] text-[#1C293C]">
-                    <span className="font-semibold text-[#432DD7]">-</span> {dashed[1]}
+                  <p key={`${index}-${lineIndex}`} className="text-[12px] text-[#1C293C] flex gap-1.5">
+                    <span className="font-bold text-[#432DD7] shrink-0">–</span>
+                    <span>{renderInline(dashed[1])}</span>
+                  </p>
+                );
+              }
+
+              // Section header: line ending with ':' and no inline code
+              if (trimmed.endsWith(':') && !trimmed.includes('`') && trimmed.length < 60) {
+                return (
+                  <p key={`${index}-${lineIndex}`} className="text-[11px] font-black uppercase tracking-widest text-[#432DD7] pt-1">
+                    {trimmed.slice(0, -1)}
                   </p>
                 );
               }
 
               return (
                 <p key={`${index}-${lineIndex}`} className="text-[12px] text-[#1C293C]">
-                  {trimmed}
+                  {renderInline(trimmed)}
                 </p>
               );
             })}
@@ -190,6 +229,7 @@ export default function GeneratorTutorChat({
   challengeDescription,
   enonceText,
   solutionCode,
+  consoleLines = [],
   level,
   onApplyToEditor,
 }: GeneratorTutorChatProps) {
@@ -198,18 +238,25 @@ export default function GeneratorTutorChat({
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [step, setStep] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [resolvedApiBase, setResolvedApiBase] = useState<string | null>(null);
   const [isSpeaking, setIsSpeaking] = useState<string | null>(null);
   const [activeTutorMode, setActiveTutorMode] = useState<TutorMode>('coach');
   const endRef = useRef<HTMLDivElement>(null);
   const initKeyRef = useRef<string>('');
 
+  // Derive last terminal output from consoleLines
+  const { consoleOutput, hasErrors } = useMemo(() => {
+    const relevant = consoleLines.filter((l) => l.kind === 'stdout' || l.kind === 'stderr');
+    const output = relevant.map((l) => l.text).join('').trim().slice(0, 1200);
+    const errors = consoleLines.some((l) => l.kind === 'stderr' && l.text.trim().length > 0);
+    return { consoleOutput: output, hasErrors: errors };
+  }, [consoleLines]);
+
   // Keep context stable to avoid re-initializing chat at each code keystroke.
   const contextKey = useMemo(
-    () => `${challengeDescription}\n---\n${enonceText}`,
-    [challengeDescription, enonceText],
+    () => `${enonceText}\n---\n${solutionCode.slice(0, 2000)}`,
+    [enonceText, solutionCode],
   );
-  const hasContext = Boolean(challengeDescription.trim() || enonceText.trim() || solutionCode.trim());
+  const hasContext = Boolean(enonceText.trim() || solutionCode.trim());
   const lastAiMessage = useMemo(
     () => [...messages].reverse().find((msg) => msg.role === 'ai' && msg.text !== '__typing__') ?? null,
     [messages],
@@ -228,42 +275,18 @@ export default function GeneratorTutorChat({
       }
 
       if (err.code === 'ECONNABORTED') {
-        return 'Le tuteur met trop de temps a repondre. Reessaie dans quelques secondes.';
+        return 'Наставник отвечает слишком долго. Попробуй снова через несколько секунд.';
       }
 
       if (!err.response) {
-        return 'Backend indisponible pour le chat. Verifie que l API tourne.';
+        return 'API чата недоступен. Проверь маршруты Next /api/generator/code.';
       }
     }
-    return 'Erreur de connexion. Impossible de parler au tuteur pour le moment.';
+    return 'Ошибка соединения. Сейчас не удается связаться с наставником.';
   }
 
   async function postInteractiveDebug(payload: Record<string, unknown>) {
-    const candidates = [
-      resolvedApiBase,
-      apiBaseUrl,
-      'http://127.0.0.1:8002',
-      'http://localhost:8002',
-      'http://127.0.0.1:8000',
-      'http://localhost:8000',
-    ].filter((value): value is string => Boolean(value));
-
-    const uniqueCandidates = [...new Set(candidates)];
-    let lastError: unknown = null;
-
-    for (let i = 0; i < uniqueCandidates.length; i += 1) {
-      const base = uniqueCandidates[i];
-      const timeout = i === 0 ? CHAT_TIMEOUT_PRIMARY_MS : CHAT_TIMEOUT_FALLBACK_MS;
-      try {
-        const res = await axios.post(`${base}/interactive-debug/`, payload, { timeout });
-        setResolvedApiBase(base);
-        return res;
-      } catch (err) {
-        lastError = err;
-      }
-    }
-
-    throw lastError;
+    return axios.post(`${apiBaseUrl}/interactive-debug`, payload, { timeout: CHAT_TIMEOUT_PRIMARY_MS });
   }
 
   useEffect(() => {
@@ -287,13 +310,13 @@ export default function GeneratorTutorChat({
     setSessionId(null);
     setStep(0);
     // No automatic assistant greeting: the learner starts the conversation.
-  }, [active, challengeDescription, contextKey, enonceText, hasContext, level, solutionCode]);
+  }, [active, contextKey, hasContext]);
 
   async function sendMessage(overrideText?: string) {
     const text = (overrideText ?? input).trim();
     if (!text || loading || !hasContext) return;
 
-    const wantsEditorInsert = /(ajoute|insere|insérer|mets|met)\b.*(editeur|éditeur)/i.test(text);
+    const wantsEditorInsert = /(ajoute|insere|insérer|mets|met|добавь|вставь|вставить|помести)\b.*(editeur|éditeur|редактор)/i.test(text);
     if (wantsEditorInsert && lastAssistantCode) {
       setInput('');
       setMessages((prev) => [
@@ -302,7 +325,7 @@ export default function GeneratorTutorChat({
         {
           id: uid(),
           role: 'ai',
-          text: 'C est fait. J ai ajoute le dernier bloc de code dans l editeur. Souhaites-tu que je remplace tout le code a la place ?',
+          text: 'Готово. Я добавил последний блок кода в редактор. Хочешь, чтобы я полностью заменил код?',
         },
       ]);
       onApplyToEditor(lastAssistantCode, 'append');
@@ -324,27 +347,25 @@ export default function GeneratorTutorChat({
       const nextStep = sessionId ? step + 1 : 0;
       const res = await postInteractiveDebug({
         code: solutionCode,
-        level,
-        step: nextStep,
         student_answer: text,
         session_id: sessionId,
-        challenge_description: challengeDescription || enonceText,
+        challenge_description: enonceText,
+        console_output: consoleOutput || undefined,
         pedagogy_context: {
           tutorMode: true,
-
-          courseTitle: 'Assistant exercice',
-          courseDescription: enonceText || challengeDescription,
-          pedagogicalStyle: 'Tutorat interactif, progressif et centre sur la comprehension',
-          aiTone: 'Tuteur academique clair, motivant et creatif',
-          targetAudience: 'Etudiant en progression vers l autonomie',
-          responseLanguage: 'francais simple',
-          responseStructure: 'resume,explication,action,question',
-          askCheckpointQuestion: true,
-          innovationGoal: 'apprentissage actif et memorisation durable',
+          courseTitle: 'Помощник по коду Python',
+          courseDescription: enonceText,
+          currentCode: solutionCode,
+          pedagogicalStyle: 'Объяснение кода, уточнение концепций, помощь в понимании',
+          aiTone: 'Понятный, прямой, учебный наставник',
+          targetAudience: 'Изучающий Python, который хочет понять сгенерированный код',
+          responseLanguage: 'простой русский',
+          responseStructure: 'кратко,объяснение,действие,вопрос',
+          askCheckpointQuestion: false,
         },
       });
 
-      const aiText = String(res.data?.response ?? 'Je n ai pas recu de reponse utile.');
+      const aiText = String(res.data?.response ?? 'Я не получил полезного ответа.');
       const chosenMode = res.data?.tutor_strategy as TutorMode | undefined;
       setMessages((prev) => prev.map((msg) => (msg.id === aiId ? { ...msg, text: aiText } : msg)));
       setSessionId(res.data?.session_id ?? sessionId);
@@ -374,7 +395,7 @@ export default function GeneratorTutorChat({
 
     window.speechSynthesis.cancel();
     const utter = new SpeechSynthesisUtterance(stripCodeForTts(text));
-    utter.lang = 'fr-FR';
+    utter.lang = 'ru-RU';
     utter.rate = 1;
     utter.pitch = 1;
     utter.onend = () => setIsSpeaking(null);
@@ -387,7 +408,7 @@ export default function GeneratorTutorChat({
     return (
       <div className="border-2 border-dashed border-[#1C293C]/25 bg-white p-6 text-center">
         <p className="text-xs font-medium text-[#1C293C]/50">
-          Genere d abord un exercice et du code pour ouvrir le chat pedagogique.
+          Сначала сгенерируй код во вкладке «Условие», чтобы использовать чат ИИ.
         </p>
       </div>
     );
@@ -395,10 +416,11 @@ export default function GeneratorTutorChat({
 
   return (
     <div className="border border-[#1C293C]/25 bg-white flex flex-col">
-      <div className="border-b border-[#1C293C]/15 px-3 py-2 flex items-center justify-between">
-        <div>
+      {/* Header */}
+      <div className="border-b border-[#1C293C]/15 px-3 py-2 flex items-center justify-between gap-2">
+        <div className="min-w-0">
           <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7]">
-            Chat IA pedagogique
+            Чат ИИ — Объяснение кода
           </p>
           <div className="mt-1 flex items-center gap-1.5">
             <span
@@ -410,18 +432,78 @@ export default function GeneratorTutorChat({
             <span className="text-[10px] text-[#1C293C]/50">{MODE_CONFIG[activeTutorMode].subtitle}</span>
           </div>
         </div>
-        <span className="text-[10px] font-bold text-[#1C293C]/45">
-          {messages.filter((message) => message.role === 'user').length > 0
-            ? `${messages.filter((message) => message.role === 'user').length} messages`
-            : 'Nouvelle session'}
-        </span>
+        <div className="flex items-center gap-1.5 shrink-0">
+          <button
+            type="button"
+            onClick={() => void sendMessage('Проанализируй мой текущий Python-код. Найди сильные стороны, потенциальные ошибки и предложи конкретные улучшения в редакторе.')}
+            disabled={loading || !hasContext}
+            className="inline-flex items-center gap-1 border border-[#432DD7] bg-white px-2 py-1 text-[10px] font-black text-[#432DD7] hover:bg-[#432DD7] hover:text-white transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+            title="Проанализировать текущий код в редакторе"
+          >
+            <Zap className="h-3 w-3" /> Анализ
+          </button>
+          {messages.length > 0 && (
+            <button
+              type="button"
+              onClick={() => { setMessages([]); setSessionId(null); setStep(0); initKeyRef.current = ''; }}
+              className="border border-[#1C293C]/20 bg-white p-1 text-[#1C293C]/50 hover:bg-red-50 hover:text-red-600 transition-colors"
+              title="Сбросить диалог"
+            >
+              <RotateCcw className="h-3 w-3" />
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* Error banner */}
+      {hasErrors && (
+        <div className="border-b border-orange-200 bg-orange-50 px-3 py-2 flex items-center justify-between gap-2">
+          <div className="flex items-center gap-1.5">
+            <AlertTriangle className="h-3.5 w-3.5 text-orange-500 shrink-0" />
+            <span className="text-[11px] font-semibold text-orange-700">В терминале обнаружены ошибки</span>
+          </div>
+          <button
+            type="button"
+            onClick={() => void sendMessage('Мой код выдает ошибки в терминале. Проанализируй эти ошибки и дай полный исправленный код в Python-блоке для прямого применения в редакторе.')}
+            disabled={loading}
+            className="inline-flex items-center gap-1 border border-orange-400 bg-orange-100 px-2 py-1 text-[10px] font-black text-orange-700 hover:bg-orange-200 transition-colors disabled:opacity-40"
+          >
+            <Code2 className="h-3 w-3" /> Исправить через ИИ
+          </button>
+        </div>
+      )}
+
+      {/* Code action buttons */}
+      <div className="border-b border-[#1C293C]/10 bg-[#FBFBF9] px-2.5 py-2">
+        <div className="flex items-center gap-1.5 flex-wrap">
+          {CODE_ACTIONS.map((action) => (
+            <button
+              key={action.label}
+              type="button"
+              onClick={() => void sendMessage(action.prompt)}
+              disabled={loading || !hasContext}
+              className="inline-flex items-center gap-1 border border-[#1C293C]/20 bg-white px-2 py-1 text-[10px] font-semibold text-[#1C293C] hover:bg-[#FDC800] hover:border-[#1C293C] transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+            >
+              <span>{action.icon}</span> {action.label}
+            </button>
+          ))}
+        </div>
       </div>
 
       <div className="max-h-[58vh] min-h-[360px] overflow-y-auto p-2.5 space-y-2">
         {!messages.length && (
-          <div className="border border-[#1C293C]/15 bg-[#FBFBF9] p-2.5">
-            <p className="text-[11px] font-semibold text-[#1C293C]/70">
-              Commence par poser ta premiere question sur l enonce ou le code.
+          <div className="border border-[#1C293C]/15 bg-[#FBFBF9] p-3 space-y-1.5">
+            <p className="text-[11px] font-bold text-[#1C293C]/70">
+              Что можно сделать здесь:
+            </p>
+            <p className="text-[11px] text-[#1C293C]/60">
+              • Нажми <strong>Анализ</strong> для быстрого разбора сгенерированного кода.
+            </p>
+            <p className="text-[11px] text-[#1C293C]/60">
+              • Задай вопрос по коду, концепции Python или попроси вариант решения.
+            </p>
+            <p className="text-[11px] text-[#1C293C]/60">
+              • Когда ИИ предложит код, нажми <strong>"Заменить в редакторе"</strong>, чтобы применить сразу.
             </p>
           </div>
         )}
@@ -443,10 +525,10 @@ export default function GeneratorTutorChat({
                         type="button"
                         onClick={() => speak(message.text, message.id)}
                         className="inline-flex items-center gap-1 border border-[#1C293C]/20 bg-white px-1.5 py-1 text-[10px] font-semibold text-[#1C293C] hover:bg-[#FDC800]"
-                        title={isSpeaking === message.id ? 'Arreter la lecture audio' : 'Lire en audio'}
+                        title={isSpeaking === message.id ? 'Остановить озвучку' : 'Озвучить'}
                       >
                         {isSpeaking === message.id ? <VolumeX className="h-3 w-3" /> : <Volume2 className="h-3 w-3" />}
-                        {isSpeaking === message.id ? 'Stop' : 'Audio'}
+                        {isSpeaking === message.id ? 'Стоп' : 'Аудио'}
                       </button>
                     </div>
                     <MessageContent text={message.text} onApplyToEditor={onApplyToEditor} />
@@ -461,7 +543,7 @@ export default function GeneratorTutorChat({
           </div>
         ))}
 
-        {!loading && (
+        {!loading && messages.length > 0 && (
           <div className="rounded-sm border border-[#1C293C]/15 bg-white p-2">
             <div className="flex flex-wrap gap-1.5">
               {MODE_CONFIG[activeTutorMode].quickReplies.map((reply) => (
@@ -492,7 +574,7 @@ export default function GeneratorTutorChat({
               void sendMessage();
             }
           }}
-          placeholder="Ex: Explique-moi pourquoi cette solution fonctionne"
+          placeholder="Например: Объясни, почему это решение работает"
           className="flex-1 border border-[#1C293C]/30 bg-white px-3 py-2 text-sm font-medium text-[#1C293C] placeholder:text-[#1C293C]/30 focus:border-[#432DD7] focus:outline-none transition-colors"
           disabled={loading}
         />
@@ -511,8 +593,22 @@ export default function GeneratorTutorChat({
 
 function stripCodeForTts(text: string): string {
   return text
-    .replace(/```[\s\S]*?```/g, '[code]')
-    .replace(/`[^`]+`/g, '')
+    // Remove fenced code blocks entirely (don't say "code")
+    .replace(/```[\s\S]*?```/g, '.')
+    // Replace inline code with just its content, no backticks
+    .replace(/`([^`]+)`/g, '$1')
+    // Remove bold markers
     .replace(/\*\*([^*]+)\*\*/g, '$1')
+    // Remove italic markers
+    .replace(/\*([^*]+)\*/g, '$1')
+    // Remove markdown headers
+    .replace(/^#{1,4}\s+/gm, '')
+    // Remove list markers
+    .replace(/^[-•→]\s+/gm, '')
+    // Remove trailing colons on section headers (avoid saying "colon")
+    .replace(/:\s*$/gm, '.')
+    // Collapse multiple punctuation/spaces
+    .replace(/\.{2,}/g, '.')
+    .replace(/\s{2,}/g, ' ')
     .trim();
 }

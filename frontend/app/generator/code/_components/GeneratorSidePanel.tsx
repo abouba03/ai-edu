@@ -1,15 +1,19 @@
 'use client';
 
-import { MessageSquareText, Sparkles, Terminal } from 'lucide-react';
+import { Loader2, MessageSquareText, Pencil, Send, Sparkles, Terminal } from 'lucide-react';
 import GeneratorTerminalPanel from './GeneratorTerminalPanel';
 import GeneratorTutorChat from './GeneratorTutorChat';
+import { useState } from 'react';
 import type { ConsoleLine, LeftPanelTab } from './types';
 
 type GeneratorSidePanelProps = {
   activeTab: LeftPanelTab;
   onTabChange: (tab: LeftPanelTab) => void;
-  enonceText: string;
-  constraints: string[];
+  problemText: string;
+  onProblemTextChange: (value: string) => void;
+  onGenerateCode: () => void;
+  loadingCode: boolean;
+  codeGenerated: boolean;
   challengeDescription: string;
   solutionCode: string;
   level: 'debutant' | 'intermediaire' | 'avance';
@@ -27,8 +31,11 @@ type GeneratorSidePanelProps = {
 export default function GeneratorSidePanel({
   activeTab,
   onTabChange,
-  enonceText,
-  constraints,
+  problemText,
+  onProblemTextChange,
+  onGenerateCode,
+  loadingCode,
+  codeGenerated,
   challengeDescription,
   solutionCode,
   level,
@@ -42,62 +49,92 @@ export default function GeneratorSidePanel({
   onClearConsole,
   onApplyToEditor,
 }: GeneratorSidePanelProps) {
-  const fallbackConstraints = [
-    'Ecrire du Python executable.',
-    'Respecter la signature attendue.',
-    'Traiter les cas limites.',
-    'Produire un code lisible et testable.',
-  ];
+  const [isEditing, setIsEditing] = useState(true);
+
+  const isLocked = codeGenerated && !isEditing && !loadingCode;
+
+  function handleGenerate() {
+    setIsEditing(false);
+    onGenerateCode();
+  }
 
   return (
-    <aside className="xl:col-span-5 border-2 border-[#1C293C] bg-[#FBFBF9] shadow-[4px_4px_0px_0px_#1C293C] p-3 space-y-3">
-      <div className="border-2 border-[#1C293C] bg-white min-h-[380px] overflow-hidden">
-        <div className="border-b-2 border-[#1C293C] bg-[#FBFBF9] p-2">
-          <div className="flex items-center gap-2 flex-wrap">
+    <aside className="xl:col-span-5 h-full min-h-0 border-2 border-[#1C293C] bg-[#FBFBF9] shadow-[4px_4px_0px_0px_#1C293C] p-2 space-y-2 overflow-hidden">
+      <div className="border-2 border-[#1C293C] bg-white h-full min-h-0 overflow-hidden flex flex-col">
+        <div className="border-b-2 border-[#1C293C] bg-[#FBFBF9] p-1.5">
+          <div className="grid grid-cols-3 gap-1">
             <button
               type="button"
               onClick={() => onTabChange('enonce')}
-              className={`inline-flex items-center gap-1.5 border-2 px-3 py-1.5 text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === 'enonce' ? 'border-[#1C293C] bg-[#FDC800] text-[#1C293C]' : 'border-[#1C293C]/20 bg-white text-[#1C293C]/60'}`}
+              className={`inline-flex items-center justify-center gap-1 border px-2 py-1 text-[9px] font-black uppercase tracking-[0.12em] transition-all ${activeTab === 'enonce' ? 'border-[#1C293C] bg-[#FDC800] text-[#1C293C] shadow-[1px_1px_0px_0px_#1C293C]' : 'border-[#1C293C]/20 bg-white text-[#1C293C]/60'}`}
             >
-              <Sparkles className="h-3 w-3" /> Enonce
+              <Sparkles className="h-3 w-3" /> Условие
             </button>
             <button
               type="button"
               onClick={() => onTabChange('terminal')}
-              className={`inline-flex items-center gap-1.5 border-2 px-3 py-1.5 text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === 'terminal' ? 'border-[#1C293C] bg-[#1C293C] text-white' : 'border-[#1C293C]/20 bg-white text-[#1C293C]/60'}`}
+              className={`inline-flex items-center justify-center gap-1 border px-2 py-1 text-[9px] font-black uppercase tracking-[0.12em] transition-all ${activeTab === 'terminal' ? 'border-[#1C293C] bg-[#1C293C] text-white shadow-[1px_1px_0px_0px_#1C293C]' : 'border-[#1C293C]/20 bg-white text-[#1C293C]/60'}`}
             >
-              <Terminal className="h-3 w-3" /> Terminal Python
+              <Terminal className="h-3 w-3" /> Терминал
             </button>
             <button
               type="button"
               onClick={() => onTabChange('chat')}
-              className={`inline-flex items-center gap-1.5 border-2 px-3 py-1.5 text-[10px] font-black uppercase tracking-widest transition-all ${activeTab === 'chat' ? 'border-[#1C293C] bg-[#432DD7] text-white' : 'border-[#1C293C]/20 bg-white text-[#1C293C]/60'}`}
+              className={`inline-flex items-center justify-center gap-1 border px-2 py-1 text-[9px] font-black uppercase tracking-[0.12em] transition-all ${activeTab === 'chat' ? 'border-[#1C293C] bg-[#432DD7] text-white shadow-[1px_1px_0px_0px_#1C293C]' : 'border-[#1C293C]/20 bg-white text-[#1C293C]/60'}`}
             >
-              <MessageSquareText className="h-3 w-3" /> Chat IA
+              <MessageSquareText className="h-3 w-3" /> Чат ИИ
             </button>
           </div>
         </div>
 
         {activeTab === 'enonce' && (
-          <div className="max-h-[58vh] overflow-y-auto p-3 pr-2">
-            <div className="space-y-2">
-              <div className="border-2 border-[#1C293C] bg-[#FBFBF9] p-2.5">
-                <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7]">Enonce</p>
-                <pre className="mt-1 whitespace-pre-wrap text-[12px] leading-relaxed text-[#1C293C]">{enonceText}</pre>
-              </div>
-
-              <div className="border-2 border-[#1C293C] bg-[#FBFBF9] p-2.5">
-                <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7]">Contraintes</p>
-                {(constraints.length > 0 ? constraints : fallbackConstraints).map((item, index) => (
-                  <p key={`${item}-${index}`} className="mt-1 text-[12px] text-[#1C293C]">{index + 1}. {item}</p>
-                ))}
-              </div>
+          <div className="p-2.5 flex flex-col gap-2 h-full min-h-0 overflow-y-auto">
+            <div>
+              <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7] mb-1.5">Твое условие</p>
+              {isLocked ? (
+                <div className="relative w-full min-h-[280px] border-2 border-[#1C293C]/40 bg-[#F5F5F0] p-3">
+                  <pre className="text-[12px] text-[#1C293C]/70 leading-relaxed whitespace-pre-wrap font-sans">{problemText}</pre>
+                  <div className="absolute top-2 right-2">
+                    <span className="text-[9px] font-black uppercase tracking-widest border border-[#1C293C]/30 bg-white px-1.5 py-0.5 text-[#1C293C]/50">
+                      Заблокировано
+                    </span>
+                  </div>
+                </div>
+              ) : (
+                <textarea
+                  value={problemText}
+                  onChange={(e) => onProblemTextChange(e.target.value)}
+                  disabled={loadingCode}
+                  placeholder="Вставь или напиши здесь условие задания по Python..."
+                  className="w-full min-h-[280px] border-2 border-[#1C293C] bg-[#FBFBF9] p-3 text-[12px] text-[#1C293C] leading-relaxed resize-y focus:outline-none focus:ring-0 disabled:opacity-50"
+                />
+              )}
             </div>
+            {isLocked ? (
+              <button
+                type="button"
+                onClick={() => setIsEditing(true)}
+                className="inline-flex items-center justify-center gap-2 border-2 border-[#1C293C]/40 bg-white px-4 py-2 text-xs font-black text-[#1C293C]/70 shadow-[2px_2px_0px_0px_#1C293C]/20 hover:border-[#1C293C] hover:text-[#1C293C] hover:shadow-[2px_2px_0px_0px_#1C293C] transition-all duration-100"
+              >
+                <Pencil className="h-3.5 w-3.5" />
+                Изменить условие
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={handleGenerate}
+                disabled={loadingCode || !problemText.trim()}
+                className="inline-flex items-center justify-center gap-2 border-2 border-[#1C293C] bg-[#FDC800] px-4 py-2 text-xs font-black text-[#1C293C] shadow-[2px_2px_0px_0px_#1C293C] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-100 disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                {loadingCode ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Send className="h-3.5 w-3.5" />}
+                {loadingCode ? 'Генерация кода...' : 'Сгенерировать код'}
+              </button>
+            )}
           </div>
         )}
 
         {activeTab === 'terminal' && (
-          <div className="p-3">
+            <div className="p-2.5 h-full min-h-0">
             <GeneratorTerminalPanel
               consoleLines={consoleLines}
               runningConsole={runningConsole}
@@ -107,19 +144,20 @@ export default function GeneratorSidePanel({
               onTerminalKeyDown={onTerminalKeyDown}
               onStopExecution={onStopExecution}
               onClearConsole={onClearConsole}
-              minBodyHeightClassName="min-h-[380px]"
-              maxBodyHeightClassName="max-h-[58vh]"
+                minBodyHeightClassName="min-h-[260px]"
+                maxBodyHeightClassName="max-h-[52vh]"
             />
           </div>
         )}
 
         {activeTab === 'chat' && (
-          <div className="p-3">
+          <div className="p-2.5 h-full min-h-0 overflow-hidden">
             <GeneratorTutorChat
               active={activeTab === 'chat'}
               challengeDescription={challengeDescription}
-              enonceText={enonceText}
+              enonceText={problemText}
               solutionCode={solutionCode}
+              consoleLines={consoleLines}
               level={level}
               onApplyToEditor={onApplyToEditor}
             />
