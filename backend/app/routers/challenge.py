@@ -801,7 +801,7 @@ def _test_feedback_from_suite(student_code: str, suite: dict[str, Any], prompt_v
 
 @router.post("/submit-challenge/")
 async def submit_challenge(req: SubmissionRequest):
-    response_language = get_response_language(req.pedagogy_context)
+    response_language = get_response_language(req.pedagogy_context, default="русский простой")
 
     if not req.student_code.strip() or len(req.student_code.strip()) < 6:
         return {
@@ -923,7 +923,7 @@ async def submit_challenge(req: SubmissionRequest):
 @router.post("/generate-challenge/")
 async def generate_challenge(req: ChallengeRequest):
     pedagogy_block = build_pedagogy_block(req.pedagogy_context)
-    response_language = get_response_language(req.pedagogy_context)
+    response_language = get_response_language(req.pedagogy_context, default="русский простой")
     title = (req.challenge_topic or "").strip() or str((req.pedagogy_context or {}).get("courseTitle") or "").strip()
     description = (req.course_description or "").strip() or str((req.pedagogy_context or {}).get("courseDescription") or "").strip()
     topic = f"{title}. Description: {description}" if description else title

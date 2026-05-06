@@ -122,7 +122,7 @@ function UserCard({ name, level, loaded }: { name: string; level: string; loaded
 export default function MainLayout({ children, initialUser }: MainLayoutProps) {
   const { isSignedIn } = useAuth();
   const pathname = usePathname();
-  const isGeneratorFocusPage = pathname.startsWith('/generator/exercise') || pathname.startsWith('/generator/code');
+  const isGeneratorFocusPage = pathname.startsWith('/generator/exercise') || pathname.startsWith('/generator/code') || pathname.includes('/mini-challenge') || pathname === '/tuteur';
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const userName = useMemo(() => initialUser?.name ?? 'Étudiant', [initialUser]);
   const userLevel = useMemo(() => initialUser?.level ?? 'débutant', [initialUser]);

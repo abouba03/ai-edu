@@ -28,5 +28,33 @@
     "totalQuestions": 10,
     "passed": false,
     "createdAt": "2026-04-15T13:06:05.330Z"
+  },
+  {
+    "type": "quiz",
+    "clerkId": "user_2xBTe5fPcaSz2XWEWKiCil9mw9D",
+    "courseSlug": "operations-et-variables-python",
+    "courseTitle": "Переменные и Операции",
+    "score": 8,
+    "totalQuestions": 10,
+    "passed": true,
+    "createdAt": "2026-05-06T08:14:44.384Z"
+  },
+  {
+    "type": "challenge",
+    "clerkId": "user_2xBTe5fPcaSz2XWEWKiCil9mw9D",
+    "courseSlug": "listes-strings-slices",
+    "courseTitle": "Списки и Строки",
+    "passed": true,
+    "status": "success",
+    "createdAt": "2026-05-06T10:05:35.608Z"
+  },
+  {
+    "type": "challenge",
+    "clerkId": "user_2xBTe5fPcaSz2XWEWKiCil9mw9D",
+    "courseSlug": "listes-strings-slices",
+    "courseTitle": "Списки и Строки",
+    "passed": true,
+    "status": "success",
+    "createdAt": "2026-05-06T10:07:36.662Z"
   }
 ]

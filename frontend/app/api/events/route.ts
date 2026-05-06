@@ -9,6 +9,8 @@ type EventPayload = {
   metadata?: unknown
 }
 
+export const maxDuration = 5; // abort after 5s, never hang for 20s
+
 export async function POST(req: Request) {
   const isAuthDisabled = process.env.NEXT_PUBLIC_DISABLE_AUTH === "true"
 

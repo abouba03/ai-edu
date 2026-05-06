@@ -4,9 +4,21 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useParams, useSearchParams } from 'next/navigation';
 import { useAuth } from '@clerk/nextjs';
-import Editor, { loader } from '@monaco-editor/react';
+import dynamic from 'next/dynamic';
 
-loader.config({ paths: { vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.52.2/min/vs' } });
+const Editor = dynamic(() => import('@monaco-editor/react'), { ssr: false });
+
+let monacoLoaderConfigured = false;
+const configureMonacoLoader = async () => {
+  if (monacoLoaderConfigured) return;
+  monacoLoaderConfigured = true;
+  try {
+    const monacoModule = await import('@monaco-editor/react');
+    monacoModule.loader.config({
+      paths: { vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.52.2/min/vs' },
+    });
+  } catch {}
+};
 import axios from 'axios';
 import { AlertTriangle, ArrowLeft, ChevronLeft, ChevronRight, Code2, Lightbulb, PlayCircle } from 'lucide-react';
 import { trackEvent } from '@/lib/event-tracker';
@@ -358,6 +370,7 @@ export default function CourseMiniChallengePage() {
         course_description: courseDescription,
         pedagogy_context: {
           level: levelToQuiz(courseLevel),
+          responseLanguage: 'русский простой',
           progressPercent,
           aiTone: 'Coach challengeant bienveillant',
           pedagogicalStyle: 'Challenge contextualisé au cours avec format coding challenge',
@@ -473,6 +486,7 @@ export default function CourseMiniChallengePage() {
         challenge_tests: challengeTests,
         pedagogy_context: {
           level: levelToQuiz(courseLevel),
+          responseLanguage: 'русский простой',
           progressPercent,
           aiTone: 'Évaluateur pédagogique précis',
           pedagogicalStyle: 'Correction explicative orientée progression',
@@ -616,6 +630,7 @@ export default function CourseMiniChallengePage() {
         max_iterations: 3,
         pedagogy_context: {
           level: levelToQuiz(courseLevel),
+          responseLanguage: 'русский простой',
           pedagogicalStyle: 'Correction avec explication simple et pédagogique',
           aiTone: 'Tuteur clair et pratique',
           targetAudience: formationName,
@@ -693,6 +708,7 @@ export default function CourseMiniChallengePage() {
   }
 
   useEffect(() => {
+    configureMonacoLoader();
     generateMiniChallenge();
   }, []);
 
@@ -846,7 +862,17 @@ export default function CourseMiniChallengePage() {
         continue;
       }
 
+      if (lower.startsWith('статус:') || lower.startsWith('статус :')) {
+        status = line.split(':').slice(1).join(':').trim() || line;
+        continue;
+      }
+
       if (lower.startsWith('erreur détectée :') || lower.startsWith('erreur detectee :') || lower.startsWith('erreur principale :')) {
+        detectedError = line.split(':').slice(1).join(':').trim() || line;
+        continue;
+      }
+
+      if (lower.startsWith('обнаруженная ошибка:') || lower.startsWith('ошибка:') || lower.startsWith('основная ошибка:')) {
         detectedError = line.split(':').slice(1).join(':').trim() || line;
         continue;
       }
@@ -856,14 +882,47 @@ export default function CourseMiniChallengePage() {
         continue;
       }
 
+      if (lower.startsWith('совет:') || lower.startsWith('подсказка:')) {
+        advice = line.split(':').slice(1).join(':').trim() || line;
+        continue;
+      }
+
       if (lower.startsWith('prochaine action :') || lower.startsWith('action recommandée :')) {
+        nextAction = line.split(':').slice(1).join(':').trim() || line;
+        continue;
+      }
+
+      if (lower.startsWith('следующее действие:') || lower.startsWith('рекомендуемое действие:')) {
+        nextAction = line.split(':').slice(1).join(':').trim() || line;
+        continue;
+      }
+
+      if (lower.startsWith('следующий шаг:')) {
         nextAction = line.split(':').slice(1).join(':').trim() || line;
         continue;
       }
     }
 
     if (!detectedError && lines.length > 0) {
-      detectedError = lines[0];
+      const fallback = lines.find((line) => {
+        const lower = line.toLowerCase();
+        return !(
+          lower.startsWith('statut :')
+          || lower.startsWith('статус:')
+          || lower.startsWith('статус :')
+          || lower.startsWith('conseil :')
+          || lower.startsWith('indice :')
+          || lower.startsWith('indice de réflexion :')
+          || lower.startsWith('совет:')
+          || lower.startsWith('подсказка:')
+          || lower.startsWith('prochaine action :')
+          || lower.startsWith('action recommandée :')
+          || lower.startsWith('следующее действие:')
+          || lower.startsWith('рекомендуемое действие:')
+          || lower.startsWith('следующий шаг:')
+        );
+      });
+      detectedError = fallback || '';
     }
 
     return {
@@ -925,6 +984,7 @@ export default function CourseMiniChallengePage() {
         session_id: null,
         pedagogy_context: {
           level: levelToQuiz(courseLevel),
+          responseLanguage: 'русский простой',
           pedagogicalStyle: 'Debug guidé socratique centré mini-challenge',
           aiTone: 'Coach concis et actionnable',
           progressPercent,
@@ -992,6 +1052,7 @@ export default function CourseMiniChallengePage() {
         session_id: debugSessionId,
         pedagogy_context: {
           level: levelToQuiz(courseLevel),
+          responseLanguage: 'русский простой',
           pedagogicalStyle: 'Debug guidé socratique centré mini-challenge',
           aiTone: 'Coach concis et actionnable',
           progressPercent,
@@ -1035,10 +1096,10 @@ export default function CourseMiniChallengePage() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-[1240px] space-y-3 pb-4">
+    <div className="flex flex-col h-full overflow-hidden bg-[#FBFBF9]">
 
       {/* ── HEADER ── */}
-      <div className="border-2 border-[#1C293C] bg-[#FBFBF9] p-3 shadow-[2px_2px_0px_0px_#1C293C] flex items-center justify-between gap-3 flex-wrap">
+      <div className="shrink-0 border-b-2 border-[#1C293C] bg-[#FBFBF9] px-3 py-2 flex items-center justify-between gap-3 flex-wrap">
         <Link
           href={`/courses/${courseSlug}`}
           className="inline-flex items-center gap-1.5 border-2 border-[#1C293C] bg-white px-3 py-1.5 text-xs font-black text-[#1C293C] shadow-[2px_2px_0px_0px_#1C293C] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-100"
@@ -1057,13 +1118,13 @@ export default function CourseMiniChallengePage() {
       </div>
 
       {/* ── MAIN GRID ── */}
-      <div className="grid grid-cols-1 xl:grid-cols-12 gap-3 items-start">
+      <div className="flex flex-1 min-h-0 flex-col xl:flex-row gap-2 p-2 overflow-hidden">
 
         {/* ── LEFT: INSTRUCTION PANEL ── */}
-        <aside className="xl:col-span-5 border-2 border-[#1C293C] bg-[#FBFBF9] shadow-[4px_4px_0px_0px_#1C293C] p-3 space-y-3">
+        <aside className="w-full xl:w-[420px] shrink-0 flex flex-col border-2 border-[#1C293C] bg-[#FBFBF9] shadow-[4px_4px_0px_0px_#1C293C] overflow-hidden">
 
           {/* Tabs */}
-          <div className="flex items-center gap-1.5 flex-wrap">
+          <div className="shrink-0 flex items-center gap-1.5 flex-wrap p-2 border-b-2 border-[#1C293C]/20">
             {instructionPages.map((label, index) => (
               <button
                 key={label}
@@ -1081,88 +1142,85 @@ export default function CourseMiniChallengePage() {
           </div>
 
           {/* Content panel */}
-          <div className="border-2 border-[#1C293C] bg-white p-3 space-y-2 min-h-[280px]">
-            <p className="text-[10px] uppercase tracking-widest font-black text-[#1C293C]/50">
+          <div className="flex-1 min-h-0 overflow-y-auto bg-white p-3">
+            <p className="text-[10px] uppercase tracking-widest font-black text-[#1C293C]/50 mb-2">
               Страница {instructionPage + 1}/{instructionPages.length}
             </p>
-            <div className="max-h-[52vh] overflow-y-auto pr-1">
+            <div>
               {instructionPages[instructionPage] === 'Отладка' ? (
-                <div className="space-y-2 text-sm">
-                  <div className="border-2 border-[#1C293C] bg-[#FBFBF9] p-2.5">
-                    <div className="flex items-center justify-between gap-2">
+                <div className="space-y-3 text-sm">
+                  {/* Header with button */}
+                  <div className="flex items-center justify-between gap-2 pb-2 border-b border-[#1C293C]/10">
+                    <div>
                       <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7]">ИИ-отладчик</p>
-                      {structuredDebug.status && (
-                        <span className={`border px-2 py-0.5 text-[10px] font-semibold ${
-                          structuredDebug.status.toLowerCase().includes('pas d')
-                            ? 'border-[#16A34A] text-[#16A34A]'
-                            : 'border-[#1C293C]/30 text-[#1C293C]/60'
-                        }`}>
-                          {structuredDebug.status}
-                        </span>
-                      )}
+                      <p className="text-[11px] text-[#1C293C]/60 mt-0.5">Анализ направленный</p>
                     </div>
-                    <div className="mt-2 flex items-center justify-between gap-2">
-                      <p className="text-[11px] text-[#1C293C]/60">Направленный анализ кода</p>
-                      <button
-                        type="button"
-                        onClick={runInlineDebugger}
-                        disabled={debugLoading || !challengeCode.trim()}
-                        className="border-2 border-[#1C293C] bg-white px-3 py-1 text-[11px] font-black text-[#1C293C] shadow-[2px_2px_0px_0px_#1C293C] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-100 disabled:opacity-40 disabled:cursor-not-allowed"
-                      >
-                        {debugLoading ? 'Анализирую...' : 'Анализировать'}
-                      </button>
-                    </div>
+                    <button
+                      type="button"
+                      onClick={runInlineDebugger}
+                      disabled={debugLoading || !challengeCode.trim()}
+                      className="border-2 border-[#1C293C] bg-white px-3 py-1.5 text-xs font-black text-[#1C293C] shadow-[2px_2px_0px_0px_#1C293C] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-100 disabled:opacity-40 disabled:cursor-not-allowed"
+                    >
+                      {debugLoading ? 'Анализ...' : 'Запустить'}
+                    </button>
                   </div>
 
+                  {/* Response content */}
                   {!debugResponse ? (
-                    <div className="border border-[#1C293C]/20 bg-[#FBFBF9] px-2.5 py-2">
-                      <p className="text-[11px] text-[#1C293C]/60">Запустите анализ для отображения основной ошибки и следующего действия.</p>
+                    <div className="text-[11px] text-[#1C293C]/50 italic py-4 text-center">
+                      Кликни {`"Запустить"`} чтобы начать анализ кода
                     </div>
                   ) : (
-                    <div className="space-y-1.5">
-                      <div className="border-2 border-[#DC2626]/40 bg-[#DC2626]/5 px-2 py-1.5">
+                    <div className="space-y-3">
+                      {/* Error box - minimal style */}
+                      <div className="border-l-4 border-[#DC2626] pl-3">
                         <p className="text-[10px] uppercase tracking-widest font-black text-[#DC2626] inline-flex items-center gap-1">
-                          <AlertTriangle className="h-3 w-3" /> Обнаруженная ошибка
+                          <AlertTriangle className="h-3.5 w-3.5" /> Ошибка
                         </p>
-                        <p className="mt-0.5 text-[12px] leading-relaxed text-[#1C293C]">
-                          {structuredDebug.detectedError || 'Конкретная ошибка не обнаружена.'}
+                        <p className="mt-1 text-[12px] leading-relaxed text-[#1C293C] font-medium">
+                          {structuredDebug.detectedError || 'Нет конкретной ошибки.'}
                         </p>
                       </div>
 
+                      {/* Advice box - minimal style */}
                       {structuredDebug.advice && (
-                        <div className="border-2 border-[#D97706]/40 bg-[#D97706]/5 px-2 py-1.5">
+                        <div className="border-l-4 border-[#D97706] pl-3">
                           <p className="text-[10px] uppercase tracking-widest font-black text-[#D97706] inline-flex items-center gap-1">
-                            <Lightbulb className="h-3 w-3" /> Совет
+                            <Lightbulb className="h-3.5 w-3.5" /> Подсказка
                           </p>
-                          <p className="mt-0.5 text-[12px] leading-relaxed text-[#1C293C]">{structuredDebug.advice}</p>
+                          <p className="mt-1 text-[12px] leading-relaxed text-[#1C293C] font-medium">{structuredDebug.advice}</p>
                         </div>
                       )}
 
+                      {/* Next action box - minimal style */}
                       {structuredDebug.nextAction && (
-                        <div className="border-2 border-[#432DD7]/40 bg-[#432DD7]/5 px-2 py-1.5">
+                        <div className="border-l-4 border-[#432DD7] pl-3">
                           <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7] inline-flex items-center gap-1">
-                            <PlayCircle className="h-3 w-3" /> Следующее действие
+                            <PlayCircle className="h-3.5 w-3.5" /> Действие
                           </p>
-                          <p className="mt-0.5 text-[12px] leading-relaxed text-[#1C293C]">{structuredDebug.nextAction}</p>
+                          <p className="mt-1 text-[12px] leading-relaxed text-[#1C293C] font-medium">{structuredDebug.nextAction}</p>
                         </div>
                       )}
                     </div>
                   )}
 
-                  <div className="border-2 border-[#1C293C] bg-[#FBFBF9] p-1.5">
+                  {/* Input section - modern style */}
+                  <div className="pt-2 border-t border-[#1C293C]/10 space-y-2">
+                    <p className="text-[10px] uppercase tracking-widest font-black text-[#1C293C]/50">Задай вопрос</p>
                     <div className="flex gap-1.5">
                       <input
                         type="text"
                         value={debugAnswer}
                         onChange={(e) => setDebugAnswer(e.target.value)}
-                        placeholder="Задай вопрос по своей ошибке..."
-                        className="w-full border-2 border-[#1C293C] bg-white px-2 py-1.5 text-xs text-[#1C293C] placeholder:text-[#1C293C]/40 focus:outline-none focus:border-[#432DD7]"
+                        onKeyPress={(e) => e.key === 'Enter' && !debugLoading && debugSessionId && debugAnswer.trim() && sendInlineDebuggerReply()}
+                        placeholder="Твой вопрос..."
+                        className="min-w-0 flex-1 border border-[#1C293C]/20 bg-white px-2.5 py-2 text-xs text-[#1C293C] placeholder:text-[#1C293C]/40 focus:outline-none focus:border-[#432DD7] focus:ring-1 focus:ring-[#432DD7]/30 rounded-sm transition-colors"
                       />
                       <button
                         type="button"
                         onClick={sendInlineDebuggerReply}
                         disabled={debugLoading || !debugSessionId || !debugAnswer.trim()}
-                        className="border-2 border-[#1C293C] bg-[#432DD7] px-3 py-1.5 text-xs font-black text-white shadow-[2px_2px_0px_0px_#1C293C] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-100 disabled:opacity-40"
+                        className="shrink-0 whitespace-nowrap border-2 border-[#1C293C] bg-[#432DD7] px-3 py-2 text-xs font-black text-white shadow-[2px_2px_0px_0px_#1C293C] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all duration-100 disabled:opacity-40 disabled:cursor-not-allowed"
                       >
                         Отправить
                       </button>
@@ -1248,21 +1306,21 @@ export default function CourseMiniChallengePage() {
                         {challengeTests.test_cases.slice(0, 8).map((testCase, index) => (
                           <div key={`${testCase?.name || 'test'}-${index}`} className="border border-[#1C293C]/20 bg-white px-2 py-1.5 space-y-0.5">
                             <div className="flex items-center justify-between gap-2">
-                              <p className="text-[11px] font-black text-[#1C293C] truncate">{testCase?.name || `Кейс ${index + 1}`}</p>
+                              <p className="text-[10px] font-black text-[#1C293C]/70 truncate">{testCase?.name || `test_${index + 1}`}</p>
                               <span className="border border-[#1C293C]/20 px-1.5 py-0.5 text-[10px] text-[#1C293C]/60">#{index + 1}</span>
                             </div>
-                            {(testCase?.args_literal || testCase?.stdin_lines) && (
-                              <p className="text-[10px] text-[#1C293C]/50 truncate">
-                                Вход: {testCase?.args_literal || JSON.stringify(testCase?.stdin_lines || [])}
-                              </p>
+                            {testCase?.args_literal && testCase?.expected_literal && (
+                              <pre className="text-[10px] font-mono bg-[#1e1e1e] text-[#a8ff78] px-2 py-1 overflow-x-auto rounded-none">
+                                {`assert ${challengeTests?.function_name || 'solution'}(${testCase.args_literal.replace(/^\[|\]$/g, '')}) == ${testCase.expected_literal}`}
+                              </pre>
                             )}
-                            {(testCase?.expected_literal || testCase?.expected_stdout) && (
+                            {testCase?.stdin_lines && testCase?.expected_stdout && (
                               <p className="text-[10px] text-[#1C293C]/50 truncate">
-                                Ожидается: {testCase?.expected_literal || testCase?.expected_stdout}
+                                input: {JSON.stringify(testCase.stdin_lines)} → {testCase.expected_stdout}
                               </p>
                             )}
                             {testCase?.constraint && (
-                              <p className="text-[10px] text-[#1C293C]/50 truncate">Условие: {testCase.constraint}</p>
+                              <p className="text-[10px] text-[#1C293C]/40 italic truncate">{testCase.constraint}</p>
                             )}
                           </div>
                         ))}
@@ -1329,7 +1387,7 @@ export default function CourseMiniChallengePage() {
           </div>
 
           {/* Prev / Next navigation */}
-          <div className="flex items-center justify-between gap-2">
+          <div className="shrink-0 border-t-2 border-[#1C293C]/20 p-2 flex items-center justify-between gap-2">
             <button
               type="button"
               disabled={instructionPage === 0}
@@ -1350,8 +1408,8 @@ export default function CourseMiniChallengePage() {
         </aside>
 
         {/* ── RIGHT: CODE EDITOR PANEL ── */}
-        <div className="xl:col-span-7 border-2 border-[#1C293C] bg-[#FBFBF9] shadow-[4px_4px_0px_0px_#1C293C] p-3 space-y-3">
-          <div className="flex items-center justify-between gap-2 flex-wrap">
+        <div className="flex-1 min-h-0 flex flex-col border-2 border-[#1C293C] bg-[#FBFBF9] shadow-[4px_4px_0px_0px_#1C293C] overflow-hidden">
+          <div className="shrink-0 flex items-center justify-between gap-2 flex-wrap px-3 py-2 border-b-2 border-[#1C293C]/20">
             <p className="text-[10px] uppercase tracking-widest font-black text-[#432DD7] inline-flex items-center gap-1.5">
               <Code2 className="h-3.5 w-3.5" /> Зона кода Python
             </p>
@@ -1377,10 +1435,10 @@ export default function CourseMiniChallengePage() {
             </div>
           </div>
 
-          <div className="border-2 border-[#1C293C] overflow-hidden">
+          <div className="flex-1 min-h-0 border-b-2 border-[#1C293C]/20 overflow-hidden">
             <Editor
               key={currentExerciseId || 'default'}
-              height="380px"
+              height="100%"
               defaultLanguage="python"
               value={challengeCode}
               onChange={(value) => setChallengeCode(value || '')}
@@ -1398,6 +1456,9 @@ export default function CourseMiniChallengePage() {
               }}
             />
           </div>
+
+          {/* Bottom: feedback + history */}
+          <div className="shrink-0 max-h-44 overflow-y-auto border-t-2 border-[#1C293C]/20 p-2 space-y-2">
 
           {!parsedChallengeFeedback.comment
             && parsedChallengeFeedback.consignes.length === 0
@@ -1434,6 +1495,8 @@ export default function CourseMiniChallengePage() {
               <p className="text-xs text-[#1C293C]/60">Попыток пока нет.</p>
             )}
           </div>
+
+          </div>{/* end bottom section */}
         </div>
 
       </div>

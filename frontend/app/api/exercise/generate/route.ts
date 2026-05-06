@@ -233,19 +233,23 @@ export async function POST(req: Request) {
   const topics = DIFFICULTY_TOPICS[difficulty] ?? DIFFICULTY_TOPICS[1];
 
   const system = [
-    'Ты опытный методист по Python. Отвечай только простым русским языком.',
+    '🔴 ОБЯЗАТЕЛЬНО: ВСЕ ТЕКСТЫ ТОЛЬКО НА РУССКОМ ЯЗЫКЕ. НЕ ИСПОЛЬЗУЙ ФРАНЦУЗСКИЙ, АНГЛИЙСКИЙ ИЛИ ДРУГОЙ ЯЗЫК ДЛЯ ТЕКСТОВ.',
+    '',
+    'Ты опытный методист по Python.',
     '',
     'ОБЯЗАТЕЛЬНЫЕ ПРАВИЛА:',
-    '1) enonce: 3-5 предложений. Практичный контекст. Точно укажи вход и ожидаемый выход.',
+    '1) enonce: 3-5 предложений НА РУССКОМ. Практичный контекст. Точно укажи вход и ожидаемый выход.',
     '2) contraintes: 3-5 технических ограничений по уровню ученика. Ограничения должны включать 2-4 разных концепта.',
     '3) concepts: массив из 2-4 коротких концептов (например: "Циклы", "Словари", "Функции").',
     '4) hints: 2-3 подсказки по шагам, без готового решения. Подсказки должны явно вести по этапам решения.',
     '5) решение задачи должно требовать минимум 2 шага (лучше 2-3 шага) и объединять несколько концептов.',
-    '4) exemple: один конкретный пример. Формат: "input: ... -> output: ...".',
-    '6) starter_code: чистый шаблон Python с правильной сигнатурой функции. В теле только "pass".',
-    '7) challenge_tests: минимум 5 тестов (базовый, крайний, негативный, типичный, сложный).',
-    '8) function_name: понятное имя snake_case, соответствует условию.',
-    '9) Верни только валидный JSON, без лишнего текста.',
+    '6) exemple: один конкретный пример. Формат: "input: ... -> output: ...".',
+    '7) starter_code: чистый шаблон Python с правильной сигнатурой функции. В теле только "pass".',
+    '8) challenge_tests: минимум 5 тестов (базовый, крайний, негативный, типичный, сложный).',
+    '9) function_name: понятное имя snake_case, соответствует условию.',
+    '10) Верни только валидный JSON, без лишнего текста.',
+    '',
+    '🔴 RAPPEL FINAL: TOUS les champs texte (challenge, enonce, contraintes, hints, exemple) DOIVENT être écrits en RUSSE SIMPLE. Pas de français.',
   ].join('\n');
 
   const user = [
@@ -289,7 +293,7 @@ export async function POST(req: Request) {
         { role: 'system', content: system },
         { role: 'user', content: user },
       ],
-      temperature: 0.5,
+      temperature: 0.3,
       maxTokens: 2800,
     });
 
@@ -346,9 +350,62 @@ export async function POST(req: Request) {
       level,
     };
 
-    const finalPayload = isRussianEnough(payload)
-      ? payload
-      : (await rewritePayloadToSimpleRussian(payload)) ?? payload;
+    let finalPayload = payload;
+    if (!isRussianEnough(payload)) {
+      const rewritten = await rewritePayloadToSimpleRussian(payload);
+      if (rewritten && isRussianEnough(rewritten)) {
+        finalPayload = rewritten;
+      } else {
+        // Rewrite failed or still not Russian — retry generation once with temperature 0
+        try {
+          const retryRaw = await callOpenAI({
+            messages: [
+              { role: 'system', content: system },
+              { role: 'user', content: user + '\n\nIMPORTANT: Répondre UNIQUEMENT en russe.' },
+            ],
+            temperature: 0,
+            maxTokens: 2800,
+          });
+          const retryParsed = parseJsonFromText<Record<string, unknown>>(retryRaw);
+          if (retryParsed) {
+            const retryJson = (retryParsed?.challenge_json && typeof retryParsed.challenge_json === 'object')
+              ? retryParsed.challenge_json as Record<string, unknown>
+              : {};
+            const retryTests = (retryParsed?.challenge_tests && typeof retryParsed.challenge_tests === 'object')
+              ? retryParsed.challenge_tests as Record<string, unknown>
+              : {};
+            const retryStarter = String(retryParsed?.starter_code ?? retryJson?.starter_code ?? DEFAULT_STARTER).trim() || DEFAULT_STARTER;
+            const retryPayload = {
+              ...payload,
+              challenge: String(retryParsed?.challenge ?? retryJson?.enonce ?? payload.challenge).trim() || payload.challenge,
+              challenge_json: {
+                ...payload.challenge_json,
+                enonce: String(retryJson?.enonce ?? payload.challenge_json.enonce).trim() || payload.challenge_json.enonce,
+                contraintes: Array.isArray(retryJson?.contraintes) ? (retryJson.contraintes as unknown[]).map(String).filter(Boolean) : payload.challenge_json.contraintes,
+                hints: Array.isArray(retryJson?.hints) ? (retryJson.hints as unknown[]).map(String).filter(Boolean) : payload.challenge_json.hints,
+                exemple: String(retryJson?.exemple ?? payload.challenge_json.exemple).trim() || payload.challenge_json.exemple,
+                starter_code: retryStarter,
+              },
+              starter_code: retryStarter,
+              challenge_tests: {
+                ...payload.challenge_tests,
+                function_name: String(retryTests?.function_name ?? payload.challenge_tests.function_name).trim() || payload.challenge_tests.function_name,
+                test_cases: Array.isArray(retryTests?.test_cases) && (retryTests.test_cases as unknown[]).length > 0
+                  ? (retryTests.test_cases as Record<string, unknown>[]).map((t, i) => ({
+                      name: String(t.name ?? `test_${i + 1}`).trim(),
+                      args_literal: String(t.args_literal ?? '[]').trim(),
+                      expected_literal: String(t.expected_literal ?? 'None').trim(),
+                    }))
+                  : payload.challenge_tests.test_cases,
+              },
+            };
+            finalPayload = isRussianEnough(retryPayload) ? retryPayload : (rewritten ?? payload);
+          }
+        } catch {
+          finalPayload = rewritten ?? payload;
+        }
+      }
+    }
 
     try {
       const insertAttempt = await supabase.from('ExerciseAttempt').insert({

@@ -7,7 +7,7 @@ export type TrackEventInput = {
 
 export async function trackEvent(input: TrackEventInput) {
   try {
-    await fetch("/api/events", {
+    void fetch("/api/events", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
